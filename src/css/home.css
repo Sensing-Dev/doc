@@ -1,0 +1,39 @@
+.jsx-section{
+    display: flex;
+    width: 100%;
+    flex-flow: column;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+.board{
+    padding: 5px;
+    margin: 0px -5px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-flow: row;
+    width: 100%;
+    flex-wrap: wrap;
+    /* container-type: inline-size; */
+}
+
+.card{
+    padding: 20px;
+    margin: 10px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.on-board{
+    min-width: 150px;
+    max-width: 200px;
+}
+
+
+/* @container screen and (max-width:480px){
+    .board{
+        flex-flow: column;
+    }
+} */
