@@ -10,7 +10,7 @@
  
  ## GenICam機能の制御
  
- `arv-tool-0.8`は、デバイスにアクセスし、GenICam機能の値を読み取り/書き込みできるようにします。**GenICam標準**について詳しく知りたい場合は、[このページ](/docs/lessons/camera.md#genicam)をご覧ください。
+ `arv-tool-0.8`は、デバイスにアクセスし、GenICam機能の値を読み取り/書き込みできるようにします。**GenICam標準**について詳しく知りたい場合は、[このページ](../../lessons/camera.md#genicam)をご覧ください。
  
  ### U3Vデバイスの一覧表示
  
