@@ -1,0 +1,38 @@
+{
+  "link.title.Guide": {
+    "message": "Guide",
+    "description": "The title of the footer links column with title=Guide in the footer"
+  },
+  "link.title.Community": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.Other project": {
+    "message": "Other project",
+    "description": "The title of the footer links column with title=Other project in the footer"
+  },
+  "link.item.label.Top Page": {
+    "message": "Top Page",
+    "description": "The label of footer link with label=Top Page linking to /"
+  },
+  "link.item.label.Grossary": {
+    "message": "Grossary",
+    "description": "The label of footer link with label=Grossary linking to /cross-reference"
+  },
+  "link.item.label.Update log": {
+    "message": "Update log",
+    "description": "The label of footer link with label=Update log linking to /blog"
+  },
+  "link.item.label.Forum": {
+    "message": "Forum",
+    "description": "The label of footer link with label=Forum linking to https://github.com/orgs/Sensing-Dev/discussions"
+  },
+  "link.item.label.GitHub organization": {
+    "message": "GitHub organization",
+    "description": "The label of footer link with label=GitHub organization linking to https://github.com/orgs/Sensing-Dev/repositories"
+  },
+  "copyright": {
+    "message": "Copyright © 2023 Sensinv-Dev.",
+    "description": "The footer copyright"
+  }
+}
