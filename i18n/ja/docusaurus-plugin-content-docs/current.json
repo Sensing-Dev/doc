@@ -1,0 +1,18 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.defaultSidebar.category.Startup Guide": {
+    "message": "Startup Guide",
+    "description": "The label for category Startup Guide in sidebar defaultSidebar"
+  },
+  "sidebar.defaultSidebar.category.Tutorial": {
+    "message": "Tutorial",
+    "description": "The label for category Tutorial in sidebar defaultSidebar"
+  },
+  "sidebar.defaultSidebar.category.Appendix": {
+    "message": "Appendix",
+    "description": "The label for category Appendix in sidebar defaultSidebar"
+  }
+}

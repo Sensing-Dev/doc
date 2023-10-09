@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Sensing-Dev",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Sensing-Dev Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Guide": {
+    "message": "Guide",
+    "description": "Navbar item with label Guide"
+  },
+  "item.label.Update Logs": {
+    "message": "Update Logs",
+    "description": "Navbar item with label Update Logs"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

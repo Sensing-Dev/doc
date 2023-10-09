@@ -10,7 +10,7 @@ id: software-reference
 
 :::info
 
-The usage of simple tools to control U3V cameras is introduced on **[Tools from Aravis](docs/tools/arv-tools.md)**.
+The usage of simple tools to control U3V cameras is introduced on **[Tools from Aravis](docs/external/aravis/arv-tools.md)**.
 
 :::
 
