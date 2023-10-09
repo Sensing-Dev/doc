@@ -10,16 +10,13 @@ const config = {
   tagline: 'You can find startup guide, tutorials, Q&A, and support!',
   favicon: 'img/tentative-icon.png',
 
+  organizationName: 'Sensing-Dev',
+  projectName: 'doc',
   // Set the production url of your site here
-  url: 'https://Sensing-Dev.github.io/doc ',
+  url: 'https://${organizationName}.github.io ',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'Sensing-Dev', // Usually your GitHub org/user name.
-  projectName: 'doc', // Usually your repo name.
+  baseUrl: '/${projectName}/',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
