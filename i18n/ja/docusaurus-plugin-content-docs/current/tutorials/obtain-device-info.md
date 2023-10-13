@@ -6,6 +6,13 @@ sidebar_position: 2
 
 このチュートリアルでは、aravis APIを使用してデバイス情報を取得する方法について学びます。
 
+## 必要なもの
+
+* Aravis Python (included in SDK package)
+* PyGObject (included in SDK package)
+
+## チュートリアル
+
 ### 必要なモジュールの読み込み
 
 まず最初に、Aravisモジュールを使用するためにPyGObjectをロードする必要があります。これには、Sensing-Dev SDKをインストールした場所である`$SENSING_DEV_ROOT/bin`を追加する必要があります。
@@ -109,6 +116,6 @@ Aravis.shutdown()
 Aravis Python APIの代わりに、arv-toolを使用することもできます。詳細については、[Aravisからのツール](../external/aravis/arv-tools.md)を参照してください。
 :::
 
-### 完全なコード
+## 完全なコード
 
 このチュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial0_get_device_info.py)です。
