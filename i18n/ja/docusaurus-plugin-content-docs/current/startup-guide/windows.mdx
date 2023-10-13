@@ -4,29 +4,77 @@ sidebar_position: 2
 
 # インストール - Windows
 
-この文書では、Windowsで開発を始める人々のために、Kizashiハードウェアおよびソフトウェア開発環境のインストール手順と、音声/ビデオ同期録画のサンプルアプリケーションHarmonyのインストール手順を説明します。
+このドキュメントでは、Kizashiハードウェアおよびソフトウェア開発環境、およびオーディオ/ビデオ同期録音サンプルアプリケーションHarmonyのインストール手順について説明します。これは、Windowsで開発を始める人々のためのものです。
 
 import '/src/css/home.css';
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href="/">Windows 64ビットパッケージをダウンロード</a>
+<a class="card" href="https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00-beta2/installer.ps1">Windows 64ビットパッケージをダウンロード</a>
 </div></div>
 
 ## 期待される環境
 
-TBD;
+このドキュメントでは、以下の環境を前提としています。
 
-## 必要条件
+* OS: Windows 10/11、64ビット版
+* 開発環境（いずれか）
+    * Python 3.11（VS Codeとともに）
+    * C++: Visual Studio 2019/2022
+* ハードウェア:
+    * USB3.0互換USBポート x2
 
-TBD;
+## 必要なもの
 
-## Sensing-dev ソフトウェアパッケージ
+* Python 3.11
+* Git
 
-このページの先頭にリンクされたインストーラーパッケージをダウンロードしてください。
+## Sensing-devソフトウェアパッケージ
 
-詳細はTBDです。
+ページのトップにあるインストーラースクリプトをダウンロードするか、[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00-beta2/installer.ps1)からダウンロードしてください。
+
+Windowsで管理者権限を持っている場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
+
+それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
+
+デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev-installer"`です。
+
+:::caution なぜ動作しないのか
+次のエラーが表示された場合：
+
+> installer.ps1 cannot be loaded because running scripts is disabled on this system
+
+PowerShellはスクリプトの実行を許可していない可能性があります。その場合、次の例のように`-ExecutionPolicy Bypass`オプションを追加してください。
+
+```bash
+powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名>
+```
+:::
+
+## 環境変数の設定
+
+installer.ps1スクリプトを実行すると、SDKが必要とする環境変数`%PATH%`と`%SENSING_DEV_ROOT%`を**自動的に設定**しますので、このステップをスキップできます。
+
+ただし、デフォルトのパスを変更したり、パッケージの場所を移動した場合は、次の手順で手動で設定する必要があります。
+
+1. Windowsキー **&#8862;** を押すか、タスクバーの角にある **&#8862;** をクリックしてスタートメニューを使用します。
+
+2. **Environment variable** と入力して、**アカウントの環境変数を編集** を探して、**環境変数** ウィンドウを開きます。
+
+![Start-menu](./img/start-menu.png)
+
+3. ウィンドウの上部および下部にはユーザーとシステム用の環境変数があり、ユーザー変数を編集します。
+
+![Start-menu](./img/environment-variables.png)
+
+4. `新規` および `編集` を使用して、次の環境変数を設定します。
+
+| 変数名 | 値 | 新規/編集（追加） |
+| --------   | ------- | ------- |
+| SENSING_DEV_ROOT | `<SDKをインストールした場所>` | 新規 |
+| PATH | `<SDKをインストールした場所>/bin` | 編集（追加） |
+| PYTHONPATH | `<SDKをインストールした場所>/lib/site-package` | 編集（追加） |
 
 :::info 確認
-`arv-tool-0.8`を使用すると、ソフトウェアパッケージが適切にインストールされているかどうかを確認できるかもしれません。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
+`arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できるかもしれません。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
 :::

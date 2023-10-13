@@ -10,23 +10,71 @@ import '/src/css/home.css';
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href="/">DL Windows 64-bit Package</a>
+<a class="card" href="https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00-beta2/installer.ps1">DL Windows 64-bit Package</a>
 </div></div>
 
 ## Expected environment
 
-TBD;
+In this document, the following environment is assumed.
+
+* OS: Windows 10/11, 64 bit version
+* Development environment (One of them)
+    * Python 3.11 (with VS Code)
+    * C++: Visual Studio 2019/2022
+* Hardware:
+    * USB3.0 compatible USB port x2
 
 ## Prerequisite
 
-TBD;
+* Python 3.11
+* Git
 
 ## Sensing-dev Software Packages
 
-Please DL the installer package linked at the top of the page.
+Please DL the installer script at the top of the page or [here](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00-beta2/installer.ps1).
 
-The details is TBD;
+If you have admin privileges on windows, you can just right-click the downloaded script and choose "Run with Posweshell".
+
+Otherwise, you can open powershell terminal and type `.\installer.ps1 -user <username>`.
+
+The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev-installer"`.
+
+:::caution why it does not work
+When you get 
+
+> installer.ps1 cannot be loaded because running scripts is disabled on this system
+
+your powershell does not allow to run the script. If so, please add `-ExecutionPolicy Bypass` option as the following example:
+
+```bash
+powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <username>
+```
+:::
+
+## Set environment variables.
+
+Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.
+
+However, if you change the default path or move the package location, it requires to set them manually with the following precedure:
+
+1. Hit Windows key **&#8862;** or click **&#8862;** at the corner of task bar to use start-menu.
+
+2. Type **Environment variable** to find **Edit environment variables got your account** to open the window of **Environment Variables**.
+
+![Start-menu](./img/start-menu.png)
+
+3. There's environment variables for user and system at the top and bottom of the window respectively, and we edit user variables.
+
+![Start-menu](./img/environment-variables.png)
+
+4. With `New` and `Edit`, set the following environment variables.
+
+| Name of variable | Value | New/Edit(append) |
+| --------   | ------- | ------- |
+| SENSING_DEV_ROOT | `<where you installed SKD>` | NEW |
+| PATH | `<where you installed SKD>/bin` | Edit(append) |
+| PYTHONPATH | `<where you installed SKD>/lib/site-package` | Edit(append) |
 
 :::info Confirmation
-Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](/docs/external/aravis/arv-tools.md) to know the procedure.
+Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools.md) to know the procedure.
 :::
