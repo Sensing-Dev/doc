@@ -51,6 +51,13 @@ powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <username>
 ```
 :::
 
+If you with to use python-binding (ionpy), please install with pip.
+
+```bash
+pip3 install -U pip
+pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+```
+
 ## Set environment variables.
 
 Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.

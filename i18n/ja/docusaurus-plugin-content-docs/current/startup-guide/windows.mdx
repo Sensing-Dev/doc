@@ -51,6 +51,13 @@ powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー
 ```
 :::
 
+Pythonで開発を進めたい場合、pipでionpyをインストールしてください。
+
+```bash
+pip3 install -U pip
+pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+```
+
 ## 環境変数の設定
 
 installer.ps1スクリプトを実行すると、SDKが必要とする環境変数`%PATH%`と`%SENSING_DEV_ROOT%`を**自動的に設定**しますので、このステップをスキップできます。
