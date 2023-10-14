@@ -84,13 +84,13 @@ Some examples of general keys defined in U3V devices are listed in the table bel
 | `PixelFormat` | Pixel Format of the sensor image data | String |
 
 :::tip
-Those feature keys and types are defined in **SFNC (Standard Features Naming Convention)** by emva; however, some of the devices have their own unique features or keys. To know the all accessible features, use `arv-tool-0.8`. See the detail in [List the available GenICam features](../external/aravis/arv-tools#list-the-available-genicam-features).
+Those feature keys and types are defined in **SFNC (Standard Features Naming Convention)** by emva; however, some of the devices have their own unique features or keys. To know the all accessible features, use `arv-tool-0.8`. See the detail in [List the available GenICam features](../external/aravis/arv-tools).
 :::
 
 :::caution why it does not work
 If `arv-device-error-quark` returns errors:
-* The device may not have the key (`Not found (1)`): check if the feature key is correct. See the details in  [List the available GenICam features](../external/aravis/arv-tools#list-the-available-genicam-features).
-* The type was wrong (`Not a ArvGcString (0)` or `Not a ArvGcFlaot (0)`) check if the feature type is correct. See the details in  [List the available GenICam features](../external/aravis/arv-tools#list-the-available-genicam-features).
+* The device may not have the key (`Not found (1)`): check if the feature key is correct. See the details in  [List the available GenICam features](../external/aravis/arv-tools).
+* The type was wrong (`Not a ArvGcString (0)` or `Not a ArvGcFlaot (0)`) check if the feature type is correct. See the details in  [List the available GenICam features](../external/aravis/arv-tools).
 :::
 
 ### Display the values
