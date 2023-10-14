@@ -85,13 +85,13 @@ U3Vデバイスで定義された一般的なキーの一部の例は、以下�
 
 :::tip
 これらのフィーチャーキーとタイプは、emvaによる**SFNC（Standard Features Naming Convention）**で定義されています。ただし、一部のデバイスには固有のユニークなフィーチャーやキーがあります。すべてのアクセス可能なフィーチャーを知るには、「arv-tool-0.8」を使用します。詳細は、[利用可能なGenICamフィーチャー 
-のリスト](../external/aravis/arv-tools#list-the-available-genicam-features)を参照してください。
+のリスト](../external/aravis/arv-tools)を参照してください。
 :::
 
 :::caution なぜ動作しないのか
 「arv-device-error-quark」がエラーを返す場合：
-* デバイスにキーが存在しない（「Not found (1)」）場合は、フィーチャーキーが正しいかどうかを確認してください。詳細は、[利用可能なGenICamフィーチャーのリスト](../external/aravis/arv-tools#list-the-available-genicam-features)を参照してください。
-* タイプが誤っている（「Not a ArvGcString (0)」または「Not a ArvGcFloat (0)」）場合は、フィーチャータイプが正しいかどうかを確認してください。詳細は、[利用可能なGenICamフィーチャーのリスト](../external/aravis/arv-tools#list-the-available-genicam-features)を参照してください。
+* デバイスにキーが存在しない（「Not found (1)」）場合は、フィーチャーキーが正しいかどうかを確認してください。詳細は、[利用可能なGenICamフィーチャーのリスト](../external/aravis/arv-tools)を参照してください。
+* タイプが誤っている（「Not a ArvGcString (0)」または「Not a ArvGcFloat (0)」）場合は、フィーチャータイプが正しいかどうかを確認してください。詳細は、[利用可能なGenICamフィーチャーのリスト](../external/aravis/arv-tools)を参照してください。
 :::
 
 ### 値の表示
