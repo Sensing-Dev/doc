@@ -58,6 +58,18 @@ pip3 install -U pip
 pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
 ```
 
+
+## U3VデバイスにWinUSBドライバーをインストール
+
+このステップは、U3Vカメラデバイスがホストマシンに初めて接続される際にのみ必要です。
+
+[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00/installer-WinUSB.ps1) からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
+
+このプロセスにはアカウントの管理者権限が必要であることに注意してください。
+
+さらに、プロセスは最大で5分かかる場合があります。
+
+
 ## 環境変数の設定
 
 installer.ps1スクリプトを実行すると、SDKが必要とする環境変数`%PATH%`と`%SENSING_DEV_ROOT%`を**自動的に設定**しますので、このステップをスキップできます。
