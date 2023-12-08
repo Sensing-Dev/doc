@@ -30,7 +30,7 @@ To display image with ionpy, we need to get the following information of the dev
 * Height
 * PixelFormat
 
-The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../external/aravis/arv-tools.md) will help to get these values.
+The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/aravis/arv-tools.md) will help to get these values.
 
 ### Build a pipeline
 
@@ -40,7 +40,7 @@ First of all, we load the module of ionpy, which is a python-binding of ion-kit.
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
-As we learned in the [introduction](intro.mdx), we will build and execute pipeline for image I/O and processing.
+As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.
 
 In this tutorial, we build a very simple pipeline has only one Building Block that obtain image from U3V camera.
 
@@ -90,7 +90,7 @@ exposure_key = Param('exposure_key', 'ExposureTime')
 :::caution why it does not work
 `gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime` in `FLOAT64`; however, some device has different key and different type.
 
-In that case, you may need to change the type of port and name of the keys of param. [This page](../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
+In that case, you may need to change the type of port and name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
 ```python
 gain_p = Port('gain', Type(<TypeCode>, <Size of the data type>, 1), 1)
 exposuretime_p = Port('exposuretime', Type(<TypeCode>, <Size of the data type>, 1), 1)
@@ -114,7 +114,7 @@ Since this is the only one BB in our pipeline, output port of the node can be th
 
 Our pipeline with BB and port looks like this:
 
-![tutorial1-pipeline](./img/tutorial1-pipeline.png)
+![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
 To pass the input values and get the output data from port, we prepare the buffers and mapping the buffer to port for input and port to buffer for output.
 
