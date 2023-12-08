@@ -100,7 +100,7 @@ exposure_key = Param('exposure_key', 'ExposureTime')
 キーです。**SFNC（Standard Features Naming Convention）**によるemvaの規格では、これらは通常、 `Gain` および `ExposureTime` を `FLOAT64` で設定しますが、一部のデバイスでは異なるキーと異なるタイ
 プを持っている場合があります。
 
-その場合、ポートのタイプとパラメータのキーの名前を変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を確認して、使用可能なフィーチャをリス 
+その場合、ポートのタイプとパラメータのキーの名前を変更する必要があります。[このページ](../../external/aravis/arv-tools#list-the-available-genicam-features)を確認して、使用可能なフィーチャをリス 
 トする方法を確認してください。
 ```python
 gain_p = Port('gain', Type(<TypeCode>, <Size of the data type>, 1), 1)

@@ -78,7 +78,7 @@ Param realtime_diaplay_mode{"realtime_diaplay_mode", "false"};
 :::caution why it does not work
 `gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime` in `FLOAT64`; however, some device has different key and different type.
 
-In that case, you may need to change the type of port and name of the keys of param. [This page](../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
+In that case, you may need to change the type of port and name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
 ```c++
 
 #define FEATURE_GAIN_KEY <name of the feature to control gain>

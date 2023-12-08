@@ -90,15 +90,15 @@ for i in range(num_device):
 ::::tip
 これらのフィーチャキーとタイプはemvaによる**SFNC（Standard Features Naming Convention）**で定義
 されていますが、一部のデバイスは独自の特徴やキーを持っている場合があります。すべてのアクセス可能
-なフィーチャを知るには、`arv-tool-0.8`を使用します。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照してください。
+なフィーチャを知るには、`arv-tool-0.8`を使用します。詳細は[利用可能なGenICamフィーチャのリスト](../../external/aravis/arv-tools)を参照してください。
 ::::
 
 ::::caution
 `arv-device-error-quark` がエラーを返す場合:
 * デバイスにキーがない（`Not found (1)`）：フィーチャキーが正しいか確認してください。詳細は[利 
-用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照。
+用可能なGenICamフィーチャのリスト](../../external/aravis/arv-tools)を参照。
 * タイプが間違っていた（`Not a ArvGcString (0)`または`Not a ArvGcFlaot (0)`）：フィーチャタイプ
-が正しいか確認してください。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照。
+が正しいか確認してください。詳細は[利用可能なGenICamフィーチャのリスト](../../external/aravis/arv-tools)を参照。
 ::::
 
 ### 値の表示
