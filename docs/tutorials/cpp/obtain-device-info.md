@@ -53,8 +53,8 @@ num_device = Aravis.get_n_devices()
 :::caution why it does not work
 If `num_devices` is `0`, your device may have the following issues.
 * The device is not connected to your host machine appropriately.
-* The WinUSB is not installed on the device (Windows). See [the Startup guide (Windows)](../startup-guide/windows.mdx)
-* Udev rules file is not located under `/etc/udev`. See [the Startup guide (Linux)](../startup-guide/linux.mdx)
+* The WinUSB is not installed on the device (Windows). See [the Startup guide (Windows)](../../startup-guide/windows.mdx)
+* Udev rules file is not located under `/etc/udev`. See [the Startup guide (Linux)](../../startup-guide/linux.mdx)
 :::
 
 ### Access to device infomation
@@ -113,7 +113,7 @@ Aravis.shutdown()
 
 
 :::tip
-Instead of using Aravis Python API, you can also use arv-tool. See the detail in [Tools from Aravis](../external/aravis/arv-tools.md)
+Instead of using Aravis Python API, you can also use arv-tool. See the detail in [Tools from Aravis](../../external/aravis/arv-tools.md)
 :::
 
 ## Complete code

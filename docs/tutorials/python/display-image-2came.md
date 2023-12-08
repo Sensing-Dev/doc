@@ -30,7 +30,7 @@ To display image with ionpy, we need to get the following information of the dev
 * Height
 * PixelFormat
 
-The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../external/aravis/arv-tools.md) will help to get these values.
+The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/aravis/arv-tools.md) will help to get these values.
 
 ### Build a pipeline
 
