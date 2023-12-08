@@ -8,69 +8,68 @@ In this tutorial, we learn how to get device informatin with aravis API.
 
 ## Prerequisite
 
-* Aravis Python (included in SDK package)
-* PyGObject (included in SDK package)
+* Aravis (included in SDK package)
 
 ## Tutorial
 
 ### Load required modules
 
-First of all, to load the PyGObject to use Aravis module, we need to add `$SENSING_DEV_ROOT/bin` (where you installed Sensing-Dev SDK).
+First of all, to use Aravis module, we need to include the header file  `arv.h` (which comes with the SDK you installed).
 
-```python
-import os
-os.add_dll_directory(os.path.join(os.environ["SENSING_DEV_ROOT"], "bin"))
+```c++
+#include <exception>
+#include <iostream>
+#include "arv.h"
 ```
 
-Now you import the module of Aravis with PyGObject.
-
-```python
-import gi
-gi.require_version("Aravis", "0.8")
-from gi.repository import Aravis
-```
-
-:::caution why it does not work
-When you see `ImportError: DLL load failed while importing _gi: The specified module could not be found.`
-* Environment variable `SENSING_DEV_ROOT` is not set appropriately.
-* Python version is not 3.11.
-:::
+It is also good idea to include exception and iostream headers to catch the error messages.
 
 ### Access to devices
 
 Now we are ready to use Aravis API. Let's start with updating the list of U3V devices that are connected to your host machine.
 
-```python
-Aravis.update_device_list()
+```c++
+arv_update_device_list ();
 ```
 
 By updating the list, the following API should return the nubmer of the devices.
 
-```python
-num_device = Aravis.get_n_devices()
+```c++
+unsigned int n_devices = arv_get_n_devices ();
 ```
 
 :::caution why it does not work
-If `num_devices` is `0`, your device may have the following issues.
+If `n_devices` is `0`, your device may have the following issues.
 * The device is not connected to your host machine appropriately.
 * The WinUSB is not installed on the device (Windows). See [the Startup guide (Windows)](../../startup-guide/windows.mdx)
 * Udev rules file is not located under `/etc/udev`. See [the Startup guide (Linux)](../../startup-guide/linux.mdx)
 :::
 
-### Access to device infomation
+### Access and Display to device infomation
 
-Out of `num_device` devices, create camera object by accessing `i`th device.
+Out of `n_devices` devices, create camera object by accessing `i`th device.
 
-You can get string/intefer/float values of device information with API of `get_*_feature_value` as follows:
+You can get string/intefer/float values of device information with API of `arv_device_get_*_feature_value` as follows:
 
-```python
-for i in range(num_device):
-    device = Aravis.Camera.new(Aravis.get_device_id(i)).get_device()
+```c++
+for (unsigned int i = 0; i < n_devices; ++i){
+    const char* dev_id = arv_get_device_id (i);
+    ArvDevice* device = arv_open_device(dev_id, nullptr);
 
-    devicemodelname = device.get_string_feature_value("DeviceModelName")
-    width = device.get_integer_feature_value("Width")
+    printf("%20s : %s\n",
+        "Device Model Name",
+        arv_device_get_string_feature_value(device, "DeviceModelName", &error));
+    if (error){
+        throw std::runtime_error(error->message);
+    }
+    printf("%20s : %li\n",
+        "Width",
+        arv_device_get_integer_feature_value(device, "Width", &error));
+            if (error){
+        throw std::runtime_error(error->message);
+    }
     ...
-    del device
+    g_object_unref (device);
 ```
 
 Some examples of general keys defined in U3V devices are listed in the table below.
@@ -93,22 +92,13 @@ If `arv-device-error-quark` returns errors:
 * The type was wrong (`Not a ArvGcString (0)` or `Not a ArvGcFlaot (0)`) check if the feature type is correct. See the details in  [List the available GenICam features](../external/aravis/arv-tools).
 :::
 
-### Display the values
-
-```python
-    print("=== device {} information ===========================".format(i))
-    print("{0:20s} : {1}".format("Device Model Name", devicemodelname))
-    print("{0:20s} : {1}".format("Wdith", width))
-```
-
-Note that all the returned value of `get_*_feature_value` is a string.
 
 ### Close 
 
 Using the following function in Aravis can release resources that avoid memory leaks.
 
-```python
-Aravis.shutdown()
+```c++
+g_object_unref (device);
 ```
 
 
@@ -118,4 +108,6 @@ Instead of using Aravis Python API, you can also use arv-tool. See the detail in
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial0_get_device_info.py)
+Complete code used in the tutorial is [here](https://github.com/AravisProject/aravis/blob/main/tests/arvdevicetest.c)
+
+You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.

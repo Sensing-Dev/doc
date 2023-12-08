@@ -4,21 +4,12 @@ sidebar_position: 3
 
 # Display Image
 
-In this tutorial, we learn how to get image data from device with ion-kit, and display with .
+In this tutorial, we learn how to get image data from device with ion-kit, and display with OpenCV.
 
 ## Prerequisite
 
-* ionpy 
-* numpy
-* OpenCV
-
-```bash
-pip3 install -U pip
-pip3 install opencv-python
-pip3 install opencv-contrib-python
-pip3 install numpy
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
-```
+* OpenCV (installed with sensing-dev SDK) 
+* ion-kit (installed with sensing-dev SDK) 
 
 ## Tutorial
 
@@ -34,25 +25,19 @@ The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/
 
 ### Build a pipeline
 
-First of all, we load the module of ionpy, which is a python-binding of ion-kit.
-
-```python
-from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
-```
-
 As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.
 
 In this tutorial, we build a very simple pipeline has only one Building Block that obtain image from U3V camera.
 
 The following ionpy API set up our pipeline.
 
-```python
-module_name = 'ion-bb.dll'
+```c++
+#define MODULE_NAME "ion-bb"
 ...
-# pipeline setup
-builder = Builder()
-builder.set_target('host')
-builder.with_bb_module(module_name)
+// pipeline setup
+Builder b;
+b.set_target(Halide::get_host_target());
+b.with_bb_module(MODULE_NAME);
 ```
 
 The `set_target` specifies on what hardware the pipeline built by the Builder will run. 
@@ -67,47 +52,55 @@ If the pixelformat is RGB8, it means bit depth is 8 and dimension is 3 (in addit
 
 Any of these BB requries input called `dispose`, `gain`, and `exposuretime`, so we have to se the port to pass the values to the pipeline.
 
-```python
-# set input port
-dispose_p = Port('dispose', Type(TypeCode.Uint, 1, 1), 0)
-gain_p = Port('gain', Type(TypeCode.Float, 64, 1), 1)
-exposuretime_p = Port('exposuretime', Type(TypeCode.Float, 64, 1), 1)
+```c++
+// set port
+Port dispose_p{ "dispose",  Halide::type_of<bool>() };
+Port gain_p{ "gain", Halide::type_of<double>(), 1 };
+Port exposure_p{ "exposure", Halide::type_of<double>(), 1 };
 ```
 
 While port input is dynamic; i.e. it can be updated for each run, you can set static values in string via `Param`. 
 
-```python
-# set params
-num_devices = Param('num_devices', str(num_device))
-pixel_format_ptr = Param('pixel_format_ptr', "RGB8")
-gain_key = Param('gain_key', 'Gain')
-exposure_key = Param('exposure_key', 'ExposureTime')
+```c++
+#define FEATURE_GAIN_KEY "Gain"
+#define FEATURE_EXPOSURE_KEY "ExposureTime"
+...
+Param num_devices{"num_devices", std::to_string(num_device)};
+Param pixel_format{"pixel_format_ptr", pixel_format};
+Param frame_sync{"frame_sync", "true"};
+Param gain_key{"gain_key", FEATURE_GAIN_KEY};
+Param exposure_key{"exposure_key", FEATURE_EXPOSURE_KEY};
+Param realtime_diaplay_mode{"realtime_diaplay_mode", "false"};
 ```
 
-`pixel_format_ptr` is the pixelformat that you obtained with [Get Device Information](#get-device-information).
-
+`pixel_format` is the pixelformat that you obtained with [Get Device Information](#get-device-information).
 
 :::caution why it does not work
 `gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime` in `FLOAT64`; however, some device has different key and different type.
 
 In that case, you may need to change the type of port and name of the keys of param. [This page](../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
-```python
-gain_p = Port('gain', Type(<TypeCode>, <Size of the data type>, 1), 1)
-exposuretime_p = Port('exposuretime', Type(<TypeCode>, <Size of the data type>, 1), 1)
+```c++
 
-gain_key = Param('gain_key', <name of the feature to control gain>)
-exposure_key = Param('exposure_key', <name of the feature to control exposure time>)
+#define FEATURE_GAIN_KEY <name of the feature to control gain>
+#define FEATURE_EXPOSURE_KEY <name of the feature to control exposure time>
+
+Port gain_p{ "gain", Halide::type_of<TypeCode for your device>(), 1 };
+Port exposure_p{ "exposure", Halide::type_of<TypeCode for your device>(), 1 };
 ```
 :::
 
 Now, you add BB to your pipeline as node with ports and params.
 
-```python
-# add a node to pipeline
-node = builder.add(bb_name)\
-    .set_port([dispose_p, gain_p, exposuretime_p, ])\
-    .set_param([pixel_format_ptr, gain_key, exposure_key, ])
-output_p = node.get_port('output')
+```c++
+Node n = b.add(bb_name[pixel_format])(dispose_p, gain_p, exposure_p)
+    .set_param(
+    num_devices,
+    pixel_format,
+    frame_sync,
+    gain_key,
+    exposure_key,
+    realtime_diaplay_mode
+    );
 ```
 
 Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, and we name is `output_p`.
@@ -118,84 +111,84 @@ Our pipeline with BB and port looks like this:
 
 To pass the input values and get the output data from port, we prepare the buffers and mapping the buffer to port for input and port to buffer for output.
 
-```python
-# create halide buffer for input port
-gain_data = np.array([48.0])
-exposure_data = np.array([100.0])
+```c++
+// create halide buffer for input port
+double *gains = (double*) malloc (sizeof (double) * num_device);
+double *exposures = (double*) malloc (sizeof (double) * num_device);
+for (int i = 0; i < num_device; ++i){
+    gains[i] = 40.0;
+    exposures[i] = 100.0;
+}
+Halide::Buffer<double> gain_buf(gains, std::vector< int >{num_device});
+Halide::Buffer<double> exposure_buf(exposures, std::vector< int >{num_device});
 
-gains = Buffer(Type(TypeCode.Float, 64, 1), (1,))
-exposures = Buffer(Type(TypeCode.Float, 64, 1), (1,))
-gains.write(gain_data.tobytes(order='C'))
-exposures.write(exposure_data.tobytes(order='C'))
+// create halide buffer for output port
+std::vector< int > buf_size = std::vector < int >{ width, height };
+if (pixel_format == "RGB8"){
+    buf_size.push_back(3);
+}
+std::vector<Halide::Buffer<T>> output;
+for (int i = 0; i < num_device; ++i){
+    output.push_back(Halide::Buffer<T>(buf_size));
+}
 
-# create halide buffer for output port
-outputs = []
-output_size = (width, height, )
-outputs.append(Buffer(Type(TypeCode.Uint, depth_of_buffer, 1), output_size))
-
-# set I/O ports
-port_map = PortMap()
-port_map.set_buffer(gain_p, gains)
-port_map.set_buffer(exposuretime_p, exposures)
-port_map.set_buffer_array(output_p, outputs)
-port_map.set_u1(dispose_p, False)
+// set I/O ports
+PortMap pm;
+pm.set(dispose_p, false);
+pm.set(gain_p, gain_buf);
+pm.set(exposure_p, exposure_buf);
+pm.set(n["output"], output);
 ```
 
-Note that `output_size` here is designed for 2D image. If the pixel format is RGB8, you need to set `(width, height, 3)` to add color channel.
+Note that `buf_size` here is designed for 2D image. If the pixel format is RGB8, you need to set `(width, height, 3)` to add color channel.
 
-`depth_of_buffer` is pixel size in bit; e.g. `8` for Mono8 and RGB8 while `16` for Mono10 and Mono12.
+`T` is the type of the output buffer; e.g. `uint8_t` for Mono8 and RGB8 while `uint16_t` for Mono10 and Mono12.
 
 ### Execute the pipeline
 
 The pipeline is ready to run.
 
-In our tutorial code, while gain and exposure time values mapping to input port are optional, dispose the device needs to be set to `False` while running and `True` at the end of program execution so that device would be safely closed.
+In our tutorial code, while gain and exposure time values mapping to input port are optional, dispose the device needs to be set to `false` while running and `true` at the end of program execution so that device would be safely closed.
 
-```python
-for x in range(loop_num):
-    port_map.set_u1(dispose_p, x==loop_num-1)
-    # running the builder
-    builder.run(port_map)
+```c++
+for (int i = 0; i < loop_num; ++i){
+    pm.set(dispose_p, i == loop_num-1);
+    b.run(pm);
+    ...
+}
 ```
 
-After setting the dynamic port, use `builder.run` to execute the pipeline.
+After setting the dynamic port, use `b.run(pm);` to execute the pipeline.
 
 ### Display with OpenCV
 
-Since our output data (i.e. image data) is mapped into Buffer `outputs`, we can copy this to OpenCV buffer to image process or display.
+Since our output data (i.e. image data) is mapped into **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.
 
 Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
 
-```python
-buf_size_opencv = (height, width)
-output_byte_size = width*height*depth_in_byte
+```c++
+for (int i = 0; i < num_device; ++i){
+cv::Mat img(height, width, opencv_mat_type[pixel_format]);
+std::memcpy(img.ptr(), output[i].data(), output[i].size_in_bytes());
+img *= positive_pow(2, num_bit_shift_map[pixel_format]);
+cv::imshow("image" + std::to_string(i), img);
+}
 ```
-`depth_in_byte` is pixel size in byte; e.g. `1` for Mono8 and RGB8 while `2` for Mono10 and Mono12.
+`opencv_mat_type[pixel_format]` depends on PixelFormat (the bit-depth and dimension) of image data; e.g. `CV_8UC1` for Mono8, `CV_8UC3` for RGB8 while `CV_16UC1` for Mono10 and Mono12.
 
-As we learned beforehand, if the device pixel format is RGB8, you need to set `(height, width, 3)` to add color channel.
+We can copy `output[i]` to the OpenCV Mat object to display.
 
-We once copy the image data to bytes buffer, then copy to numpy array to display.
-
-```python
-output_bytes = outputs[0].read(output_byte_size) 
-
-output_np_HxW = np.frombuffer(output_bytes, data_type).reshape(buf_size_opencv)
-output_np_HxW *= pow(2, num_bit_shift)
-
-cv2.imshow("A", output_np_HxW)
-cv2.waitKey(0)
+```c++
+cv::imshow("image" + std::to_string(i), img);
+cv2.waitKey(1)
 ```
 
-Note that `outputs` is the list of Buffer (so that you many set `num_device` more than `1` to control multiple devices), you access `outpus[0]` to get image data.
+Note that `output` is the vector of Buffer (so that you many set `num_device` more than `1` to control multiple devices), you access `outpus[0]` to get image data.
 
 Repeating the set of this process in `for` loop successfully shows the sequential images from camera device. 
 
-Do not forget to destroy windows that displayed the image after `for` loop.
-
-```python
-cv2.destroyAllWindows()
-```
-
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)
+
+You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.
