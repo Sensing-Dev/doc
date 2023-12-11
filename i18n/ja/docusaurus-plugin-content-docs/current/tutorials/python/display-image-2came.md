@@ -106,4 +106,4 @@ cv2.waitKey(0)
 
 ## 完全なコード
 
-チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display_2cam.py)にあります。
+チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial1_display_2cam.py)にあります。
