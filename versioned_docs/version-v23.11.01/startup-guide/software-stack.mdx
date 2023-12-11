@@ -1,0 +1,77 @@
+---
+sidebar_position: 1
+---
+
+# Software Package
+
+import '/src/css/home.css';
+
+<div class="jsx-section">
+<p>
+Installer and the procedure is available for Windows 64-bit and Linux.
+</p>
+<div class="board">
+
+
+<a class="card on-board" href="windows">Windows 64-bit</a>
+<a class="card on-board" href="linux">Linux</a>
+</div></div>
+
+This page shows the components of the software package set by the installer. 
+
+## Outline
+
+The structure of the provided software package looks like this:
+
+![The outline of Software Stack](./img/generic-sw-stack.png)
+
+| Components | OSS included in the package | License |
+| --------   | ------- | ------- |
+| Driver | [libUSB (Linux)](#libusbwinusb) | LGPL-2.1 |
+| Camera Acquisition Library | [Aravis](#aravis) | LGPL-2.1 |
+| Image Processing Framework | [ion-kit](#ion-kit) | MIT |
+| Image Processing Library (used in Framework) | [OpenCV](https://opencv.org/) | BSD |
+
+:::note
+
+For Windows, the driver (WinUSB) comes with Windows OS.
+
+:::
+
+## libUSB/WinUSB
+
+Driver allows Computer OS to communicate with hardware. At the upper part of software stack, we use camera acquisition library called Aravis which controls U3V Cameras over **libUSB** and **WinUSB** on Linux and Windows respectively.
+
+For Linux, the script for the installation includes libUSB.
+
+Oh the otherhand, WinUSB comes with Windows OS, but the program to apply the driver to U3V device is included in the installer.
+
+## Aravis
+
+[**Aravis**&#128279;](https://aravisproject.github.io/aravis/) is a GObject based camera acquisition library that allows to control U3V camera and GigE camera devices. 
+
+This library has APIs to control the camera device which allows to set/get some parameters, start/stop the device, and acquiring the image data from the device.
+
+It also provides some simple tools of accessing GenICam features, obtaining the payload of streaming data, and displaying the captured images.
+
+:::info
+
+To learn how to use the aravis tools, check **[Tools from Aravis](docs/external/aravis/arv-tools.md)** section.
+
+:::
+
+## ion-kit
+
+[**ion-kit**&#128279;](https://github.com/fixstars/ion-kit) is an image processing framework which enables to efficiently describe and compile a user-defined image processing pipeline. 
+
+General image processing programs mainly have three steps: input (load from a file or acquiting data from device), image-processing, and output (save or display).
+
+However, ion-kit has readymade building blocks (BBs) for those steps, and the whole process of them can be done by the single pipeline consisting of the combination of those BBs. 
+
+The building blocks is written in Halide, a language for efficient image processing, embedded in C++. 
+
+:::note
+
+To learn about **Halide** please check [the official webpage](https://halide-lang.org/).
+
+:::
