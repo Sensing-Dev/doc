@@ -108,6 +108,6 @@ Instead of using Aravis Python API, you can also use arv-tool. See the detail in
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/AravisProject/aravis/blob/main/tests/arvdevicetest.c)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial0_get_device_info.cpp)
 
 You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.
