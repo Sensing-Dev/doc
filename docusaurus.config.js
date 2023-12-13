@@ -93,6 +93,7 @@ const config = {
             position: 'left',
             label: 'Guide',
           },
+          { type: 'docsVersionDropdown' },
           // blog content
           {to: '/blog', label: 'Update Logs', position: 'left'},
           // github
