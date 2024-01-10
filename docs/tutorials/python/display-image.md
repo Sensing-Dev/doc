@@ -40,6 +40,10 @@ First of all, we load the module of ionpy, which is a python-binding of ion-kit.
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
+:::caution why it does not work
+For Python users, you may have no C/C++ runtime library. If you have trouble to load the module of ionpy, you can install the library from [the article of Microsoft official webpage](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022).
+:::
+
 As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.
 
 In this tutorial, we build a very simple pipeline has only one Building Block that obtain image from U3V camera.

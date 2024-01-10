@@ -41,6 +41,10 @@ ionpyで画像を表示するには、デバイスの以下の情報を取得す
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
+:::caution
+Pythonユーザーの場合、ionpyのモジュールをロードする際にC/C++ランタイムライブラリがない可能性があります。ionpyのモジュールをロードする際に問題が発生する場合は、[Microsoftの公式ウェブページの記事](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022)からライブラリをインストールできます。
+:::
+
 [イントロダクション](../intro.mdx)で学んだように、画像I/Oおよび処理のためのパイプラインを構築お
 よび実行します。
 
