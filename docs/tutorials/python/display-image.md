@@ -15,7 +15,6 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 ```bash
 pip3 install -U pip
 pip3 install opencv-python
-pip3 install opencv-contrib-python
 pip3 install numpy
 pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
 ```
@@ -39,6 +38,10 @@ First of all, we load the module of ionpy, which is a python-binding of ion-kit.
 ```python
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
+
+:::caution why it does not work
+For Python users, you may have no C/C++ runtime library. If you have trouble to load the module of ionpy, you can install the library from [the article of Microsoft official webpage](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022).
+:::
 
 As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.
 
