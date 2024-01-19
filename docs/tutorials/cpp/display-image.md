@@ -189,6 +189,6 @@ Repeating the set of this process in `for` loop successfully shows the sequentia
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/cpp/src/tutorial1_display.cpp)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)
 
-You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/cpp/CMAKELists.txt) to compile and build the program.
+You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.
