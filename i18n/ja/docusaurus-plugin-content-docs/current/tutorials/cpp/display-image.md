@@ -1,144 +1,104 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # 画像の表示
 
-このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpenCVで表示する方法に
-ついて学びます。
+このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpenCVで表示する方法を学びます。
 
 ## 前提条件
 
-* OpenCV（sensing-dev SDKと共にインストール済み）
-* ion-kit（sensing-dev SDKと共にインストール済み）
+* OpenCV（sensing-dev SDKと共にインストール）
+* ion-kit（sensing-dev SDKと共にインストール）
 
 ## チュートリアル
 
 ### デバイス情報の取得
 
-ionpyを使用して画像を表示するには、デバイスの次の情報を取得する必要があります。
+ionpyを使用して画像を表示するには、デバイスの以下の情報を取得する必要があります。
 
 * 幅
 * 高さ
 * ピクセルフォーマット
 
-[前のチュートリアル](obtain-device-info.md)または[arv-tool-0.8](../../external/aravis/arv-tools.md)を参照してこれらの値を取得するのに役立ちます。
+[前回のチュートリアル](obtain-device-info.md)または [arv-tool-0.8](../../external/aravis/arv-tools.md) がこれらの値を取得するのに役立ちます。
 
 ### パイプラインの構築
 
-[導入](../intro.mdx)で学んだように、画像のI/Oと処理のためのパイプラインを構築し、実行します。  
+[導入](../intro.mdx)で学んだように、画像の入出力と処理のためのパイプラインを構築して実行します。
 
-このチュートリアルでは、U3Vカメラから画像を取得する唯一のビルディングブロックを持つ非常に単純な
-パイプラインを構築します。
-
-次のionpy APIは、パイプラインを設定します。
+ion-kitおよびOpenCVのAPIを使用するために、次のヘッダーを含める必要があります：
 
 ```c++
-#define MODULE_NAME "ion-bb"
-...
+#include <ion/ion.h>
+
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+```
+
+このチュートリアルでは、非常に単純なパイプラインを構築します。このパイプラインは、U3Vカメラから画像を取得する唯一のビルディングブロックを持っています。
+
+次のion APIがパイプラインを設定します。
+
+```c++
 // パイプラインの設定
 Builder b;
-b.set_target(Halide::get_host_target());
-b.with_bb_module(MODULE_NAME);
+b.set_target(ion::get_host_target());
+b.with_bb_module("ion-bb");
 ```
 
-`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。    
+`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。
 
-`ion-bb.dll` で定義されたBBを使用したいので、 `with_bb_module` 関数でモジュールをロードする必要
-があります。
+`ion-bb.dll`で定義されたBBを使用したいので、`with_bb_module`関数でモジュールをロードする必要があります。
 
-ここで使用するBBは `image_io_u3v_cameraN_u8x2` で、これは各ピクセルデータが8ビット深度で2次元の
-U3Vカメラ向けに設計されています（たとえば、Mono8）。
+使用するBBは`image_io_u3v_cameraN_u8x2`で、これは各ピクセルデータが8ビット深度で2次元のU3Vカメラ向けに設計されています（例：Mono8）。
 
-デバイスのピクセルフォーマットがMono10またはMono12の場合は、それぞれ10ビットおよび12ビットのピ 
-クセルデータを格納するために16ビット深度のピクセルが必要なので `image_io_u3v_cameraN_u16x2` を使
-用する必要があります。
+デバイスのピクセルフォーマットがMono10またはMono12の場合、10ビットおよび12ビットのピクセルデータを格納するために16ビット深度のピクセルが必要なので、`image_io_u3v_cameraN_u16x2`が必要です。
 
-ピクセルフォーマットがRGB8の場合、ビット深度が8で次元が3（幅と高さに加えて、色のチャネルがある 
-）であるため、 `image_io_u3v_cameraN_u8x3` を使用します。
+ピクセルフォーマットがRGB8の場合、ビットの深度は8で、次元は3です（幅と高さに加えて、カラーチャンネルがあります）、そのため`image_io_u3v_cameraN_u8x3`を使用します。
 
-これらのBBのいずれも、入力として `dispose`、`gain`、および `exposuretime` と呼ばれるものを必要 
-とするため、これらの値をパイプラインに渡すためにポートを設定する必要があります。
+| BBの名前 | ビットの深さ | 次元 | `PixelFormat`の例 |
+| --------   | ------- | ------- | ------- |
+| `image_io_u3v_cameraN_u8x2` | 8 | 2 | `Mono8` |
+| `image_io_u3v_cameraN_u8x3` | 8 | 3 |  `RGB8`, `BGR8` |
+| `image_io_u3v_cameraN_u16x2` | 16 | 2 | `Mono10`, `Mono12` |
+
+BBに設定するための静的な入力値を設定するには、次のように`Param`を定義する必要があります。
 
 ```c++
-// ポートの設定
-Port dispose_p{ "dispose",  Halide::type_of<bool>() };
-Port gain_p{ "gain", Halide::type_of<double>(), 1 };
-Port exposure_p{ "exposure", Halide::type_of<double>(), 1 };
+// パラメータの設定
+Param num_devices("num_devices", num_device),
+Param frame_sync("frame_sync", true),
+Param realtime_diaplay_mode("realtime_diaplay_mode", false)
 ```
 
-ポートの入力は動的です。つまり、各実行ごとに更新できます。入力値を文字列で静的に設定するには、 
-`Param` を使用できます。
+| Paramのキー | 値のタイプ | 説明 |
+| --------   | ------- | ------- |
+| `num_devices` | Integer | プログラムで使用するデバイスの数 |
+| `frame_sync` | Boolean | デバイスの数が1以上の場合、デバイス間でフレームカウントを同期させる |
+| `realtime_diaplay_mode` | Boolean | フレームドロップを許可しますが、遅延はありません |
+
+これで、ノードとポート、およびパラメータを持つBBをパイプラインに追加できます。
 
 ```c++
-#define FEATURE_GAIN_KEY "Gain"
-#define FEATURE_EXPOSURE_KEY "ExposureTime"
-...
-Param num_devices{"num_devices", std::to_string(num_device)};
-Param pixel_format{"pixel_format_ptr", pixel_format};
-Param frame_sync{"frame_sync", "true"};
-Param gain_key{"gain_key", FEATURE_GAIN_KEY};
-Param exposure_key{"exposure_key", FEATURE_EXPOSURE_KEY};
-Param realtime_diaplay_mode{"realtime_diaplay_mode", "false"};
-```
-
-`pixel_format` は[デバイス情報の取得](#get-device-information)で取得したピクセルフォーマットで 
-す。
-
-::::caution
-`gain_key` と `exposure_key` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキ 
-ーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で `Gain` および 
-`ExposureTime` として設定されていますが、一部のデバイスには異なるキーと異なるタイプがあるかもし 
-れません。
-
-その場合、ポートのタイプとパラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
-プする方法を確認してください。
-
-```c++
-#define FEATURE_GAIN_KEY <デバイスのゲインを制御するフィーチャの名前>
-#define FEATURE_EXPOSURE_KEY <露光時間を制御するフィーチャの名前>
-
-Port gain_p{ "gain", Halide::type_of<TypeCode for your device>(), 1 };
-Port exposure_p{ "exposure", Halide::type_of<TypeCode for your device>(), 1 };
-```
-::::
-
-これで、ポートとパラメータを使用してパイプラインにBBを追加します。
-
-```c++
-Node n = b.add(bb_name[pixel_format])(dispose_p, gain_p, exposure_p)
+// パイプラインにノードを追加
+Node n = b.add(bb_name)()
     .set_param(
-    num_devices,
-    pixel_format,
-    frame_sync,
-    gain_key,
-    exposure_key,
-    realtime_diaplay_mode
+        Param("num_devices", num_device),
+        Param("frame_sync", true),
+        Param("realtime_diaplay_mode", false)
     );
 ```
 
-これが私たちのパイプラインの唯一のBBであるため、ノードの出力ポートはパイプラインの出力ポートに 
-なり、その名前は `output_p` です。
-
-BBとポートを含む私たちのパイプラインは次のようになります。
+これがパイプラインとBB、ポートの構造です：
 
 ![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
-入力値を渡し、ポートから出力データを取得するためには、入力用のバッファを用意し、そのバッファを 
-入力用のポートにマッピングし、出力用のポートにバッファをマッピングする必要があります。
+ポートから出力データを取得するために、出力用のバッファを準備し、ポートをバッファにバインドします。
 
 ```c++
-// 入力ポートのためのHalideバッファを作成
-double *gains = (double*) malloc (sizeof (double) * num_device);
-double *exposures = (double*) malloc (sizeof (double) * num_device);
-for (int i = 0; i < num_device; ++i){
-    gains[i] = 40.0;
-    exposures[i] = 100.0;
-}
-Halide::Buffer<double> gain_buf(gains, std::vector< int >{num_device});
-Halide::Buffer<double> exposure_buf(exposures, std::vector< int >{num_device});
-
-// 出力ポートのためのHalideバッファを作成
+// 出力ポートから出力バッファへのポートマッピング
 std::vector< int > buf_size = std::vector < int >{ width, height };
 if (pixel_format == "RGB8"){
     buf_size.push_back(3);
@@ -147,74 +107,70 @@ std::vector<Halide::Buffer<T>> output;
 for (int i = 0; i < num_device; ++i){
     output.push_back(Halide::Buffer<T>(buf_size));
 }
-
-// I/Oポートの設定
-PortMap pm;
-pm.set(dispose_p, false);
-pm.set(gain_p, gain_buf);
-pm.set(exposure_p, exposure_buf);
-pm.set(n["output"], output);
+n["output"].bind(output);
 ```
 
-ここでの `buf_size` は2D画像向けに設計されています。ピクセルフォーマットがRGB8の場合、色チャン 
-ネルを追加するために `(width, height, 3)` を設定する必要があります。
+注意：ここでの`buf_size`は2Dイメージ用に設計されています。ピクセルフォーマットがRGB8の場合、カラーチャンネルを追加するには`(width、height、3)`を設定する必要があります。
 
-`T` は出力バッファの型です。例えば、Mono8およびRGB8の場合は `uint8_t` で、Mono10およびMono12の 
-場合は `uint16_t` です。
+`T`は出力バッファのタイプです。たとえば、Mono8およびRGB8用に`uint8_t`、Mono10およびMono12用に`uint16_t`です。
 
 ### パイプラインの実行
 
-パイプラインは実行の準備ができています。
-
-チュートリアルコードでは、ゲインおよび露光時間の値を入力ポートにマッピングするのはオプションで 
-すが、デバイスを破棄するには実行中に `false` に設定し、プログラムの実行が終了したら `true` に設 
-定する必要があります。これにより、デバイスが安全に閉じられます。
+パイプラインは実行の準備ができました。 `run()`を呼び出すたびに、ベクトルまたは`output`内のバッファが出力画像を受け取ります。
 
 ```c++
-for (int i = 0; i < loop_num; ++i){
-    pm.set(dispose_p, i == loop_num-1);
-    b.run(pm);
-    ...
-}
+b.run();
 ```
 
-動的ポートを設定した後、 `b.run(pm);` を使用してパイプラインを実行します。
+### OpenCVで表示
 
-### OpenCVでの表示
+出力データ（つまり画像データ）が**Bufferのベクトル** `output`とバインドされているため、これをOpenCVバッファにコピーして画像処理または表示できます。
 
-出力データ（つまり、画像データ）が**Bufferのベクトル**にマップされているので、これをOpenCVバッ 
-ファにコピーして画像処理または表示を行うことができます。
-
-注意すべきは、OpenCVはバッファのチャネル（次元）の順序が異なることです。
+注意：OpenCVはバッファ上のチャネル（次元）の順序が異なる可能性があります。
 
 ```c++
-for (int i = 0; i < num_device; ++i){
+int coef =  positive_pow(2, num_bit_shift_map[pixel_format]);
+
+// i番目のデバイス用
 cv::Mat img(height, width, opencv_mat_type[pixel_format]);
 std::memcpy(img.ptr(), output[i].data(), output[i].size_in_bytes());
-img *= positive_pow(2, num_bit_shift_map[pixel_format]);
-cv::imshow("image" + std::to_string(i), img);
-}
+img *= coef;
 ```
 
-`opencv_mat_type[pixel_format]` は、画像データのPixelFormat（ビットの深さと次元）に依存します。
-例えば、Mono8の場合は `CV_8UC1` 、RGB8の場合は `CV_8UC3` 、Mono10およびMono12の場合は `CV_16UC1` です。
+`opencv_mat_type[pixel_format]`は画像データのPixelFormat（ビットの深さと次元）に依存します。例えば、Mono8の場合は`CV_8UC1`、RGB8の場合は`CV_8UC3`、Mono10およびMono12の場合は`CV_16UC1`です。
 
-`output[i]` をOpenCV Matオブジェクトにコピーして表示できます。
+`output[i]`をOpenCV Matオブジェクトにコピーして表示できます。
 
 ```c++
 cv::imshow("image" + std::to_string(i), img);
-cv2.waitKey(1)
+user_input = cv::waitKeyEx(1);
 ```
 
-注意すべきは、 `output` はBufferのベクトルです（複数のデバイスを制御するために `num_device` を 
-`1` より大きく設定できることを考慮しています）。画像データを取得するには、 `outpus[0]` にアクセ 
-スします。
+注意：`output`はBufferのベクトルです（つまり、複数のデバイスを制御するために`num_device`を設定できます）。画像データを取得するには`outpus[0]`にアクセスします。
 
-このプロセスを `for` ループで繰り返すと、カメラデバイスからの連続した画像が正常に表示されます。
+連続した画像を取得するには、`cv::waitKeyEx(1)`を使用してwhileループを設定します。これにより、プログラムは1ミリ秒間保持され、ユーザーがキーを入力すると-1以外の値が返されます。次のコードは、ユーザーがキーを入力するまで無限ループします。
+
+```c++
+while(user_input == -1)
+{
+    // Builderを使用してパイプラインをJITコンパイルおよび実行します。
+    b.run();
+    
+    // 取得したバッファオブジェクトをOpenCVバッファ形式に変換します。
+    for (int i = 0; i < num_device; ++i){
+    cv::Mat img(height, width, opencv_mat_type[pixel_format]);
+    std::memcpy(img.ptr(), output[i].data(), output[i].size_in_bytes());
+    img *= coef;
+    cv::imshow("image" + std::to_string(i), img);
+    }
+
+    // 1ms待機
+    user_input = cv::waitKeyEx(1);
+}
+```
 
 ## 完全なコード
 
-チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)にあります。
+チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)です。
 
-
-プログラムをコンパイルおよびビルドするために[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)で提供されているCMakeLists.txtを使用できます。
+プログラムのコンパイルとビルドには[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)に提供されているCMakeLists.txtを使用できます。

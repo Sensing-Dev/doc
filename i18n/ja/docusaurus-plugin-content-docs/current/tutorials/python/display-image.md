@@ -102,7 +102,7 @@ output_p = node.get_port('output')
 
 ![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
-入力値を渡し、ポートから出力データを取得するために、出力のためのバッファを準備し、ポートを出力用のバッファにバインドします。
+ポートから出力データを取得するために、出力のためのバッファを準備し、ポートを出力用のバッファにバインドします。
 
 ```python
 # 出力ポート用のHalideバッファを作成
@@ -118,8 +118,6 @@ output_p.bind(output)
 ```
 
 ここでの`output_size`は2D画像用に設計されています。ピクセルフォーマットがRGB8の場合、色チャンネルを追加するために`(width, height, 3)`を設定する必要があります。
-
-`depth_of_buffer`はビット単位のピクセルサイズで、例えばMono8とRGB8の場合は`8`であり、Mono10とMono12の場合は`16`です。
 
 ### パイプラインの実行
 
@@ -158,7 +156,7 @@ while(user_input == -1):
     user_input = cv2.waitKeyEx(1)
 ```
 
-`for`ループの後に画像を表示したウィンドウを破棄することを忘れないでください。
+`while`ループの後に画像を表示したウィンドウを破棄することを忘れないでください。
 
 ```python
 cv2.destroyAllWindows()
