@@ -27,7 +27,7 @@ sidebar_position: 3
 
 ### デバイスの現在の値を取得する
 
-まず最初に、`Gain`と`ExposureTime`の現在の値を知りたいです。前回のチュートリアルで学んだように、カメラを開いた後に`get_*_feature_value`を使用してカメラ情報を取得します。
+まず最初に、`Gain`と`ExposureTime`の現在の値を知りたいです。前回のチュートリアルで学んだように、カメラを開いた後に`get_float_feature_value`を使用してカメラ情報を取得します。
 
 ```python
 for i in range(num_device):
@@ -52,6 +52,9 @@ U3Vデバイスで定義された一般的なキーの例は以下の表にリ�
 一般的な名前（例）：
 * `Gain`の代わりに、`GainRaw`または`GainAbs`かもしれません。
 * `ExposureTime`の代わりに、`ExposureTimeBaseAbs`または`ExposureTimeRaw`かもしれません。
+
+一般的な型（例）：
+* もし`Gain`や`ExposureTime`の型がDoubleではなくIntegerの場合、`get_float_feature_value`の代わりに`get_integer_feature_value`を使う必要があります。
 :::
 
 :::caution なぜ動作しないのか
@@ -62,7 +65,7 @@ U3Vデバイスで定義された一般的なキーの例は以下の表にリ�
 
 ### デバイスの現在の値を設定する
 
-さて、`set_*_feature_value`のAPIを使用してGainとExposureTimeの値を更新しましょう：
+さて、`set_float_feature_value`のAPIを使用してGainとExposureTimeの値を更新しましょう：
 
 ```python
     new_gain = current_gain + 10.0
