@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Display Image
 
-In this tutorial, we learn how to get image data from device with ion-kit, and display with .
+In this tutorial, we learn how to get image data from device with ion-kit, and display with OpenCV.
 
 ## Prerequisite
 
@@ -166,4 +166,4 @@ cv2.destroyAllWindows()
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/main/tutorial1_display.py)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)

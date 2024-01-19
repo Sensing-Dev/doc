@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # 画像の表示
 
-このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、表示する方法を学びます。
+このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpwnCVを使って表示する方法を学びます。
 
 ## 必要なもの
 
@@ -166,4 +166,4 @@ cv2.destroyAllWindows()
 
 ## 完全なコード
 
-このチュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/main/tutorial1_display.py)
+このチュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)
