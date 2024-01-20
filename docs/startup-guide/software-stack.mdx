@@ -27,14 +27,22 @@ The structure of the provided software package looks like this:
 
 | Components | OSS included in the package | License |
 | --------   | ------- | ------- |
-| Driver | [libUSB (Linux)](#libusbwinusb) | LGPL-2.1 |
-| Camera Acquisition Library | [Aravis](#aravis) | LGPL-2.1 |
-| Image Processing Framework | [ion-kit](#ion-kit) | MIT |
+| **Driver** | [libUSB (Linux)](#libusbwinusb) | LGPL-2.1 |
+| **Camera Acquisition Library** | [Aravis](#aravis) | LGPL-2.1 |
+| **Image Processing Framework** | [ion-kit](#ion-kit) | MIT |
+| Language for Image Processing | [Halide](https://halide-lang.org/) | MIT |
 | Image Processing Library (used in Framework) | [OpenCV](https://opencv.org/) | BSD |
+| Data Parser/separator | [GenDC Sepatrator](https://github.com/Sensing-Dev/GenDC) | MIT |
 
 :::note
 
 For Windows, the driver (WinUSB) comes with Windows OS.
+
+:::
+
+:::note
+
+Halide is the language for efficient image processing, and GenDC Separator is a library to treat [GenDC Data format](../lessons/camera.md).
 
 :::
 
