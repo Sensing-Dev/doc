@@ -15,7 +15,6 @@ In this tutorial, we learn how to access 2 cameras and obtain their images via i
 ```bash
 pip3 install -U pip
 pip3 install opencv-python
-pip3 install opencv-contrib-python
 pip3 install numpy
 pip3 install ion-python
 ```
@@ -28,10 +27,15 @@ To display images with ionpy, we need to get the following information of the de
 
 * Width
 * Height
+* PixelFormat
 
 The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/aravis/arv-tools.md) will help to get these values.
 
 ### Build a pipeline
+
+Import the modules, and set up the pipeline are the same as [tutorial that display 1-camera image](display-image).
+
+### Allow BB to access 2 cameras
 
 While the structurte of BB is the same as the [tutorial that display 1-camera image](display-image), we need some small changes to access two devices.
 
@@ -43,9 +47,10 @@ num_devices = Param('num_devices', str(num_device))
 node = builder.add(bb_name)\
     .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
 ```
- We have made  `Gain` and `ExposureTime` optional values. In this tutorial, we don't need to set `Gain` and `ExposureTime`  manually.
 
-Now, input is ready to access and control 2 cameras. 
+Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, and we name is `output_p`.
+
+Now, the BB is ready to access and control 2 cameras. 
 
 Similarly, output requires 2 Buffers to store two camera images that BB obtains. Therefore, the number of `Buffer` to append the output `List` is `2` as follws.
 
