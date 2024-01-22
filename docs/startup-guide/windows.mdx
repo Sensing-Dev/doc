@@ -27,7 +27,6 @@ In this document, the following environment is assumed.
 ## Prerequisite
 
 * Python 3.11
-* Git
 
 ## Sensing-dev Software Packages
 
@@ -55,7 +54,7 @@ If you with to use python-binding (ionpy), please install with pip.
 
 ```bash
 pip3 install -U pip
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+pip3 install ion-python
 ```
 
 
@@ -92,7 +91,6 @@ However, if you change the default path or move the package location, it require
 | --------   | ------- | ------- |
 | SENSING_DEV_ROOT | `<where you installed SKD>` | NEW |
 | PATH | `<where you installed SKD>/bin` | Edit(append) |
-| PYTHONPATH | `<where you installed SKD>/lib/site-package` | Edit(append) |
 
 :::info Confirmation
 Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools.md) to know the procedure.
