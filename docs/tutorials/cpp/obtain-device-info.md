@@ -4,11 +4,12 @@ sidebar_position: 2
 
 # Access and Display Device Info
 
-In this tutorial, we learn how to get device informatin with aravis API.
+In this tutorial, we learn how to get device informatin with Aravis API.
 
 ## Prerequisite
 
 * Aravis (included in SDK package)
+* GObject (included in SDK package)
 
 ## Tutorial
 
@@ -70,6 +71,7 @@ for (unsigned int i = 0; i < n_devices; ++i){
     }
     ...
     g_object_unref (device);
+}
 ```
 
 Some examples of general keys defined in U3V devices are listed in the table below.

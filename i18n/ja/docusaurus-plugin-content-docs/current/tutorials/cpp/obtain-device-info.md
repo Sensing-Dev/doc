@@ -9,13 +9,13 @@ sidebar_position: 2
 ## 前提条件
 
 * Aravis（SDKパッケージに含まれています）
+* GObject （SDKパッケージに含まれています）
 
 ## チュートリアル
 
 ### 必要なモジュールをロード
 
-Aravisモジュールを使用するためには、 `arv.h`（インストールしたSDKに含まれています）というヘッダ
-ーファイルを含める必要があります。
+Aravisモジュールを使用するためには、 `arv.h`（インストールしたSDKに含まれています）というヘッダーファイルを含める必要があります。
 
 ```c++
 #include <exception>
@@ -27,8 +27,7 @@ Aravisモジュールを使用するためには、 `arv.h`（インストール
 
 ### デバイスへのアクセス
 
-これでAravis APIを使用する準備が整いました。まず、ホストマシンに接続されているU3Vデバイスのリス
-トを更新します。
+これでAravis APIを使用する準備が整いました。まず、ホストマシンに接続されているU3Vデバイスのリストを更新します。
 
 ```c++
 arv_update_device_list ();
@@ -73,6 +72,7 @@ for (unsigned int i = 0; i < n_devices; ++i){
     }
     ...
     g_object_unref (device);
+}
 ```
 
 一般的なU3Vデバイスで定義された一部のキーの例は、以下の表にリストされています。
@@ -86,17 +86,13 @@ for (unsigned int i = 0; i < n_devices; ++i){
 | `PixelFormat` | センサーイメージデータのピクセルフォーマット | 文字列 |
 
 ::::tip
-これらのフィーチャキーとタイプはemvaによる**SFNC（Standard Features Naming Convention）**で定義
-されていますが、一部のデバイスは独自の特徴やキーを持っている場合があります。すべてのアクセス可能
-なフィーチャを知るには、`arv-tool-0.8`を使用します。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照してください。
+これらのフィーチャキーとタイプはemvaによる**SFNC（Standard Features Naming Convention）**で定義されていますが、一部のデバイスは独自の特徴やキーを持っている場合があります。すべてのアクセス可能なフィーチャを知るには、`arv-tool-0.8`を使用します。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照してください。
 ::::
 
 ::::caution
 `arv-device-error-quark` がエラーを返す場合:
-* デバイスにキーがない（`Not found (1)`）：フィーチャキーが正しいか確認してください。詳細は[利 
-用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照。
-* タイプが間違っていた（`Not a ArvGcString (0)`または`Not a ArvGcFlaot (0)`）：フィーチャタイプ
-が正しいか確認してください。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照。
+* デバイスにキーがない（`Not found (1)`）：フィーチャキーが正しいか確認してください。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照。
+* タイプが間違っていた（`Not a ArvGcString (0)`または`Not a ArvGcFlaot (0)`）：フィーチャタイプが正しいか確認してください。詳細は[利用可能なGenICamフィーチャのリスト](../external/aravis/arv-tools)を参照。
 ::::
 
 ### クローズ

@@ -25,9 +25,9 @@ The process of loading modules is exactly the same as in the last tutorial. See 
 
 The API of acess to devices is exactly the same as in the last tutorial. See the detail in [Access and Display Device Info](./obtain-device-info).
 
-### Get current values of the device.
+### Get current values of the device
 
-First of all, we want to know the current values of `Gain` and `ExposureTime`. As we learned in [the previous tutorial](./obtain-device-info), use `get_*_feature_value` to obtain camera information after opening a camera.
+First of all, we want to know the current values of `Gain` and `ExposureTime`. As we learned in [the previous tutorial](./obtain-device-info), use `get_float_feature_value` to obtain camera information after opening a camera.
 
 ```python
 for i in range(num_device):
@@ -52,6 +52,9 @@ Those feature keys and types are defined in **SFNC (Standard Features Naming Con
 Common names (example):
 * Instead of `Gain`, it may be `GainRaw` or `GainAbs`.
 * Instead of `ExposureTime`, it may be `ExposureTimeBaseAbs` or `ExposureTimeRaw`.
+
+Common types (example):
+* Instead of `get_float_feature_value`, it may be `get_integer_feature_value` if the type of `Gain` or `ExposureTime` is Integer.
 :::
 
 :::caution why it does not work
@@ -60,9 +63,9 @@ If `arv-device-error-quark` returns errors:
 * The type was wrong (`Not a ArvGcFlaot (0)`) check if the feature type is correct. If the type is integer, the API must be `get_integer_feature_value`.  See the details in  [List the available GenICam features](../../external/aravis/arv-tools).
 :::
 
-### Set current values of the device.
+### Set current values of the device
 
-Now, let's update the Gain and ExposureTime value with API of `set_*_feature_value` as follows:
+Now, let's update the Gain and ExposureTime value with API of `get_float_feature_value` as follows:
 
 ```python
     new_gain = current_gain + 10.0

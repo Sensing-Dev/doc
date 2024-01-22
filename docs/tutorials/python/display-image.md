@@ -4,7 +4,8 @@ sidebar_position: 3
 
 # Display Image
 
-In this tutorial, we learn how to get image data from device with ion-kit, and display with opencv.
+In this tutorial, we learn how to get image data from device with ion-kit, and display with OpenCV.
+
 
 ## Prerequisite
 
@@ -102,7 +103,7 @@ Our pipeline with BB and port looks like this:
 
 ![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
-To pass the input values and get the output data from port, we prepare the buffers and bind port to buffer for output.
+To get the output data from port, we prepare the buffers and bind a port to buffer for output.
 
 ```python
 # create halide buffer for output port
@@ -118,8 +119,6 @@ output_p.bind(output)
 ```
 
 Note that `output_size` here is designed for 2D image. If the pixel format is RGB8, you need to set `(width, height, 3)` to add color channel.
-
-`depth_of_buffer` is pixel size in bit; e.g. `8` for Mono8 and RGB8 while `16` for Mono10 and Mono12.
 
 ### Execute the pipeline
 
@@ -158,7 +157,7 @@ while(user_input == -1):
     user_input = cv2.waitKeyEx(1)
 ```
 
-Do not forget to destroy windows that displayed the image after `for` loop.
+Do not forget to destroy windows that displayed the image after `while` loop.
 
 ```python
 cv2.destroyAllWindows()
@@ -166,4 +165,4 @@ cv2.destroyAllWindows()
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/main/tutorial1_display.py)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)
