@@ -97,11 +97,11 @@ for i in range(num_device):
 
 ### Execute the pipeline
 
-The pipeline is now designed for 2 cameras, so `builder.run` can be executed same as the signle-camera tutorial.
+Execute `builder.run()` to finish the pipeline
 
 ### Display with OpenCV
 
-`outputs` is the `List` having 2 buffers. Each buffer is stored into numpy array, and we can access it by index (`output_datas[i]`).
+`outputs` is the `List` of buffers. Each buffer is stored into numpy array, and we can access it by index (`output_datas[i]`).
 ```python
 while(user_input == -1):
     # running the builder

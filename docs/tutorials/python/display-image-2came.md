@@ -65,7 +65,7 @@ for i in range(num_device):
 
 ### Execute the pipeline
 
-The pipeline is now designed for 2 cameras, so `builder.run` can be executed same as the signle-camera tutorial.
+The pipeline is now designed for 2 cameras, so `builder.run()` can be executed same as the signle-camera tutorial.
 
 ### Display with OpenCV
 
