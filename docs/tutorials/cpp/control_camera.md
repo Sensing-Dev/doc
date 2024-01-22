@@ -27,8 +27,7 @@ The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/
 
 ### Build a pipeline
 
-While the structurte of BB is the same as the [tutorial that display 1-camera image](display-image), and 
-[tutorial that display multiple cameras image](display-image-2came), we need some small changes to enable `Gain` and `ExposureTime` setting.
+While the structurte of BB is the same as the [tutorial that display 1-camera image](display-image), we need some small changes to enable `Gain` and `ExposureTime` setting.
 
 In this tutorial, we can set `Gain` and `ExposureTime` manually by setting enable_control to `true`.
 
