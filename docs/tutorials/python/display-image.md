@@ -1,10 +1,11 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 # Display Image
 
 In this tutorial, we learn how to get image data from device with ion-kit, and display with OpenCV.
+
 
 ## Prerequisite
 
