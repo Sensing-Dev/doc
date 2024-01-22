@@ -6,6 +6,9 @@ sidebar_position: 5
 
 このチュートリアルでは、1つのカメラ画像を表示する[前のチュートリアル](display-image)および[複数のカメラ画像を表示する](display-image-2came)の基づいて、ion-kitでGainおよびExposure timeを手動で設定する方法を学びます。
 
+BBを用いずにGainやExposureTimeなどのカメラ情報を変更するためには、[アクセスとデバイス情報の設定](./set-device-info) や [arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
+
+
 ## 前提条件
 
 * ionpy 
@@ -35,13 +38,13 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 
 BBの構造は[1台のカメラ画像を表示するチュートリアル](display-image)および[複数のカメラ画像を表示するチュートリアル](display-image-2came)と同じですが、`Gain`および`ExposureTime`の設定を有効にするためにはいくつかの小さな変更が必要です。
 
-このチュートリアルでは、enable_controlを`true`に設定することで`Gain`および`ExposureTime`を手動で設定できます。
+このチュートリアルでは、`enable_control`を`true`に設定することで`Gain`および`ExposureTime`を手動で設定できます。
 
 ポートの入力は動的で、つまり各実行ごとに更新できますが、静的な値をParamを介して文字列で設定できます。例えば、`Gain`および`ExposureTime`の値は実行ごとに更新されるべきですが、これらの値のキーは静的であるため、次のようにParamで設定することができます。
 
 ```python
 # set params
-num_devices = Param('num_devices', str(num_device))
+enable_control = Param('enable_control', 'true')
 gain_key = Param('gain_key', 'Gain')
 exposure_key = Param('exposure_key', 'ExposureTime')
 
@@ -60,7 +63,6 @@ for i in range(num_device):
     exposure_values.append(100.0)
 
 # add enable_control
-enable_control = Param('enable_control', 'true')
 node = builder.add(bb_name)\
         .set_iport([gain_ps[0], exposure_ps[0]])\
         .set_param([num_devices, frame_sync, realtime_diaplay_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
