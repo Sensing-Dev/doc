@@ -1,3 +1,4 @@
+
 .jsx-section{
     display: flex;
     width: 100%;
@@ -7,9 +8,34 @@
     padding: 10px;
 }
 
+
+
+.on-board{
+    min-width: 150px;
+    max-width: 200px;
+}
+
+.on-board-2{
+    min-width: 150px;
+    max-width: 300px;
+}
+
+/* @container screen and (max-width:480px){
+    .board{
+        flex-flow: column;
+    }
+} */
+
+
+.shadow {
+    margin: 0;
+    padding: 0rem;
+    background-color:  #f0f0f0;
+  }
+
+
 .board{
     padding: 5px;
-    margin: 0px -5px;
     display: flex;
     justify-content: center;
     text-align: center;
@@ -19,6 +45,7 @@
     /* container-type: inline-size; */
 }
 
+
 .card{
     padding: 20px;
     margin: 10px;
@@ -26,10 +53,7 @@
     font-weight: bold;
 }
 
-.on-board{
-    min-width: 150px;
-    max-width: 200px;
-}
+
 
 
 /* @container screen and (max-width:480px){
@@ -37,3 +61,53 @@
         flex-flow: column;
     }
 } */
+
+.col {
+    --ifm-col-width: 100%;
+    flex: 1 0;
+    margin-left: 0;
+    max-width: var(--ifm-col-width)
+
+}
+
+
+.col[class*=col--] {
+    flex: 0 0 var(--ifm-col-width)
+}
+
+
+.col--6 {
+    --ifm-col-width: 50%
+}
+
+.col--offset-6 {
+    margin-left: 50%
+}
+
+.margin-bottom--lg {
+    margin-bottom: 2rem!important
+}
+
+
+.margin-top--lg{
+    margin-top: 2rem!important
+}
+
+
+.section {
+    background-color: #E8E8E8;
+    width: 30%;
+    border-radius: 10px;
+  
+  }
+
+  a
+{
+    color: #19623a;
+}
+
+a:hover
+  {
+    color:  green;
+    text-decoration: none;
+}

@@ -125,4 +125,4 @@ Aravis Python APIの代わりに、arv-toolを使用することもできます�
 
 ## 完全なコード
 
-チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial0_get_device_info.py)にあります。
+チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial0_get_device_info.py)にあります。

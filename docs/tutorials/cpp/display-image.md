@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Display Image
@@ -27,17 +27,25 @@ The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/
 
 As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.
 
-In this tutorial, we build a very simple pipeline has only one Building Block that obtain image from U3V camera.
-
-The following ionpy API set up our pipeline.
+To use API of ion-kit and OpenCV, we need to include the header:
 
 ```c++
-#define MODULE_NAME "ion-bb"
-...
+#include <ion/ion.h>
+
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+```
+
+In this tutorial, we build a very simple pipeline has only one Building Block that obtain image from U3V camera.
+
+The following ion API set up our pipeline.
+
+```c++
 // pipeline setup
 Builder b;
-b.set_target(Halide::get_host_target());
-b.with_bb_module(MODULE_NAME);
+b.set_target(ion::get_host_target());
+b.with_bb_module("ion-bb");
 ```
 
 The `set_target` specifies on what hardware the pipeline built by the Builder will run. 
@@ -50,79 +58,48 @@ With the device pixelformat Mono10 or Mono12, you need `image_io_u3v_cameraN_u16
 
 If the pixelformat is RGB8, it means bit depth is 8 and dimension is 3 (in addition to width and height, it has color channel) so you would use `image_io_u3v_cameraN_u8x3`.
 
-Any of these BB requries input called `dispose`, `gain`, and `exposuretime`, so we have to se the port to pass the values to the pipeline.
+| Name of the BB | Bit depth | Dimension | Example of `PixelFormat` |
+| --------   | ------- | ------- | ------- |
+| `image_io_u3v_cameraN_u8x2` | 8 | 2 | `Mono8` |
+| `image_io_u3v_cameraN_u8x3` | 8 | 3 |  `RGB8`, `BGR8` |
+| `image_io_u3v_cameraN_u16x2` | 16 | 2 | `Mono10`, `Mono12` |
+
+To set static input values to set on BB, you need to define `Param` as follows.
 
 ```c++
-// set port
-Port dispose_p{ "dispose",  Halide::type_of<bool>() };
-Port gain_p{ "gain", Halide::type_of<double>(), 1 };
-Port exposure_p{ "exposure", Halide::type_of<double>(), 1 };
+// set params
+Param num_devices("num_devices", num_device),
+Param frame_sync("frame_sync", true),
+Param realtime_diaplay_mode("realtime_diaplay_mode", false)
 ```
 
-While port input is dynamic; i.e. it can be updated for each run, you can set static values in string via `Param`. 
-
-```c++
-#define FEATURE_GAIN_KEY "Gain"
-#define FEATURE_EXPOSURE_KEY "ExposureTime"
-...
-Param num_devices{"num_devices", std::to_string(num_device)};
-Param pixel_format{"pixel_format_ptr", pixel_format};
-Param frame_sync{"frame_sync", "true"};
-Param gain_key{"gain_key", FEATURE_GAIN_KEY};
-Param exposure_key{"exposure_key", FEATURE_EXPOSURE_KEY};
-Param realtime_diaplay_mode{"realtime_diaplay_mode", "false"};
-```
-
-`pixel_format` is the pixelformat that you obtained with [Get Device Information](#get-device-information).
-
-:::caution why it does not work
-`gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime` in `FLOAT64`; however, some device has different key and different type.
-
-In that case, you may need to change the type of port and name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
-```c++
-
-#define FEATURE_GAIN_KEY <name of the feature to control gain>
-#define FEATURE_EXPOSURE_KEY <name of the feature to control exposure time>
-
-Port gain_p{ "gain", Halide::type_of<TypeCode for your device>(), 1 };
-Port exposure_p{ "exposure", Halide::type_of<TypeCode for your device>(), 1 };
-```
-:::
+| Key of Param | Value Type | Description |
+| --------   | ------- | ------- |
+| `num_devices` | Integer | The number of devices to use in the program |
+| `frame_sync` | Boolean | If number of device is more than 1, sync the framecounts between devices |
+| `realtime_diaplay_mode` | Boolean | Allows framedrop, but no delay |
 
 Now, you add BB to your pipeline as node with ports and params.
 
 ```c++
-Node n = b.add(bb_name[pixel_format])(dispose_p, gain_p, exposure_p)
+Node n = b.add(bb_name)()
     .set_param(
-    num_devices,
-    pixel_format,
-    frame_sync,
-    gain_key,
-    exposure_key,
-    realtime_diaplay_mode
+        Param("num_devices", num_device),
+        Param("frame_sync", true),
+        Param("realtime_diaplay_mode", false)
     );
 ```
 
-Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, and we name is `output_p`.
+Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, `n["output"]`.
 
 Our pipeline with BB and port looks like this:
 
 ![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
-To pass the input values and get the output data from port, we prepare the buffers and mapping the buffer to port for input and port to buffer for output.
+To get the output data from port, we prepare the buffers and bind a port to buffer for output.
 
 ```c++
-// create halide buffer for input port
-double *gains = (double*) malloc (sizeof (double) * num_device);
-double *exposures = (double*) malloc (sizeof (double) * num_device);
-for (int i = 0; i < num_device; ++i){
-    gains[i] = 40.0;
-    exposures[i] = 100.0;
-}
-Halide::Buffer<double> gain_buf(gains, std::vector< int >{num_device});
-Halide::Buffer<double> exposure_buf(exposures, std::vector< int >{num_device});
-
-// create halide buffer for output port
+// portmapping from output port to output buffer
 std::vector< int > buf_size = std::vector < int >{ width, height };
 if (pixel_format == "RGB8"){
     buf_size.push_back(3);
@@ -131,13 +108,7 @@ std::vector<Halide::Buffer<T>> output;
 for (int i = 0; i < num_device; ++i){
     output.push_back(Halide::Buffer<T>(buf_size));
 }
-
-// set I/O ports
-PortMap pm;
-pm.set(dispose_p, false);
-pm.set(gain_p, gain_buf);
-pm.set(exposure_p, exposure_buf);
-pm.set(n["output"], output);
+n["output"].bind(output);
 ```
 
 Note that `buf_size` here is designed for 2D image. If the pixel format is RGB8, you need to set `(width, height, 3)` to add color channel.
@@ -146,49 +117,61 @@ Note that `buf_size` here is designed for 2D image. If the pixel format is RGB8,
 
 ### Execute the pipeline
 
-The pipeline is ready to run.
-
-In our tutorial code, while gain and exposure time values mapping to input port are optional, dispose the device needs to be set to `false` while running and `true` at the end of program execution so that device would be safely closed.
+The pipeline is ready to run. Each time you call `run()`, the buffer in the vector or `output` receive output images.
 
 ```c++
-for (int i = 0; i < loop_num; ++i){
-    pm.set(dispose_p, i == loop_num-1);
-    b.run(pm);
-    ...
-}
+b.run();
 ```
-
-After setting the dynamic port, use `b.run(pm);` to execute the pipeline.
 
 ### Display with OpenCV
 
-Since our output data (i.e. image data) is mapped into **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.
+Since our output data (i.e. image data) is binded with **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.
 
 Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
 
 ```c++
-for (int i = 0; i < num_device; ++i){
+int coef =  positive_pow(2, num_bit_shift_map[pixel_format]);
+
+// for ith device
 cv::Mat img(height, width, opencv_mat_type[pixel_format]);
 std::memcpy(img.ptr(), output[i].data(), output[i].size_in_bytes());
-img *= positive_pow(2, num_bit_shift_map[pixel_format]);
-cv::imshow("image" + std::to_string(i), img);
-}
+img *= coef;
 ```
+
 `opencv_mat_type[pixel_format]` depends on PixelFormat (the bit-depth and dimension) of image data; e.g. `CV_8UC1` for Mono8, `CV_8UC3` for RGB8 while `CV_16UC1` for Mono10 and Mono12.
 
 We can copy `output[i]` to the OpenCV Mat object to display.
 
 ```c++
 cv::imshow("image" + std::to_string(i), img);
-cv2.waitKey(1)
+user_input = cv::waitKeyEx(1);
 ```
 
 Note that `output` is the vector of Buffer (so that you many set `num_device` more than `1` to control multiple devices), you access `outpus[0]` to get image data.
 
-Repeating the set of this process in `for` loop successfully shows the sequential images from camera device. 
+To obtain the sequential images, you can set while loop with `cv::waitKeyEx(1)`. This holds the program for 1 ms, and return non -1 value if there's any userinput. The following code infinitely loop unless a user types any key.
+
+```c++
+while(user_input == -1)
+{
+    // JIT compilation and execution of pipelines with Builder.
+    b.run();
+
+    // Convert the retrieved buffer object to OpenCV buffer format.
+    for (int i = 0; i < num_device; ++i){
+    cv::Mat img(height, width, opencv_mat_type[pixel_format]);
+    std::memcpy(img.ptr(), output[i].data(), output[i].size_in_bytes());
+    img *= coef;
+    cv::imshow("image" + std::to_string(i), img);
+    }
+
+    // Wait for 1ms
+    user_input = cv::waitKeyEx(1);
+}
+```
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/cpp/src/tutorial1_display.cpp)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)
 
-You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/cpp/CMAKELists.txt) to compile and build the program.
+You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.
