@@ -27,14 +27,22 @@ import '/src/css/home.css';
 
 | コンポーネント | パッケージに含まれるOSS | ライセンス |
 | --------   | ------- | ------- |
-| ドライバ | [libUSB (Linux)](#libusbwinusb) | LGPL-2.1 |
-| カメラ取得ライブラリ | [Aravis](#aravis) | LGPL-2.1 |
-| 画像処理フレームワーク | [ion-kit](#ion-kit) | MIT |
+| **ドライバ** | [libUSB (Linux)](#libusbwinusb) | LGPL-2.1 |
+| **カメラ取得ライブラリ** | [Aravis](#aravis) | LGPL-2.1 |
+| **画像処理フレームワーク** | [ion-kit](#ion-kit) | MIT |
+| 画像処理言語 | [Halide](https://halide-lang.org/) | MIT |
 | 画像処理ライブラリ (フレームワーク内で使用) | [OpenCV](https://opencv.org/) | BSD |
+| データ処理ライブラリ| [GenDC Sepatrator](https://github.com/Sensing-Dev/GenDC) | MIT |
 
 :::note
 
 Windowsでは、ドライバー（WinUSB）はWindows OSに同梱されています。
+
+:::
+
+:::note
+
+HalideはC/C++ベースの言語でion-kit内で画像処理の高速化のために使われています。また、GenDC Separatorは[GenDC データフォーマット](../lessons/camera.md)を処理するために使われています。
 
 :::
 

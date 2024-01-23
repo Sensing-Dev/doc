@@ -1,213 +1,162 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
-# 画像を表示する
+# 画像の表示
 
-このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpenCVを使用して画像を
-表示する方法を学びます。
+このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpwnCVを使って表示する方法を学びます。
 
-## 前提条件
+## 必要なもの
 
-* ionpy
+* ionpy 
 * numpy
 * OpenCV
 
 ```bash
 pip3 install -U pip
 pip3 install opencv-python
-pip3 install opencv-contrib-python
 pip3 install numpy
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"       
+pip3 install ion-python
 ```
 
 ## チュートリアル
 
-### デバイス情報を取得
+### デバイス情報の取得
 
-ionpyで画像を表示するには、デバイスの以下の情報を取得する必要があります。
+ionpyを使用して画像を表示するには、デバイスの以下の情報を取得する必要があります。
 
 * 幅
 * 高さ
-* ピクセルフォーマット
+* PixelFormat
 
-[前のチュートリアル](obtain-device-info.md)または[arv-tool-0.8](../../external/aravis/arv-tools.md)がこれらの値を取得するのに役立ちます。
+[前回のチュートリアル](obtain-device-info.md)または[arv-tool-0.8](../../external/aravis/arv-tools.md)がこれらの値を取得するのに役立ちます。
 
 ### パイプラインの構築
 
-まず最初に、ionpyのモジュールをロードします。これはion-kitのPythonバインディングです。
+まず最初に、ion-kitのpythonバインディングであるionpyのモジュールをロードします。
 
 ```python
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
-[イントロダクション](../intro.mdx)で学んだように、画像I/Oおよび処理のためのパイプラインを構築お
-よび実行します。
+:::caution why it does not work
+Pythonユーザーの場合、C/C++ランタイムライブラリがない可能性があります。ionpyのモジュールをロードするのに問題がある場合は、[Microsoft公式ウェブページの記事](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022)からライブラリをインストールできます。
+:::
 
-このチュートリアルでは、U3Vカメラから画像を取得する唯一のビルディングブロックを持つ非常にシンプ
-ルなパイプラインを構築します。
+[前回の紹介](../intro.mdx)で学んだように、画像のI/Oと処理のためにパイプラインを構築して実行します。
 
-以下のionpy APIは、パイプラインをセットアップします。
+このチュートリアルでは、U3Vカメラから画像を取得する唯一のビルディングブロックを持つ非常に単純なパイプラインを構築します。
+
+次のionpy APIでパイプラインを設定します。
 
 ```python
-module_name = 'ion-bb.dll'
-...
 # パイプラインのセットアップ
 builder = Builder()
 builder.set_target('host')
-builder.with_bb_module(module_name)
+builder.with_bb_module('ion-bb')
 ```
 
-`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。    
+`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。
 
-使用するBBが `ion-bb.dll` で定義されているため、`with_bb_module` 関数でモジュールをロードする必
-要があります。
+`ion-bb.dll`で定義されたBBを使用するためには、`with_bb_module`関数でモジュールをロードする必要があります。
 
-使用するBBは `image_io_u3v_cameraN_u8x2` で、各ピクセルデータが8ビットの深さで、2次元（例：Mono8）のU3Vカメラ向けに設計されています。
+使用するBBは`image_io_u3v_cameraN_u8x2`で、これは各ピクセルデータの深度が8ビットで、2次元のU3Vカメラ向けに設計されています。例えば、Mono8です。
 
-ピクセルフォーマットがMono10またはMono12の場合は、各ピクセルデータに16ビットの深さが必要なので 
-`image_io_u3v_cameraN_u16x2` を使用する必要があります。
+ピクセルフォーマットがMono10またはMono12の場合、各ピクセルデータの深度が16ビットであるため、`image_io_u3v_cameraN_u16x2`が必要です。
 
-ピクセルフォーマットがRGB8の場合、ビット深度が8で次元が3（幅と高さに加えて、カラーチャネルがあ 
-ります）であるため、 `image_io_u3v_cameraN_u8x3` を使用します。
+ピクセルフォーマットがRGB8の場合、深度が8で次元が3（幅と高さに加えてカラーチャンネルがある）であるため、`image_io_u3v_cameraN_u8x3`を使用します。
 
-これらのBBのいずれも、 `dispose` 、 `gain` 、および `exposuretime` と呼ばれる入力が必要なので、
-パイプラインに値を渡すためにポートを設定する必要があります。
+| BBの名前 | ビット深度 | 次元 | `PixelFormat`の例 |
+| --------   | ------- | ------- | ------- |
+| `image_io_u3v_cameraN_u8x2` | 8 | 2 | `Mono8` |
+| `image_io_u3v_cameraN_u8x3` | 8 | 3 |  `RGB8`, `BGR8` |
+| `image_io_u3v_cameraN_u16x2` | 16 | 2 | `Mono10`, `Mono12` |
 
-```python
-# 入力ポートの設定
-dispose_p = Port('dispose', Type(TypeCode.Uint, 1, 1), 0)
-gain_p = Port('gain', Type(TypeCode.Float, 64, 1), 1)
-exposuretime_p = Port('exposuretime', Type(TypeCode.Float, 64, 1), 1)
-```
-
-ポート入力は動的であるため（すべての実行に対して更新できます）、 `Param` を介して静的な値を文字
-列で設定できます。
+BBに設定するために静的な入力値を設定するには、次のように`Param`を定義する必要があります。
 
 ```python
 # パラメータの設定
 num_devices = Param('num_devices', str(num_device))
-pixel_format_ptr = Param('pixel_format_ptr', "RGB8")
-gain_key = Param('gain_key', 'Gain')
-exposure_key = Param('exposure_key', 'ExposureTime')
+frame_sync = Param('frame_sync', 'false')
+realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 ```
 
-`pixel_format_ptr` は [デバイス情報の取得](#get-device-information) で取得したピクセルフォーマ 
-ットです。
+| Paramのキー | 値のタイプ | 説明 |
+| --------   | ------- | ------- |
+| `num_devices` | Integer | プログラムで使用するデバイスの数 |
+| `frame_sync` | Boolean | デバイスの数が1より多い場合、デバイス間のフレームカウントを同期します |
+| `realtime_diaplay_mode` | Boolean | フレームドロップを許可しますが、遅延はありません |
 
-::::caution
-`gain_key` および `exposure_key` はデバイスのゲインおよび露光時間を制御するGenICamのフィーチャ 
-キーです。**SFNC（Standard Features Naming Convention）**によるemvaの規格では、これらは通常、 `Gain` および `ExposureTime` を `FLOAT64` で設定しますが、一部のデバイスでは異なるキーと異なるタイ
-プを持っている場合があります。
-
-その場合、ポートのタイプとパラメータのキーの名前を変更する必要があります。[このページ](../../external/aravis/arv-tools#list-the-available-genicam-features)を確認して、使用可能なフィーチャをリス 
-トする方法を確認してください。
-```python
-gain_p = Port('gain', Type(<TypeCode>, <Size of the data type>, 1), 1)
-exposuretime_p = Port('exposuretime', Type(<TypeCode>, <Size of the data type>, 1), 1)
-
-gain_key = Param('gain_key', <name of the feature to control gain>)
-exposure_key = Param('exposure_key', <name of the feature to control exposure time>)
-```
-::::
-
-これで、ポートとパラメータを指定してBBをパイプラインに追加できます。
+これで、ノードにポートとパラメータを持つBBをパイプラインに追加できます。
 
 ```python
 # パイプラインにノードを追加
 node = builder.add(bb_name)\
-    .set_port([dispose_p, gain_p, exposuretime_p, ])\
-    .set_param([pixel_format_ptr, gain_key, exposure_key, ])
+    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
 output_p = node.get_port('output')
 ```
 
-これがパイプラインのBBとポートを持つ構造です：
+これが私たちのパイプラインの唯一のBBであるため、ノードの出力ポートはパイプラインの出力ポートになります。そして、それを`output_p`と名前を付けます。
+
+私たちのBBとポートを持つパイプラインは次のようになります：
 
 ![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
-入力値を渡し、ポートから出力データを取得するために、入力および出力用にバッファを準備し、バッフ 
-ァをポートにマッピングします。
+ポートから出力データを取得するために、出力のためのバッファを準備し、ポートを出力用のバッファにバインドします。
 
 ```python
-# 入力ポートのHalideバッファの作成
-gain_data = np.array([48.0])
-exposure_data = np.array([100.0])
-
-gains = Buffer(Type(TypeCode.Float, 64, 1), (1,))
-exposures = Buffer(Type(TypeCode.Float, 64, 1), (1,))
-gains.write(gain_data.tobytes(order='C'))
-exposures.write(exposure_data.tobytes(order='C'))
-
-# 出力ポートのHalideバッファの作成
-outputs = []
-output_size = (width, height, )
-outputs.append(Buffer(Type(TypeCode.Uint, depth_of_buffer, 1), output_size))
+# 出力ポート用のHalideバッファを作成
+output_size = (height, width, )
+if pixelformat == "RGB8":
+    output_size += (3,)
+output_data = np.full(output_size, fill_value=0, dtype=data_type)
+output = []
+output.append(Buffer(array= output_data))
 
 # I/Oポートの設定
-port_map = PortMap()
-port_map.set_buffer(gain_p, gains)
-port_map.set_buffer(exposuretime_p, exposures)
-port_map.set_buffer_array(output_p, outputs)
-port_map.set_u1(dispose_p, False)
+output_p.bind(output)
 ```
 
-ここでの `output_size` は2Dイメージ用に設計されています。ピクセルフォーマットがRGB8の場合、カラ
-ーチャンネルを追加するために `(width, height, 3)` を設定する必要があります。
-
-`depth_of_buffer` はビット単位のピクセルサイズで、例えばMono8およびRGB8の場合は `8` 、Mono10お 
-よびMono12の場合は `16` です。
+ここでの`output_size`は2D画像用に設計されています。ピクセルフォーマットがRGB8の場合、色チャンネルを追加するために`(width, height, 3)`を設定する必要があります。
 
 ### パイプラインの実行
 
-パイプラインは実行の準備ができました。
-
-チュートリアルコードでは、入力ポートにマッピングされるゲインおよび露光時間の値はオプションです 
-が、デバイスを破棄するには実行中に `False` に設定し、プログラムの実行が終了したら `True` に設定 
-する必要があります。これにより、デバイスが安全に閉じられます。
+パイプラインは実行の準備ができています。`run()`を呼び出すたびに、バッファ`output`は出力画像を受け取ります。
 
 ```python
-for x in range(loop_num):
-    port_map.set_u1(dispose_p, x==loop_num-1)
-    # builderを実行
-    builder.run(port_map)
+builder.run()
 ```
-
-動的なポートを設定した後、`builder.run`を使用してパイプラインを実行します。
 
 ### OpenCVで表示
 
-出力データ（すなわち画像データ）がBuffer `outputs`にマッピングされているため、これをOpenCVバッ 
-ファにコピーして画像処理または表示を行うことができます。
+出力ポートがバッファ`output`にバインドされている間、出力データ（つまり画像データ）はnumpy配列（`output_data`）に格納されます。
 
-注意: OpenCVはバッファ上のチャネル（次元）の順序が異なります。
+OpenCVはnumpy配列を扱うことができるため、`cv2.imshow("img", output_data)`を使用して出力画像を表示できます。
 
-```python
-buf_size_opencv = (height, width)
-output_byte_size = width*height*depth_in_byte
-```
-
-`depth_in_byte` はピクセルサイズのバイト単位です。例えば、Mono8およびRGB8の場合は `1` 、Mono10 
-およびMono12の場合は `2` です。
-
-先に画像データをバイトバッファにコピーし、次にnumpy配列にコピーして表示します。
+ただし、ピクセルフォーマットの深度がnumpy配列の深度（例：`Mono10`または`Mono12`）と一致しない場合は、データをいくつかのビットシフトで調整する必要があります。そうしないと、取得した画像がはるかに暗く見える可能性があります。
 
 ```python
-output_bytes = outputs[0].read(output_byte_size)
-
-output_np_HxW = np.frombuffer(output_bytes, data_type).reshape(buf_size_opencv)
-output_np_HxW *= pow(2, num_bit_shift)
-
-cv2.imshow("A", output_np_HxW)
-cv2.waitKey(0)
+coef = pow(2, num_bit_shift)
+output_data *= coef
+cv2.imshow("img", output_data)
 ```
 
-注意: `outputs`はBufferのリストです（複数のデバイスを制御するために`num_device`を`1`より大きく 
-することができます）、 `outputs[0]` にアクセスして画像データを取得します。
+連続した画像を取得するには、`cv2.waitKeyEx(1)`を使用してwhileループを設定できます。これにより、プログラムが1ミリ秒間保持され、ユーザー入力があると非-1の値が返されます。以下のコードは、ユーザーが任意のキーを入力するまで無限にループします。
 
-このプロセスのセットを `for` ループで繰り返すと、カメラデバイスからの連続した画像が表示されます
-。
+```python
+coef = pow(2, num_bit_shift)
+user_input = -1
 
-`for` ループの後に画像を表示したウィンドウを破棄することを忘れないでください。
+while(user_input == -1):
+    # ビルダーの実行
+    builder.run()
+    output_data *= coef
+
+    cv2.imshow("img", output_data)
+    user_input = cv2.waitKeyEx(1)
+```
+
+`while`ループの後に画像を表示したウィンドウを破棄することを忘れないでください。
 
 ```python
 cv2.destroyAllWindows()
@@ -215,4 +164,4 @@ cv2.destroyAllWindows()
 
 ## 完全なコード
 
-チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial1_display.py)にあります。
+このチュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)

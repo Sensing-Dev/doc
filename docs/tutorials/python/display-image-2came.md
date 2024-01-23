@@ -15,16 +15,15 @@ In this tutorial, we learn how to access 2 cameras and obtain their images via i
 ```bash
 pip3 install -U pip
 pip3 install opencv-python
-pip3 install opencv-contrib-python
 pip3 install numpy
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+pip3 install ion-python
 ```
 
 ## Tutorial
 
 ### Get Device Information
 
-To display image with ionpy, we need to get the following information of the device.
+To display images with ionpy, we need to get the following information of the device.
 
 * Width
 * Height
@@ -34,6 +33,10 @@ The [previous tutorial](obtain-device-info.md) or [arv-tool-0.8](../../external/
 
 ### Build a pipeline
 
+Import the modules, and set up the pipeline are the same as [tutorial that display 1-camera image](display-image).
+
+### Allow BB to access 2 cameras
+
 While the structurte of BB is the same as the [tutorial that display 1-camera image](display-image), we need some small changes to access two devices.
 
 We need to set `Param` of BB `image_io_u3v_cameraN_u<bit-depth>x<dimension>` called `num_devices` to `2` so that it will try to detect 2 cameras connected to the host machine.
@@ -42,61 +45,50 @@ We need to set `Param` of BB `image_io_u3v_cameraN_u<bit-depth>x<dimension>` cal
 num_device = 2
 num_devices = Param('num_devices', str(num_device))
 node = builder.add(bb_name)\
-    .set_port([dispose_p, gain_p, exposuretime_p, ])\
-    .set_param([pixel_format_ptr, gain_key, exposure_key, ])
+    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
 ```
 
-Since two cameras requires the value to set `Gain` and `WxposureTime` respectively, data requires 2-length array. Size of buffer also changes from `(1,)` to `(2,)`.
+Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, and we name is `output_p`.
 
-```python
-gain_data = np.array([48.0, 24.0])
-exposure_data = np.array([100.0, 50.0])
-gains = Buffer(Type(TypeCode.Float, 64, 1), (2,))
-exposures = Buffer(Type(TypeCode.Float, 64, 1), (2,))
-```
-
-Now, input is ready to access and control 2 cameras. 
+Now, the BB is ready to access and control 2 cameras. 
 
 Similarly, output requires 2 Buffers to store two camera images that BB obtains. Therefore, the number of `Buffer` to append the output `List` is `2` as follws.
 
 ```python
 outputs = []
-output_size = (width, height, )
+output_datas = []
+output_size = (height, width, )
 if pixelformat == "RGB8":
     output_size += (3,)
-outputs.append(Buffer(Type(TypeCode.Uint, depth_of_buffer, 1), output_size))
-outputs.append(Buffer(Type(TypeCode.Uint, depth_of_buffer, 1), output_size))
+for i in range(num_device):
+    output_datas.append(np.full(output_size, fill_value=0, dtype=data_type))
+    outputs.append(Buffer(array= output_datas[i]))
+# set I/O ports
+for i in range(num_device):
+    output_p[i].bind(outputs[i])
 ```
 
 ### Execute the pipeline
 
-The pipeline is now designed for 2 cameras, so `builder.run` can be executed same as the signle-camera tutorial.
+The pipeline is now designed for 2 cameras, so `builder.run()` can be executed same as the signle-camera tutorial.
 
 ### Display with OpenCV
 
-`outputs` is the `List` having 2 buffers. To access data for each, we can use the square brackets.
+`outputs` is the `List` having 2 buffers. Each buffer is stored into numpy array, and we can access it by index (`output_datas[i]`).
+```python
+while(user_input == -1):
+    # running the builder
+    builder.run()
+    for i in range(num_device):
+        output_datas[i] *= coef
+        cv2.imshow("img" + str(i), output_datas[i])
+    user_input = cv2.waitKeyEx(1)
+```
+Do not forget to destroy windows that displayed the image after `for` loop.
 
 ```python
-output_bytes_image0 = outputs[0].read(output_byte_size)
-output_bytes_image1 = outputs[1].read(output_byte_size)
+cv2.destroyAllWindows()
 ```
-
-We need to create numpy array for each image, and processed numpy arrays can be displayed.
-
-```python
-output_np_HxW_image0 = np.frombuffer(output_bytes_image0, data_type).reshape(buf_size_opencv)
-output_np_HxW_image1 = np.frombuffer(output_bytes_image1, data_type).reshape(buf_size_opencv)
-output_np_HxW_image0 *= pow(2, num_bit_shift)
-output_np_HxW_image1 *= pow(2, num_bit_shift)
-
-...
-
-cv2.imshow("A", output_np_HxW_image0)
-cv2.imshow("B", output_np_HxW_image1)
-cv2.waitKey(0)
-...
-```
-
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial1_display_2cam.py)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display_2cam.py)
