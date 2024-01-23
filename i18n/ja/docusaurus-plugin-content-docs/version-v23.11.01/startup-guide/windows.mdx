@@ -47,7 +47,11 @@ Windowsで管理者権限を持っている場合、ダウンロードしたス�
 PowerShellはスクリプトの実行を許可していない可能性があります。その場合、次の例のように`-ExecutionPolicy Bypass`オプションを追加してください。
 
 ```bash
+<<<<<<< HEAD
 powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名> v23.11.01
+=======
+powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名> -version v23.11.01
+>>>>>>> 238142384a951fc901440fbe931c2d2d420c4e03
 ```
 :::
 

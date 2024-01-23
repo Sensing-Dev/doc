@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 # Access and Display Device Info
@@ -118,4 +118,4 @@ Instead of using Aravis Python API, you can also use arv-tool. See the detail in
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial0_get_device_info.py)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial0_get_device_info.py)

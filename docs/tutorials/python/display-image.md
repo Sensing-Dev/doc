@@ -4,7 +4,8 @@ sidebar_position: 3
 
 # Display Image
 
-In this tutorial, we learn how to get image data from device with ion-kit, and display with .
+In this tutorial, we learn how to get image data from device with ion-kit, and display with OpenCV.
+
 
 ## Prerequisite
 
@@ -15,9 +16,8 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 ```bash
 pip3 install -U pip
 pip3 install opencv-python
-pip3 install opencv-contrib-python
 pip3 install numpy
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+pip3 install ion-python
 ```
 
 ## Tutorial
@@ -40,6 +40,10 @@ First of all, we load the module of ionpy, which is a python-binding of ion-kit.
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
+:::caution why it does not work
+For Python users, you may have no C/C++ runtime library. If you have trouble to load the module of ionpy, you can install the library from [the article of Microsoft official webpage](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022).
+:::
+
 As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.
 
 In this tutorial, we build a very simple pipeline has only one Building Block that obtain image from U3V camera.
@@ -47,12 +51,10 @@ In this tutorial, we build a very simple pipeline has only one Building Block th
 The following ionpy API set up our pipeline.
 
 ```python
-module_name = 'ion-bb.dll'
-...
 # pipeline setup
 builder = Builder()
 builder.set_target('host')
-builder.with_bb_module(module_name)
+builder.with_bb_module('ion-bb')
 ```
 
 The `set_target` specifies on what hardware the pipeline built by the Builder will run. 
@@ -65,48 +67,33 @@ With the device pixelformat Mono10 or Mono12, you need `image_io_u3v_cameraN_u16
 
 If the pixelformat is RGB8, it means bit depth is 8 and dimension is 3 (in addition to width and height, it has color channel) so you would use `image_io_u3v_cameraN_u8x3`.
 
-Any of these BB requries input called `dispose`, `gain`, and `exposuretime`, so we have to se the port to pass the values to the pipeline.
+| Name of the BB | Bit depth | Dimension | Example of `PixelFormat` |
+| --------   | ------- | ------- | ------- |
+| `image_io_u3v_cameraN_u8x2` | 8 | 2 | `Mono8` |
+| `image_io_u3v_cameraN_u8x3` | 8 | 3 |  `RGB8`, `BGR8` |
+| `image_io_u3v_cameraN_u16x2` | 16 | 2 | `Mono10`, `Mono12` |
 
-```python
-# set input port
-dispose_p = Port('dispose', Type(TypeCode.Uint, 1, 1), 0)
-gain_p = Port('gain', Type(TypeCode.Float, 64, 1), 1)
-exposuretime_p = Port('exposuretime', Type(TypeCode.Float, 64, 1), 1)
-```
-
-While port input is dynamic; i.e. it can be updated for each run, you can set static values in string via `Param`. 
+To set static input values to set on BB, you need to define `Param` as follows. 
 
 ```python
 # set params
 num_devices = Param('num_devices', str(num_device))
-pixel_format_ptr = Param('pixel_format_ptr', "RGB8")
-gain_key = Param('gain_key', 'Gain')
-exposure_key = Param('exposure_key', 'ExposureTime')
+frame_sync = Param('frame_sync', 'false')
+realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 ```
 
-`pixel_format_ptr` is the pixelformat that you obtained with [Get Device Information](#get-device-information).
-
-
-:::caution why it does not work
-`gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime` in `FLOAT64`; however, some device has different key and different type.
-
-In that case, you may need to change the type of port and name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
-```python
-gain_p = Port('gain', Type(<TypeCode>, <Size of the data type>, 1), 1)
-exposuretime_p = Port('exposuretime', Type(<TypeCode>, <Size of the data type>, 1), 1)
-
-gain_key = Param('gain_key', <name of the feature to control gain>)
-exposure_key = Param('exposure_key', <name of the feature to control exposure time>)
-```
-:::
+| Key of Param | Value Type | Description |
+| --------   | ------- | ------- |
+| `num_devices` | Integer | The number of devices to use in the program |
+| `frame_sync` | Boolean | If number of device is more than 1, sync the framecounts between devices |
+| `realtime_diaplay_mode` | Boolean | Allows framedrop, but no delay |
 
 Now, you add BB to your pipeline as node with ports and params.
 
 ```python
 # add a node to pipeline
 node = builder.add(bb_name)\
-    .set_port([dispose_p, gain_p, exposuretime_p, ])\
-    .set_param([pixel_format_ptr, gain_key, exposure_key, ])
+    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
 output_p = node.get_port('output')
 ```
 
@@ -116,81 +103,61 @@ Our pipeline with BB and port looks like this:
 
 ![tutorial1-pipeline](../img/tutorial1-pipeline.png)
 
-To pass the input values and get the output data from port, we prepare the buffers and mapping the buffer to port for input and port to buffer for output.
+To get the output data from port, we prepare the buffers and bind a port to buffer for output.
 
 ```python
-# create halide buffer for input port
-gain_data = np.array([48.0])
-exposure_data = np.array([100.0])
-
-gains = Buffer(Type(TypeCode.Float, 64, 1), (1,))
-exposures = Buffer(Type(TypeCode.Float, 64, 1), (1,))
-gains.write(gain_data.tobytes(order='C'))
-exposures.write(exposure_data.tobytes(order='C'))
-
 # create halide buffer for output port
-outputs = []
-output_size = (width, height, )
-outputs.append(Buffer(Type(TypeCode.Uint, depth_of_buffer, 1), output_size))
+output_size = (height, width, )
+if pixelformat == "RGB8":
+    output_size += (3,)
+output_data = np.full(output_size, fill_value=0, dtype=data_type)
+output = []
+output.append(Buffer(array= output_data))
 
 # set I/O ports
-port_map = PortMap()
-port_map.set_buffer(gain_p, gains)
-port_map.set_buffer(exposuretime_p, exposures)
-port_map.set_buffer_array(output_p, outputs)
-port_map.set_u1(dispose_p, False)
+output_p.bind(output)
 ```
 
 Note that `output_size` here is designed for 2D image. If the pixel format is RGB8, you need to set `(width, height, 3)` to add color channel.
 
-`depth_of_buffer` is pixel size in bit; e.g. `8` for Mono8 and RGB8 while `16` for Mono10 and Mono12.
-
 ### Execute the pipeline
 
-The pipeline is ready to run.
-
-In our tutorial code, while gain and exposure time values mapping to input port are optional, dispose the device needs to be set to `False` while running and `True` at the end of program execution so that device would be safely closed.
+The pipeline is ready to run. Each time you call `run()`, the buffer `output` receive output images.
 
 ```python
-for x in range(loop_num):
-    port_map.set_u1(dispose_p, x==loop_num-1)
-    # running the builder
-    builder.run(port_map)
+builder.run()
 ```
-
-After setting the dynamic port, use `builder.run` to execute the pipeline.
 
 ### Display with OpenCV
 
-Since our output data (i.e. image data) is mapped into Buffer `outputs`, we can copy this to OpenCV buffer to image process or display.
+While our output port is bound with Buffer `output`, output data (i.e. image data) is stored into numpy array (`output_data`).
 
-Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
+OpenCV can treat numpy array, so you can use `cv2.imshow("img", output_data)` to display the output image.
 
-```python
-buf_size_opencv = (height, width)
-output_byte_size = width*height*depth_in_byte
-```
-`depth_in_byte` is pixel size in byte; e.g. `1` for Mono8 and RGB8 while `2` for Mono10 and Mono12.
-
-As we learned beforehand, if the device pixel format is RGB8, you need to set `(height, width, 3)` to add color channel.
-
-We once copy the image data to bytes buffer, then copy to numpy array to display.
+However, if the pixelformat depth does not match the depth of the numpy array (e.g., `Mono10` or `Mono12`), you may want to shift the data by a few bits; otherwise, the obtained image may appear much darker.
 
 ```python
-output_bytes = outputs[0].read(output_byte_size) 
-
-output_np_HxW = np.frombuffer(output_bytes, data_type).reshape(buf_size_opencv)
-output_np_HxW *= pow(2, num_bit_shift)
-
-cv2.imshow("A", output_np_HxW)
-cv2.waitKey(0)
+coef = pow(2, num_bit_shift)
+output_data *= coef
+cv2.imshow("img", output_data)
 ```
 
-Note that `outputs` is the list of Buffer (so that you many set `num_device` more than `1` to control multiple devices), you access `outpus[0]` to get image data.
+To obtain the sequential images, you can set while loop with `cv2.waitKeyEx(1)`. This holds the program for 1 ms, and return non -1 value if there's any userinput. The following code infinitely loop unless a user types any key.
 
-Repeating the set of this process in `for` loop successfully shows the sequential images from camera device. 
+```python
+coef = pow(2, num_bit_shift)
+user_input = -1
 
-Do not forget to destroy windows that displayed the image after `for` loop.
+while(user_input == -1):
+    # running the builder
+    builder.run()
+    output_data *= coef
+
+    cv2.imshow("img", output_data)
+    user_input = cv2.waitKeyEx(1)
+```
+
+Do not forget to destroy windows that displayed the image after `while` loop.
 
 ```python
 cv2.destroyAllWindows()
@@ -198,4 +165,4 @@ cv2.destroyAllWindows()
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial1_display.py)
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)

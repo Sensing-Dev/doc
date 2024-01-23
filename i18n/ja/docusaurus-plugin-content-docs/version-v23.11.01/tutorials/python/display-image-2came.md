@@ -16,7 +16,6 @@ sidebar_position: 4
 ```bash
 pip3 install -U pip
 pip3 install opencv-python
-pip3 install opencv-contrib-python
 pip3 install numpy
 pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python" 
 ```
