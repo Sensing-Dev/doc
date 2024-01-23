@@ -35,9 +35,9 @@ Please DL the installer script at the top of the page or [here](https://github.c
 
 If you have admin privileges on windows, you can just right-click the downloaded script and choose "Run with Posweshell".
 
-Otherwise, you can open powershell terminal and type `.\installer.ps1 -user <username>`.
+Otherwise, you can open powershell terminal and type `.\installer.ps1 -user <username> v23.11.01`.
 
-The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev-installer"`.
+The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
 
 :::caution why it does not work
 When you get 
@@ -55,7 +55,7 @@ If you with to use python-binding (ionpy), please install with pip.
 
 ```bash
 pip3 install -U pip
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python" 
 ```
 
 
