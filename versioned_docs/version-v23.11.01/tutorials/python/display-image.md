@@ -17,7 +17,7 @@ pip3 install -U pip
 pip3 install opencv-python
 pip3 install opencv-contrib-python
 pip3 install numpy
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+pip3 install "git+https://github.com/fixstars/ion-kit.git@633660504315364a641caa4297c19b9c09bcdf9b#egg=ionpy&subdirectory=python"
 ```
 
 ## Tutorial
