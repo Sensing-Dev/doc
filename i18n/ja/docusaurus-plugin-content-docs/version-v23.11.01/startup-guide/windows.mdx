@@ -35,9 +35,9 @@ import '/src/css/home.css';
 
 Windowsで管理者権限を持っている場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
 
-それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
+それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名> v23.11.01`と入力します。
 
-デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev-installer"`です。
+デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
 
 :::caution なぜ動作しないのか
 次のエラーが表示された場合：
@@ -47,7 +47,7 @@ Windowsで管理者権限を持っている場合、ダウンロードしたス�
 PowerShellはスクリプトの実行を許可していない可能性があります。その場合、次の例のように`-ExecutionPolicy Bypass`オプションを追加してください。
 
 ```bash
-powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名>
+powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名> v23.11.01
 ```
 :::
 
@@ -55,7 +55,7 @@ Pythonで開発を進めたい場合、pipでionpyをインストールしてく
 
 ```bash
 pip3 install -U pip
-pip3 install "git+https://github.com/fixstars/ion-kit.git#egg=ionpy&subdirectory=python"
+pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python" 
 ```
 
 
