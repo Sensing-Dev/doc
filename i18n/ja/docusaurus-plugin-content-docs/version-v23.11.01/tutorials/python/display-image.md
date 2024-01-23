@@ -17,11 +17,7 @@ sidebar_position: 3
 pip3 install -U pip
 pip3 install opencv-python
 pip3 install numpy
-<<<<<<< HEAD
 pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python" 
-=======
-pip3 install "git+https://github.com/fixstars/ion-kit.git@bbec9c25c75b1d6926d8b23b81beb770923399d3#egg=ionpy&subdirectory=python"      
->>>>>>> 238142384a951fc901440fbe931c2d2d420c4e03
 ```
 
 ## チュートリアル
