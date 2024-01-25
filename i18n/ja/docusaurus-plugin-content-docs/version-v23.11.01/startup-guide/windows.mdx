@@ -33,9 +33,7 @@ import '/src/css/home.css';
 
 ページのトップにあるインストーラースクリプトをダウンロードするか、[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer.ps1)からダウンロードしてください。
 
-Windowsで管理者権限を持っている場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
-
-それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名> v23.11.01`と入力します。
+PowerShellターミナルを開いて、`.\installer.ps1 -user <ユーザー名> v23.11.01`と入力して、SDKをインストールできます。
 
 デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
 
@@ -61,13 +59,33 @@ pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdi
 
 ## U3VデバイスにWinUSBドライバーをインストール
 
-このステップは、U3Vカメラデバイスがホストマシンに初めて接続される際にのみ必要です。
 
-[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00/installer-WinUSB.ps1) からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
+U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
-このプロセスにはアカウントの管理者権限が必要であることに注意してください。
+1. タスクバーの検索ボックスに「device manager」と入力し、メニューからDevice Managerを選択して、U3Vカメラデバイスを確認してください。
+![before_installed](./img/before_installed.png)
+画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバーをインストールする必要があります。
 
-さらに、プロセスは最大で5分かかる場合があります。
+2. **[ここ](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer-WinUSB.ps1)** and right-click to run it in PowerShell.**からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
+このプロセスには、アカウントに管理者権限が必要であり、最大で5分かかる場合があります。
+
+
+3. もし以下の画像であなたのデバイス名が見えるなら、WinUSBドライバーがインストールされています。
+![installed](./img/installed.png)
+
+
+次の画像でデバイス名が表示されている場合、WinUSBドライバーがインストールされています。
+
+:::tip ドライバーをアンインストールしたい場合
+
+1. 再度デバイスマネージャーを開き、デバイスを右クリックして、「デバイスのアンインストール」を選択してください。
+![uninstall](./img/uninstall.png)
+2. チェックボックスをクリックして、「デバイスのアンインストール」をクリックしてください。
+![clickbox](./img/clickbox.png)
+3. "Action"を開き、"scan for hardware changes"をクリックしてください。
+![hardware](./img/hardware.png)
+もしデバイスが未知のデバイスとして表示されているなら、おめでとうございます！WinUSBドライバーは正常にアンインストールされました！
+:::
 
 
 ## 環境変数の設定

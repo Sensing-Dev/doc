@@ -33,9 +33,7 @@ In this document, the following environment is assumed.
 
 Please DL the installer script at the top of the page or [here](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer.ps1).
 
-If you have admin privileges on windows, you can just right-click the downloaded script and choose "Run with Posweshell".
-
-Otherwise, you can open powershell terminal and type `.\installer.ps1 -user <username> v23.11.01`.
+You can open powershell terminal and type `.\installer.ps1 -user <username> v23.11.01` to install the SDK.
 
 The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
 
@@ -62,14 +60,28 @@ pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdi
 ## Install WinUSB driver on U3V device.
 
 This step is only required the first time a U3V camera device is connected to a host machine.
-
-Download the script from [here](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer-WinUSB.ps1) and right-click to run it in PowerShell.
-
-Please note that this process requires administrative privileges on your account.
-
-Additionally, the process may take up to 5 minutes.
+1. Check your U3V camera device using Device Manager. In the search box on the taskbar, type device manager, then select Device Manager from the menu.
+![before_installed](./img/before_installed.png)
+The image shows there are two unknown U3V camera devices connected on my host machine and we need to install the WinUSB driver.
 
 
+2. **Download the script from [HERE](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer-WinUSB.ps1)** and right-click to run it in PowerShell.
+Please note that this process requires administrative privileges on your account and may take up to 5 minutes.
+
+3. If you can see your device name in the following image, it means the WinUSB driver is installed.
+![installed](./img/installed.png)
+
+
+:::tip If you want to uninstall driver
+
+1. Open Device Manager again, and right click on your device and choose uninstall device.
+![uninstall](./img/uninstall.png)
+2. Click the checkbox and click uninstall device
+![clickbox](./img/clickbox.png)
+3. Open Action and click scan for hardware changes
+![hardware](./img/hardware.png)
+If your device is displaying as an unknown device, congratulations! The WinUSB driver has been successfully uninstalled!
+:::
 ## Set environment variables.
 
 Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.
