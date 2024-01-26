@@ -40,7 +40,8 @@ from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
 :::caution why it does not work
-For Python users, you may have no C/C++ runtime library. If you have trouble to load the module of ionpy, you can install the library from [the article of Microsoft official webpage](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022).
+* For Python users, you may have no C/C++ runtime library. If you have trouble to load the module of ionpy, you can install the library from [the article of Microsoft official webpage](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022).
+* Your ionpy may be not v0.1.0a. To check the version, type `pip3 show ionpy` on a console window. You may download the required version by `pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python"`
 :::
 
 As we learned in the [introduction](../intro.mdx), we will build and execute pipeline for image I/O and processing.

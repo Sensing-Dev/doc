@@ -41,7 +41,8 @@ from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
 :::caution
-Pythonユーザーの場合、ionpyのモジュールをロードする際にC/C++ランタイムライブラリがない可能性があります。ionpyのモジュールをロードする際に問題が発生する場合は、[Microsoftの公式ウェブページの記事](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022)からライブラリをインストールできます。
+* Pythonユーザーの場合、ionpyのモジュールをロードする際にC/C++ランタイムライブラリがない可能性があります。ionpyのモジュールをロードする際に問題が発生する場合は、[Microsoftの公式ウェブページの記事](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022)からライブラリをインストールできます。
+* ionpyのバージョンがv0.1.0a0でないと動かないことがあります。`pip3 show ionpy`でお使いのバージョンをご確認いただき、異なるバージョンをお使いの場合は`pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python"`コマンドによりv23.11.01で動作するモジュールのインストールが可能です。
 :::
 
 [イントロダクション](../intro.mdx)で学んだように、画像I/Oおよび処理のためのパイプラインを構築お
