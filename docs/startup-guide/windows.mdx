@@ -7,10 +7,11 @@ sidebar_position: 2
 This document describes the steps to install the Kizashi hardware and software development environment and the audio/video synchronous recording sample application Harmony for those who are starting development on Windows.
 
 import '/src/css/home.css';
+import {latest_installer_URL, latest_winUSB_installer_URL} from "@site/static/config.js"
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href="https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.01/installer.ps1">DL Windows 64-bit Package</a>
+<a class="card" href={latest_installer_URL}>DL Windows 64-bit Package</a>
 </div></div>
 
 ## Expected environment
@@ -30,7 +31,7 @@ In this document, the following environment is assumed.
 
 ## Sensing-dev Software Packages
 
-Please DL the installer script at the top of the page or [here](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v24.01.00/installer.ps1).
+Please DL the installer script at the top of the page or <a href={latest_installer_URL}>here</a>.
 
 If you have admin privileges on windows, you can just right-click the downloaded script and choose "Run with Posweshell".
 
@@ -63,7 +64,7 @@ pip3 install gendc-python==0.1.0
 
 This step is only required the first time a U3V camera device is connected to a host machine.
 
-Download the script from [here](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.01/installer-WinUSB.ps1) and right-click to run it in PowerShell.
+Download the script from <a href={latest_winUSB_installer_URL}>here</a>. and right-click to run it in PowerShell.
 
 Please note that this process requires administrative privileges on your account.
 

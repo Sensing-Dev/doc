@@ -7,10 +7,12 @@ sidebar_position: 2
 このドキュメントでは、Kizashiハードウェアおよびソフトウェア開発環境、およびオーディオ/ビデオ同期録音サンプルアプリケーションHarmonyのインストール手順について説明します。これは、Windowsで開発を始める人々のためのものです。
 
 import '/src/css/home.css';
+import {latest_installer_URL, latest_winUSB_installer_URL} from "@site/static/config.js"
+
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href="https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.01/installer.ps1">Windows 64ビットパッケージをダウンロード</a>
+<a class="card" href={latest_installer_URL}>Windows 64ビットパッケージをダウンロード</a>
 </div></div>
 
 ## 期待される環境
@@ -30,7 +32,7 @@ import '/src/css/home.css';
 
 ## Sensing-devソフトウェアパッケージ
 
-ページのトップにあるインストーラースクリプトをダウンロードするか、[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v24.01.00/installer.ps1)からダウンロードしてください。
+ページのトップにあるインストーラースクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
 
 Windowsで管理者権限を持っている場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
 
@@ -63,7 +65,7 @@ pip3 install gendc-python==0.1.0
 
 このステップは、U3Vカメラデバイスがホストマシンに初めて接続される際にのみ必要です。
 
-[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.10.00/installer-WinUSB.ps1) からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
+<a href={latest_winUSB_installer_URL}>こちら</a> からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
 
 このプロセスにはアカウントの管理者権限が必要であることに注意してください。
 
