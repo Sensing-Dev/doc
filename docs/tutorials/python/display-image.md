@@ -22,7 +22,7 @@ pip3 install ion-python
 
 ## Tutorial
 
-:::info
+:::tip API updates from v23.11.01
 The tutorial of v23.11.01 or older took the input of `Gain` and `ExposureTime` to control the device, but this version does not require them anymore. If you would like to control those values, please see [Control Camera in BB](./control_camera.md).
 :::
 
@@ -86,7 +86,7 @@ frame_sync = Param('frame_sync', 'false')
 realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 ```
 
-:::note
+:::tip API updates from v23.11.01
 While v23.11.01 requires BB to take a input port for `Gain` and `ExposureTime`, it became optional in this version. See the detail in [Control Camera in BB](./control_camera.md).
 
 Also, another input port `dispose` is deprecated, and the camera is automatically and implicitly closed when the instance of builder is released. 

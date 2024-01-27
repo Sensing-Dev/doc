@@ -93,7 +93,7 @@ realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 
 これで、ノードにポートとパラメータを持つBBをパイプラインに追加できます。
 
-:::note
+:::tip v23.11.01 からの変更点
 v23.11.01では`Gain`と`ExposureTime`の入力ポートをBBが必要としていましたが、このバージョンではオプションになりました。詳細は[BB内でカメラを制御する](./control_camera.md)を参照してください。
 
 また、別の入力ポート`dispose`は廃止され、ビルダーのインスタンスが解放されるとカメラは自動的にかつ暗黙的に閉じられます。

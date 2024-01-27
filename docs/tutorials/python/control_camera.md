@@ -80,6 +80,10 @@ for i in range(num_device):
 ```
 Now, we have set `Gain` and `ExposureTime` successfully!
 
+:::tip API updates from v23.11.01
+* `set_port` is renamed to `set_iport`
+:::
+
 ### Execute the pipeline
 
 Execute `builder.run()` to finish the pipeline.

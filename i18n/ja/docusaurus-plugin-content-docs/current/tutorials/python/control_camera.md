@@ -82,6 +82,10 @@ for i in range(num_device):
 
 これで、`Gain`および`ExposureTime`が正常に設定されました！
 
+:::tip v23.11.01 からの変更点
+* `set_port` が `set_iport`　に名称変更されました。
+:::
+
 ### パイプラインの実行
 
 `builder.run()` を実行してパイプラインを終了します。
