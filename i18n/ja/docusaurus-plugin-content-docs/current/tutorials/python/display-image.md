@@ -16,10 +16,14 @@ sidebar_position: 4
 pip3 install -U pip
 pip3 install opencv-python
 pip3 install numpy
-pip3 install ion-python
+pip3 install ion-python==1.0
 ```
 
 ## チュートリアル
+
+:::info
+v23.11.01またはそれ以前のチュートリアルでは、デバイスを制御するためにGainとExposureTimeの入力が必要でしたが、このバージョンではそれらがもはや必要ありません。これらの値を制御したい場合は、[BB内でカメラを制御する](./control_camera.md)を参照してください。
+:::
 
 ### デバイス情報の取得
 
@@ -89,6 +93,12 @@ realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 
 これで、ノードにポートとパラメータを持つBBをパイプラインに追加できます。
 
+:::tip v23.11.01 からの変更点
+v23.11.01では`Gain`と`ExposureTime`の入力ポートをBBが必要としていましたが、このバージョンではオプションになりました。詳細は[BB内でカメラを制御する](./control_camera.md)を参照してください。
+
+また、別の入力ポート`dispose`は廃止され、ビルダーのインスタンスが解放されるとカメラは自動的にかつ暗黙的に閉じられます。
+:::
+
 ```python
 # パイプラインにノードを追加
 node = builder.add(bb_name)\
@@ -126,6 +136,11 @@ output_p.bind(output)
 ```python
 builder.run()
 ```
+
+:::tip v23.11.01 からの変更点
+* `PortMap`は廃止されました
+* `Builder`の`run`は`PortMap`の引数を受け取りません。
+:::
 
 ### OpenCVで表示
 

@@ -19,7 +19,7 @@ To control Gain and ExposureTime without BB, you may want to see [Access and Set
 pip3 install -U pip
 pip3 install opencv-python
 pip3 install numpy
-pip3 install ion-python
+pip3 install ion-python==1.0
 ```
 
 ## Tutorial
@@ -79,6 +79,10 @@ for i in range(num_device):
     exposure_ps[i].bind(exposure_values[i])
 ```
 Now, we have set `Gain` and `ExposureTime` successfully!
+
+:::tip API updates from v23.11.01
+* `set_port` is renamed to `set_iport`
+:::
 
 ### Execute the pipeline
 

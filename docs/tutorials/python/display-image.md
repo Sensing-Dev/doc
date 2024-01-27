@@ -17,10 +17,14 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 pip3 install -U pip
 pip3 install opencv-python
 pip3 install numpy
-pip3 install ion-python
+pip3 install ion-python==1.0
 ```
 
 ## Tutorial
+
+:::tip API updates from v23.11.01
+The tutorial of v23.11.01 or older took the input of `Gain` and `ExposureTime` to control the device, but this version does not require them anymore. If you would like to control those values, please see [Control Camera in BB](./control_camera.md).
+:::
 
 ### Get Device Information
 
@@ -82,6 +86,13 @@ frame_sync = Param('frame_sync', 'false')
 realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 ```
 
+:::tip API updates from v23.11.01
+While v23.11.01 requires BB to take a input port for `Gain` and `ExposureTime`, it became optional in this version. See the detail in [Control Camera in BB](./control_camera.md).
+
+Also, another input port `dispose` is deprecated, and the camera is automatically and implicitly closed when the instance of builder is released. 
+:::
+
+
 | Key of Param | Value Type | Description |
 | --------   | ------- | ------- |
 | `num_devices` | Integer | The number of devices to use in the program |
@@ -127,6 +138,11 @@ The pipeline is ready to run. Each time you call `run()`, the buffer `output` re
 ```python
 builder.run()
 ```
+
+:::tip API updates from v23.11.01
+* `PortMap` is deprecated 
+* `Builder`'s `run` does not take argument of `PortMap` anymore.
+:::
 
 ### Display with OpenCV
 

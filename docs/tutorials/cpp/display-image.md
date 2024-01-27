@@ -13,6 +13,10 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 
 ## Tutorial
 
+:::tip API updates from v23.11.01
+The tutorial of v23.11.01 or older took the input of `Gain` and `ExposureTime` to control the device, but this version does not require them anymore. If you would like to control those values, please see [Control Camera in BB](./control_camera.md).
+:::
+
 ### Get Device Information
 
 To display image with ionpy, we need to get the following information of the device.
@@ -90,6 +94,12 @@ Node n = b.add(bb_name)()
     );
 ```
 
+:::tip API updates from v23.11.01
+While v23.11.01 requires BB to take a input port for `Gain` and `ExposureTime`, it became optional in this version. See the detail in [Control Camera in BB](./control_camera.md).
+
+Also, another input port `dispose` is deprecated, and the camera is automatically and implicitly closed when the instance of builder is released. 
+:::
+
 Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, `n["output"]`.
 
 Our pipeline with BB and port looks like this:
@@ -122,6 +132,11 @@ The pipeline is ready to run. Each time you call `run()`, the buffer in the vect
 ```c++
 b.run();
 ```
+
+:::tip API updates from v23.11.01
+* `PortMap` is deprecated 
+* `Builder`'s `run` does not take argument of `PortMap` anymore.
+:::
 
 ### Display with OpenCV
 

@@ -61,6 +61,13 @@ Node n = b.add(bb_name)(&gain0, &exposuretime0)
 
 これで、`Gain`と`ExposureTime`が正常に設定されました！
 
+
+:::note
+v23.11.01ではGainおよびExposureTimeのポートを取るためにBBが必要でしたが、このバージョンではGainおよびExposureTimeの値のアドレスを単に入力できます。
+
+また、BBがこれらの値を入力として受け取るためには、BBのParam入力にenable_controlを追加する必要があります。
+:::
+
 ### パイプラインの実行
 
 パイプラインは実行する準備ができています。`run()`を呼び出すたびに、ベクトル内のバッファまたは`output`が出力画像を受け取ります。
