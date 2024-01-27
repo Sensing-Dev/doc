@@ -8,7 +8,7 @@ sidebar_position: 4
 
 ## 前提条件
 
-* OpenCV（sensing-dev SDKと共にインストール）
+* OpenCV（sensing-dev SDKと一緒に`-InstallOpenCV`オプションでインストール）
 * ion-kit（sensing-dev SDKと共にインストール）
 
 ## チュートリアル
@@ -174,3 +174,7 @@ while(user_input == -1)
 チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)です。
 
 プログラムのコンパイルとビルドには[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)に提供されているCMakeLists.txtを使用できます。
+
+:::caution 動かない時は
+* もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。
+:::
