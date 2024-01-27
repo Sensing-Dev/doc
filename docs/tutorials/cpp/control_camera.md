@@ -60,6 +60,12 @@ Node n = b.add(bb_name)(&gain0, &exposuretime0)
 ```
 Now, we have set `Gain` and `ExposureTime` successfully!
 
+:::note
+While v23.11.01 requires BB to take a port for `Gain` and `ExposureTime`, you may take just an address of `Gain` and `ExposureTime` values for input.
+
+Also, to enable BB to take these values as inputs, you have to add `enable_control` as Param input of BB.
+:::
+
 ### Execute the pipeline
 
 The pipeline is ready to run. Each time you call `run()`, the buffer in the vector or `output` receive output images.
