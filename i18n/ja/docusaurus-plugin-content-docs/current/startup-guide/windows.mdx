@@ -34,9 +34,11 @@ import {latest_installer_URL, latest_winUSB_installer_URL} from "@site/static/co
 
 ページのトップにあるインストーラースクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
 
-Windowsで管理者権限を持っている場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
+Windowsで管理者権限を持っていて、最小限のコンポーネントをインストールしたい場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
 
 それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
+
+OpenCVをお持ちでなく、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
 
 デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev-installer"`です。
 
