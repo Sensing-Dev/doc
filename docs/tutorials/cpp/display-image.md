@@ -133,6 +133,11 @@ The pipeline is ready to run. Each time you call `run()`, the buffer in the vect
 b.run();
 ```
 
+:::tip API updates from v23.11.01
+* `PortMap` is deprecated 
+* `Builder`'s `run` does not take argument of `PortMap` anymore.
+:::
+
 ### Display with OpenCV
 
 Since our output data (i.e. image data) is binded with **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.

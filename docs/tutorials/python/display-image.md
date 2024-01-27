@@ -139,6 +139,11 @@ The pipeline is ready to run. Each time you call `run()`, the buffer `output` re
 builder.run()
 ```
 
+:::tip API updates from v23.11.01
+* `PortMap` is deprecated 
+* `Builder`'s `run` does not take argument of `PortMap` anymore.
+:::
+
 ### Display with OpenCV
 
 While our output port is bound with Buffer `output`, output data (i.e. image data) is stored into numpy array (`output_data`).

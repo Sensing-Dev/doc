@@ -137,6 +137,11 @@ output_p.bind(output)
 builder.run()
 ```
 
+:::tip v23.11.01 からの変更点
+* `PortMap`は廃止されました
+* `Builder`の`run`は`PortMap`の引数を受け取りません。
+:::
+
 ### OpenCVで表示
 
 出力ポートがバッファ`output`にバインドされている間、出力データ（つまり画像データ）はnumpy配列（`output_data`）に格納されます。

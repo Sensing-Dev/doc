@@ -132,6 +132,11 @@ n["output"].bind(output);
 b.run();
 ```
 
+:::tip v23.11.01 からの変更点
+* `PortMap`は廃止されました
+* `Builder`の`run`は`PortMap`の引数を受け取りません。
+:::
+
 ### OpenCVで表示
 
 出力データ（つまり画像データ）が**Bufferのベクトル** `output`とバインドされているため、これをOpenCVバッファにコピーして画像処理または表示できます。
