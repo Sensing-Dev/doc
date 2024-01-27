@@ -13,6 +13,10 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 
 ## Tutorial
 
+:::info
+The tutorial of v23.11.01 or older took the input of `Gain` and `ExposureTime` to control the device, but this version does not require them anymore. If you would like to control those values, please see [Control Camera in BB](./control_camera.md).
+:::
+
 ### Get Device Information
 
 To display image with ionpy, we need to get the following information of the device.
