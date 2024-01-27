@@ -61,7 +61,9 @@ pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdi
 
 This step is only required the first time a U3V camera device is connected to a host machine.
 1. Check your U3V camera device using Device Manager. In the search box on the taskbar, type device manager, then select Device Manager from the menu.
-![before_installed](./img/before_installed.png)
+
+![before_installed](./img/winusb-install-before_installed.png)
+
 The image shows there are two unknown U3V camera devices connected on my host machine and we need to install the WinUSB driver.
 
 
@@ -69,17 +71,24 @@ The image shows there are two unknown U3V camera devices connected on my host ma
 Please note that this process requires administrative privileges on your account and may take up to 5 minutes.
 
 3. If you can see your device name in the following image, it means the WinUSB driver is installed.
-![installed](./img/installed.png)
+
+![installed](./img/winusb-install-installed.png)
 
 
 :::tip If you want to uninstall driver
 
 1. Open Device Manager again, and right click on your device and choose uninstall device.
-![uninstall](./img/uninstall.png)
+
+![uninstall](./img/winusb-uninstall-uninstall.png)
+
 2. Click the checkbox and click uninstall device
-![clickbox](./img/clickbox.png)
+
+![clickbox](./img/winusb-uninstall-checkbox.png)
+
 3. Open Action and click scan for hardware changes
-![hardware](./img/hardware.png)
+
+![hardware](./img/winusb-uninstall-hardware.png)
+
 If your device is displaying as an unknown device, congratulations! The WinUSB driver has been successfully uninstalled!
 :::
 ## Set environment variables.
