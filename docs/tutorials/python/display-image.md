@@ -22,6 +22,10 @@ pip3 install ion-python
 
 ## Tutorial
 
+:::info
+The tutorial of v23.11.01 or older took the input of `Gain` and `ExposureTime` to control the device, but this version does not require them anymore. If you would like to control those values, please see [Control Camera in BB](./control_camera.md).
+:::
+
 ### Get Device Information
 
 To display image with ionpy, we need to get the following information of the device.
@@ -81,6 +85,13 @@ num_devices = Param('num_devices', str(num_device))
 frame_sync = Param('frame_sync', 'false')
 realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 ```
+
+:::note
+While v23.11.01 requires BB to take a input port for `Gain` and `ExposureTime`, it became optional in this version. See the detail in [Control Camera in BB](./control_camera.md).
+
+Also, another input port `dispose` is deprecated, and the camera is automatically and implicitly closed when the instance of builder is released. 
+:::
+
 
 | Key of Param | Value Type | Description |
 | --------   | ------- | ------- |

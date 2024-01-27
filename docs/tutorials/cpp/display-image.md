@@ -94,6 +94,12 @@ Node n = b.add(bb_name)()
     );
 ```
 
+:::note
+While v23.11.01 requires BB to take a input port for `Gain` and `ExposureTime`, it became optional in this version. See the detail in [Control Camera in BB](./control_camera.md).
+
+Also, another input port `dispose` is deprecated, and the camera is automatically and implicitly closed when the instance of builder is released. 
+:::
+
 Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, `n["output"]`.
 
 Our pipeline with BB and port looks like this:
