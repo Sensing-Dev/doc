@@ -63,7 +63,9 @@ pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdi
 U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
 1. タスクバーの検索ボックスに「device manager」と入力し、メニューからDevice Managerを選択して、U3Vカメラデバイスを確認してください。
-![before_installed](./img/before_installed.png)
+
+![before_installed](./img/winusb-install-before_installed.png)
+
 画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバーをインストールする必要があります。
 
 2. **[ここ](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer-WinUSB.ps1)** and right-click to run it in PowerShell.**からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
@@ -71,7 +73,8 @@ U3Vカメラデバイスがホストマシンに初めて接続される場合�
 
 
 3. もし以下の画像であなたのデバイス名が見えるなら、WinUSBドライバーがインストールされています。
-![installed](./img/installed.png)
+
+![installed](./img/winusb-install-installed.png)
 
 
 次の画像でデバイス名が表示されている場合、WinUSBドライバーがインストールされています。
@@ -79,11 +82,17 @@ U3Vカメラデバイスがホストマシンに初めて接続される場合�
 :::tip ドライバーをアンインストールしたい場合
 
 1. 再度デバイスマネージャーを開き、デバイスを右クリックして、「デバイスのアンインストール」を選択してください。
-![uninstall](./img/uninstall.png)
+
+![uninstall](./img/winusb-uninstall-uninstall.png)
+
 2. チェックボックスをクリックして、「デバイスのアンインストール」をクリックしてください。
-![clickbox](./img/clickbox.png)
+
+![clickbox](./img/winusb-uninstall-checkbox.png)
+
 3. "Action"を開き、"scan for hardware changes"をクリックしてください。
-![hardware](./img/hardware.png)
+
+![hardware](./img/winusb-uninstall-hardware.png)
+
 もしデバイスが未知のデバイスとして表示されているなら、おめでとうございます！WinUSBドライバーは正常にアンインストールされました！
 :::
 
