@@ -19,7 +19,7 @@ To control Gain and ExposureTime without BB, you may want to see [Access and Set
 pip3 install -U pip
 pip3 install opencv-python
 pip3 install numpy
-pip3 install ion-python
+pip3 install ion-python=1.0
 ```
 
 ## Tutorial
