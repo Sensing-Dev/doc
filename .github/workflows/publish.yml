@@ -24,6 +24,7 @@ jobs:
           node-version: '20.x'
       - name: build
         run: |
+          yarn add @docusaurus/plugin-ideal-image
           yarn install
           yarn build
       - name: Upload artifact
