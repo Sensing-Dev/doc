@@ -17,7 +17,7 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 pip3 install -U pip
 pip3 install opencv-python
 pip3 install numpy
-pip3 install ion-python==1.0
+pip3 install ion-python
 ```
 
 ## Tutorial
