@@ -66,6 +66,16 @@ While v23.11.01 requires BB to take a port for `Gain` and `ExposureTime`, you ma
 Also, to enable BB to take these values as inputs, you have to add `enable_control` as Param input of BB.
 :::
 
+:::caution why it does not work
+`gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime`; however, some device has different key.
+
+In that case, you may need to change the name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
+```c++
+Param("gain_key", <name of the feature to control gain>)
+Param("exposure_key", <name of the feature to control exposure time>)
+```
+:::
+
 ### Execute the pipeline
 
 The pipeline is ready to run. Each time you call `run()`, the buffer in the vector or `output` receive output images.

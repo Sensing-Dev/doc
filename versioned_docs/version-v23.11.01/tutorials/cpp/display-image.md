@@ -76,16 +76,12 @@ Param realtime_diaplay_mode{"realtime_diaplay_mode", "false"};
 `pixel_format` is the pixelformat that you obtained with [Get Device Information](#get-device-information).
 
 :::caution why it does not work
-`gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime` in `FLOAT64`; however, some device has different key and different type.
+`gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime`; however, some device has different key.
 
-In that case, you may need to change the type of port and name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
+In that case, you may need to change the name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
 ```c++
-
 #define FEATURE_GAIN_KEY <name of the feature to control gain>
 #define FEATURE_EXPOSURE_KEY <name of the feature to control exposure time>
-
-Port gain_p{ "gain", Halide::type_of<TypeCode for your device>(), 1 };
-Port exposure_p{ "exposure", Halide::type_of<TypeCode for your device>(), 1 };
 ```
 :::
 
