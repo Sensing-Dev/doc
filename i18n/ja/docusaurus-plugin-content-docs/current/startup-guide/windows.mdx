@@ -67,13 +67,13 @@ pip3 install gendc-python==0.1.0
 
 U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
-1. WinUSB を対象の USB デバイスに適用するには、デバイスのベンダー ID を知る必要があります。タスクバーの検索ボックスに「device manager」と入力し、メニューから**Device Manager**を選択して、U3Vカメラデバイスを確認してください。
+1. WinUSB を対象の USB デバイスに適用するには、デバイスのベンダー IDとプロダクトID を知る必要があります。タスクバーの検索ボックスに「device manager」と入力し、メニューから**Device Manager**を選択して、U3Vカメラデバイスを確認してください。
 
 ![before_installed](./img/winusb-install-before_installed.png)
 
 画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバーをインストールする必要があります。
 
-U3V カメラデバイスをダブルクリックし、ポップアップウィンドウの**詳細**タブを選択します。ドロップダウンメニューから**ハードウェア ID**を選択し、`VID_`の後にベンダー ID を見ることができます。下記の例では、それが`2676`です。
+U3V カメラデバイスをダブルクリックし、ポップアップウィンドウの**詳細**タブを選択します。ドロップダウンメニューから**ハードウェア ID**を選択し、`VID_`の後にベンダー ID を、`PID_`のあとにプロダクトIDを見ることができます。下記の例では、それぞれ`2676`と`BA03`です。
 
 ![before_installed](./img/winusb-install-vendorid.png)
 
@@ -82,9 +82,16 @@ U3V カメラデバイスをダブルクリックし、ポップアップウィ�
 
 <pre>
 <code class="language-powershell">
-{one_line_powershell} &lt;Vendor ID&gt;
+{one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
 </code>
 </pre>
+
+* U3V camera devicesにおける各IDの例
+
+|                     | Vendor ID | Product ID |
+|---------------------|-----------|------------|
+| Basler daA1280-54uc | 2676      | BA03       |
+| Sony Kizashi1.2     | 054C      | 0D7D       |
 
 :::tip ドライバーをアンインストールしたい場合
 
