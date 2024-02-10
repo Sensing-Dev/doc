@@ -84,6 +84,16 @@ Now, we have set `Gain` and `ExposureTime` successfully!
 * `set_port` is renamed to `set_iport`
 :::
 
+:::caution why it does not work
+`gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime`; however, some device has different key.
+
+In that case, you may need to change the name of the keys of param. [This page](../../external/aravis/arv-tools#list-the-available-genicam-features) to check how to list the available features.
+```python
+gain_key = Param('gain_key', <name of the feature to control gain>)
+exposure_key = Param('exposure_key', <name of the feature to control exposure time>)
+```
+:::
+
 ### Execute the pipeline
 
 Execute `builder.run()` to finish the pipeline.

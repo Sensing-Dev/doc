@@ -45,7 +45,7 @@ node = builder.add(bb_name)\
     .set_param([pixel_format_ptr, gain_key, exposure_key, ])
 ```
 
-Since two cameras requires the value to set `Gain` and `WxposureTime` respectively, data requires 2-length array. Size of buffer also changes from `(1,)` to `(2,)`.
+Since two cameras requires the value to set `Gain` and `ExposureTime` respectively, data requires 2-length array. Size of buffer also changes from `(1,)` to `(2,)`.
 
 ```python
 gain_data = np.array([48.0, 24.0])

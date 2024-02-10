@@ -61,12 +61,23 @@ Node n = b.add(bb_name)(&gain0, &exposuretime0)
 
 これで、`Gain`と`ExposureTime`が正常に設定されました！
 
-
 :::note
 v23.11.01ではGainおよびExposureTimeのポートを取るためにBBが必要でしたが、このバージョンではGainおよびExposureTimeの値のアドレスを単に入力できます。
 
 また、BBがこれらの値を入力として受け取るためには、BBのParam入力にenable_controlを追加する必要があります。
 :::
+
+::::caution
+`Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもし れません。
+
+その場合、パラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
+プする方法を確認してください。
+
+```c++
+Param("gain_key", <デバイスのゲインを制御するフィーチャの名前>)
+Param("exposure_key", <露光時間を制御するフィーチャの名前>)
+```
+::::
 
 ### パイプラインの実行
 
