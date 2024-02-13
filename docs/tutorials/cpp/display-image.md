@@ -183,7 +183,6 @@ while(user_input == -1)
     // Wait for 1ms
     user_input = cv::waitKeyEx(1);
 }
-
 ```
 :::tip when exactly camera instance is released
 The lifespan of the camera instance instance is bound by the building block instance. Meaning it'll be automatically destroyed, along with the building block instance once the program exits. To observe the precise moment, the user can `set ION_LOG_LEVEL=debug` in the Windows command line or `export ION_LOG_LEVEL=debug` in the Unix terminal. The user can access the camera via aravis if they see the following lines in terminal:
