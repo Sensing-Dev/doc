@@ -190,7 +190,7 @@ The lifespan of the camera instance instance is bound by the building block inst
 [2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
 [2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
 ```
-上記のデバッグ情報から、ユーザーはカメラインスタンスの解放にかかる時間を知ることができます。
+From the above debug infomation, users are able to know how long it takes to release the camera instance.
 :::
 ## Complete code
 
