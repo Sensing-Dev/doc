@@ -178,7 +178,20 @@ Do not forget to destroy windows that displayed the image after `while` loop.
 ```python
 cv2.destroyAllWindows()
 ```
-
+:::tip when exactly camera instance is released
+The lifespan of the camera instance instance is bound by the building block instance. Meaning it'll be automatically destroyed, along with the building block instance once the program exits. To observe the precise moment, the user can `set ION_LOG_LEVEL=debug` in the Windows command line or `export ION_LOG_LEVEL=debug` in the Unix terminal. The user can access the camera via aravis if they see the following lines in terminal:
+```
+[2024-02-14 08:17:19.560] [ion] [info]  Device/USB 0::Command : AcquisitionStart
+[2024-02-14 08:17:27.789] [ion] [debug] U3V::release_instance() :: is called
+[2024-02-14 08:17:27.790] [ion] [debug] U3V::dispose() :: is called
+[2024-02-14 08:17:27.791] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-14 08:17:28.035] [ion] [debug] U3V::dispose() :: g_object_unref took 244 ms
+[2024-02-14 08:17:28.109] [ion] [debug] U3V::dispose() :: g_object_unref took 72 ms
+[2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
+[2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
+```
+上記のデバッグ情報から、ユーザーはカメラインスタンスの解放にかかる時間を知ることができます。
+:::
 ## Complete code
 
 Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)
