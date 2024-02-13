@@ -212,6 +212,20 @@ cv2.waitKey(1)
 
 このプロセスを `for` ループで繰り返すと、カメラデバイスからの連続した画像が正常に表示されます。
 
+:::tip カメラインスタンスが正確に解放されるのは
+v23.11.01では、各外部関数に登録されたdispose()関数を呼び出すことで、u3vクラスを明示的に破棄しています。
+ビルディングブロックは、デバイスを明示的に閉じるためにdisposeに入力ポートが必要です。
+正確なタイミングを観察するには、ユーザーはWindowsコマンドラインでset ION_LOG_LEVEL=debug、またはUnixターミナルでexport ION_LOG_LEVEL=debugを設定できます。ユーザーは、ターミナルで以下の行を見た場合、aravis経由でカメラにアクセスできます:s
+```
+[2024-02-14 08:17:27.790] [ion] [debug] U3V::dispose() :: is called
+[2024-02-14 08:17:27.791] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-14 08:17:28.035] [ion] [debug] U3V::dispose() :: g_object_unref took 244 ms
+[2024-02-14 08:17:28.109] [ion] [debug] U3V::dispose() :: g_object_unref took 72 ms
+[2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
+```
+上記のデバッグ情報から、ユーザーはカメラインスタンスの解放にかかる時間を知ることができます。
+:::
+
 ## 完全なコード
 
 チュートリアルで使用された完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/cpp/src/tutorial1_display.cpp)にあります。
