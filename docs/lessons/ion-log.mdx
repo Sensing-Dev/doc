@@ -1,0 +1,68 @@
+---
+sidebar_position: 3
+---
+
+# Debug Tips
+
+This is the page for users seeking to debug their applications effectively.
+Understanding the intricacies of debugging requires insight into the multiple levels of our Software Development Kit (SDK).
+Delving deeper into this topic, you can find detailed information about these levels by checking [Sogtware Package](../startup-guide/software-stack), 
+and we offer debug tools for the Aravis (Camera Acquisition Library) and ion-kti (Image Processing Framework), empowering you to pinpoint issues with precision and efficiency.
+
+## Aravis
+
+For Aravis, you can set environment varialbe `ARV_DEBUG` to set the log-level to see the internal process of this library.
+
+If you think an issue is on device, transport, or stream, you may want to set this to check each category.
+
+See the detail in [the official website](https://aravisproject.github.io/docs/aravis-0.4/aravis-building.html).
+
+### ion-kit
+
+For ion-kit, you can set environment varialbe `ION_LOG_LEVEL` to set the log-level to see the internal process of this library.
+
+If you think an issue is on your framework or controling device through ion-kit, you may want to set this to debug.
+
+#### Example with Balser with tutorial 1
+
+Following is the console output of [Tutorial 1](../tutorials/python/display-image) after setting the environment variable `ION_LOG_LEVEL=debug`
+
+This simple tutorial code just obtain image in BB and use OpenCV to display the image, and you can see 
+
+* The version of ion-kit
+* The ID of U3V class instance
+* Camera information to use
+* When exactly the device  `AcquisitionStart`/`AcquisitionStop` is executed
+* When exactly the device is closed (`U3V::release_instance() :: is finished`)
+
+```bash
+$ python python/tutorial1_display.py 
+[2024-02-15 14:35:15.080] [ion] [debug] ion-kit version is v1.5.1
+[2024-02-15 14:35:15.090] [ion] [info] Start building pipeline
+[2024-02-15 14:35:15.091] [ion] [info] Builder::register_disposer
+[2024-02-15 14:35:15.778] [ion] [info] Create U3V instance: 1150c5e9-9e57-4373-b984-c840c2f3c68f
+[2024-02-15 14:35:15.781] [ion] [debug] U3V:: 23-11-18 : updating obtain and write
+[2024-02-15 14:35:15.782] [ion] [info] Using aravis-0.8.31
+[2024-02-15 14:35:16.809] [ion] [info] Creating U3V instance with 1 devices...
+[2024-02-15 14:35:16.809] [ion] [info] Acquisition option::frame_sync_ is false
+[2024-02-15 14:35:16.810] [ion] [info] Acquisition option::realtime_display_mode_ is true
+[2024-02-15 14:35:16.810] [ion] [info]  Device/USB 0::DeviceID : Basler-26760159D7CC-22665164
+[2024-02-15 14:35:16.874] [ion] [info]  Device/USB 0::PixelFormat : RGB8
+[2024-02-15 14:35:16.876] [ion] [info]  Device/USB 0::PayloadSize : 3686400
+[2024-02-15 14:35:16.878] [ion] [info]  Device/USB 0::GenDC : Not Supported
+[2024-02-15 14:35:16.879] [ion] [info]  Device/USB 0::Width : 1280
+[2024-02-15 14:35:16.879] [ion] [info]  Device/USB 0::Height : 960
+[2024-02-15 14:35:16.881] [ion] [info]  Device/USB 0::Buffer Size : 1073741824
+[2024-02-15 14:35:16.882] [ion] [info]  Device/USB 0::Number of Buffers : 292
+[2024-02-15 14:35:16.882] [ion] [info]  Device/USB 0::Command : AcquisitionMode
+[2024-02-15 14:35:16.886] [ion] [info]  Device/USB 0::Command : AcquisitionStart
+[2024-02-15 14:35:27.351] [ion] [debug] U3V::release_instance() :: is called
+[2024-02-15 14:35:27.352] [ion] [debug] U3V::dispose() :: is called
+[2024-02-15 14:35:27.393] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-15 14:35:27.442] [ion] [debug] U3V::dispose() :: g_object_unref took 48 ms
+[2024-02-15 14:35:27.506] [ion] [debug] U3V::dispose() :: g_object_unref took 63 ms
+[2024-02-15 14:35:27.507] [ion] [debug] U3V::dispose() :: Instance is deleted
+[2024-02-15 14:35:27.507] [ion] [debug] U3V::release_instance() :: is finished
+```
+
+If your application is not working, you can display these log and check where the issue occurs.
