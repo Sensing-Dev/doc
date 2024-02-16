@@ -37,11 +37,32 @@ ion-kitを介したフレームワークやデバイスの制御に問題があ�
 
 ```bash
 $ python python/tutorial1_display.py 
-[2024-02-15 14:35:15.080] [ion] [debug] ion-kitのバージョンはv1.5.1です
-[2024-02-15 14:35:15.090] [ion] [info] パイプラインの構築を開始します
+[2024-02-15 14:35:15.080] [ion] [debug] ion-kit version is v1.5.1
+[2024-02-15 14:35:15.090] [ion] [info] Start building pipeline
 [2024-02-15 14:35:15.091] [ion] [info] Builder::register_disposer
-[2024-02-15 14:35:15.778] [ion] [info] U3Vインスタンスを作成します：1150c5e9-9e57-4373-b984-c840c2f3c68f
-...
+[2024-02-15 14:35:15.778] [ion] [info] Create U3V instance: 1150c5e9-9e57-4373-b984-c840c2f3c68f
+[2024-02-15 14:35:15.781] [ion] [debug] U3V:: 23-11-18 : updating obtain and write
+[2024-02-15 14:35:15.782] [ion] [info] Using aravis-0.8.31
+[2024-02-15 14:35:16.809] [ion] [info] Creating U3V instance with 1 devices...
+[2024-02-15 14:35:16.809] [ion] [info] Acquisition option::frame_sync_ is false
+[2024-02-15 14:35:16.810] [ion] [info] Acquisition option::realtime_display_mode_ is true
+[2024-02-15 14:35:16.810] [ion] [info]  Device/USB 0::DeviceID : Basler-26760159D7CC-22665164
+[2024-02-15 14:35:16.874] [ion] [info]  Device/USB 0::PixelFormat : RGB8
+[2024-02-15 14:35:16.876] [ion] [info]  Device/USB 0::PayloadSize : 3686400
+[2024-02-15 14:35:16.878] [ion] [info]  Device/USB 0::GenDC : Not Supported
+[2024-02-15 14:35:16.879] [ion] [info]  Device/USB 0::Width : 1280
+[2024-02-15 14:35:16.879] [ion] [info]  Device/USB 0::Height : 960
+[2024-02-15 14:35:16.881] [ion] [info]  Device/USB 0::Buffer Size : 1073741824
+[2024-02-15 14:35:16.882] [ion] [info]  Device/USB 0::Number of Buffers : 292
+[2024-02-15 14:35:16.882] [ion] [info]  Device/USB 0::Command : AcquisitionMode
+[2024-02-15 14:35:16.886] [ion] [info]  Device/USB 0::Command : AcquisitionStart
+[2024-02-15 14:35:27.351] [ion] [debug] U3V::release_instance() :: is called
+[2024-02-15 14:35:27.352] [ion] [debug] U3V::dispose() :: is called
+[2024-02-15 14:35:27.393] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-15 14:35:27.442] [ion] [debug] U3V::dispose() :: g_object_unref took 48 ms
+[2024-02-15 14:35:27.506] [ion] [debug] U3V::dispose() :: g_object_unref took 63 ms
+[2024-02-15 14:35:27.507] [ion] [debug] U3V::dispose() :: Instance is deleted
+[2024-02-15 14:35:27.507] [ion] [debug] U3V::release_instance() :: is finished
 ```
 
 アプリケーションが正常に機能しない場合は、これらのログを表示して問題の発生箇所を確認できます。
