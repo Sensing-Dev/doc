@@ -19,7 +19,7 @@ const LangSwitcher = ({islatest, version}) => {
       return <p>{right_click_install_en} Otherwise, you  {user_install_en} <code>{shorter_install_default}</code>.</p>;
     }
     const this_ver = version;
-    return <p>{i18n.currentLocale} You {user_install_en} <code>{shorter_install_default} -version {this_ver}</code>.</p>;
+    return <p>You {user_install_en} <code>{shorter_install_default} -version {this_ver}</code>.</p>;
   }
 
   if (i18n.currentLocale == 'ja'){
