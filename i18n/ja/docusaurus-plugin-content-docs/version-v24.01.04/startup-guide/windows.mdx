@@ -7,8 +7,8 @@ sidebar_position: 2
 このドキュメントでは、Kizashiハードウェアおよびソフトウェア開発環境、およびオーディオ/ビデオ同期録音サンプルアプリケーションHarmonyのインストール手順について説明します。これは、Windowsで開発を始める人々のためのものです。
 
 import '/src/css/home.css';
-import {latest_installer_URL, one_line_powershell} from "@site/static/version_const/v240104.js"
-
+import {is_latest, latest_version, one_line_install, latest_installer_URL, one_line_powershell} from "@site/static/version_const/v240104.js"
+import LangSwitcher from '@site/static/locale_const.js';
 
 <div class="jsx-section">
 <div class="board">
@@ -34,6 +34,8 @@ import {latest_installer_URL, one_line_powershell} from "@site/static/version_co
 
 ページのトップにあるインストーラースクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
 
+<LangSwitcher islatest={is_latest} version={latest_version}/>
+
 Windowsで管理者権限を持っていて、最小限のコンポーネントをインストールしたい場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
 
 それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
@@ -49,9 +51,11 @@ OpenCVをお持ちでなく、チュートリアルなどでご利用になり�
 
 PowerShellはスクリプトの実行を許可していない可能性があります。その場合、次の例のように`-ExecutionPolicy Bypass`オプションを追加してください。
 
-```bash
-powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名>
-```
+<pre>
+<code class="language-powershell">
+{one_line_install}
+</code>
+</pre>
 :::
 
 Pythonで開発を進めたい場合、pipでionpyをインストールしてください。
