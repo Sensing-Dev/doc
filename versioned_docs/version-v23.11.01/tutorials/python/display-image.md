@@ -196,7 +196,19 @@ Do not forget to destroy windows that displayed the image after `for` loop.
 ```python
 cv2.destroyAllWindows()
 ```
-
+:::tip when exactly camera instance is released
+In v23.11.01, we explicitly dispose the u3v class by calling the dispose() function in each external functions registered.
+The building block requires input port for dispose to explicitly close the device.
+To observe the precise moment, the user can `set ION_LOG_LEVEL=debug` in the Windows command line or `export ION_LOG_LEVEL=debug` in the Unix terminal. The user can access the camera via aravis if they see the following lines in terminal:
+```
+[2024-02-14 08:17:27.790] [ion] [debug] U3V::dispose() :: is called
+[2024-02-14 08:17:27.791] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-14 08:17:28.035] [ion] [debug] U3V::dispose() :: g_object_unref took 244 ms
+[2024-02-14 08:17:28.109] [ion] [debug] U3V::dispose() :: g_object_unref took 72 ms
+[2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
+```
+From the above debug infomation, users are able to know how long it takes to release the camera instance.
+:::
 ## Complete code
 
 Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/v23.11.01/python/tutorial1_display.py)
