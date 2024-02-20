@@ -80,9 +80,6 @@ for i in range(num_device):
 ```
 Now, we have set `Gain` and `ExposureTime` successfully!
 
-:::tip API updates from v23.11.01
-* `set_port` is renamed to `set_iport`
-:::
 
 :::caution why it does not work
 `gain_key` and `exposure_key` are the feature key of GenICam to control device gain and exposure time. With **SFNC (Standard Features Naming Convention)** by emva; they are usually set `Gain` and `ExposureTime`; however, some device has different key.
