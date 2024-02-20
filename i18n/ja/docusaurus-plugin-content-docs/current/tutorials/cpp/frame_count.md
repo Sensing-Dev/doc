@@ -41,8 +41,6 @@ std::cout << frame_counts[0](0) << std::endl;
 
 チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial3_getting_frame_count.cpp)です。
 
-プログラムのコンパイルおよびビルドには、[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)で提供されているCMakeLists.txtを使用できます。
-
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。
 :::
