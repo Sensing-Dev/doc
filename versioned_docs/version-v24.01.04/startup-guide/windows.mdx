@@ -7,11 +7,11 @@ sidebar_position: 2
 This document describes the steps to install the Kizashi hardware and software development environment and the audio/video synchronous recording sample application Harmony for those who are starting development on Windows.
 
 import '/src/css/home.css';
-import {one_line_powershell} from "@site/static/version_const/v240104.js"
+import {latest_installer_URL, one_line_powershell} from "@site/static/version_const/v240104.js"
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href="https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer.ps1">DL Windows 64-bit Package v23.11.01</a>
+<a class="card" href={latest_installer_URL}>DL Windows 64-bit Package</a>
 </div></div>
 
 ## Expected environment
@@ -28,15 +28,18 @@ In this document, the following environment is assumed.
 ## Prerequisite
 
 * Python 3.11
-* Git
 
 ## Sensing-dev Software Packages
 
-Please DL the installer script at the top of the page or [here](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer.ps1).
+Please DL the installer script at the top of the page or <a href={latest_installer_URL}>here</a>.
 
-You can open powershell terminal and type `.\installer.ps1 -version v23.11.01` to install the SDK. If you have no admin privileges, add `-user <username>`.
+If you have admin privileges on windows and wishes the minimum components of SDK, you can just right-click the downloaded script and choose "Run with Posweshell".
 
-The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
+Otherwise, you can open powershell terminal and type `.\installer.ps1 -user <username>`.
+
+If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+
+The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev-installer"`.
 
 :::caution why it does not work
 When you get 
@@ -46,7 +49,7 @@ When you get
 your powershell does not allow to run the script. If so, please add `-ExecutionPolicy Bypass` option as the following example:
 
 ```bash
-powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <username> -version v23.11.01
+powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <username>
 ```
 :::
 
@@ -54,7 +57,8 @@ If you with to use python-binding (ionpy), please install with pip.
 
 ```bash
 pip3 install -U pip
-pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python" 
+pip3 install ion-python
+pip3 install gendc-python==0.1.0
 ```
 
 
@@ -88,7 +92,6 @@ In the example below, they are `2676` and `BA03` respectively.
 | Basler daA1280-54uc | 2676      | BA03       |
 | Sony Kizashi1.2     | 054C      | 0D7D       |
 
-
 :::tip If you want to uninstall driver
 
 1. Open Device Manager again, and right click on your device and choose uninstall device.
@@ -99,12 +102,15 @@ In the example below, they are `2676` and `BA03` respectively.
 
 <img src={require("./img/winusb-uninstall-checkbox.png").default } width="60%" alt="checkbox"/>
 
+
 3. Open Action and click scan for hardware changes
 
 <img src={require("./img/winusb-uninstall-hardware.png").default} width="80%" alt="hardware"/>
 
 If your device is displaying as an unknown device, congratulations! The WinUSB driver has been successfully uninstalled!
 :::
+
+
 ## Set environment variables.
 
 Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.
@@ -127,7 +133,6 @@ However, if you change the default path or move the package location, it require
 | --------   | ------- | ------- |
 | SENSING_DEV_ROOT | `<where you installed SKD>` | NEW |
 | PATH | `<where you installed SKD>/bin` | Edit(append) |
-| PYTHONPATH | `<where you installed SKD>/lib/site-package` | Edit(append) |
 
 :::info Confirmation
 Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools.md) to know the procedure.

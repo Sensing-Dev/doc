@@ -7,11 +7,12 @@ sidebar_position: 2
 このドキュメントでは、Kizashiハードウェアおよびソフトウェア開発環境、およびオーディオ/ビデオ同期録音サンプルアプリケーションHarmonyのインストール手順について説明します。これは、Windowsで開発を始める人々のためのものです。
 
 import '/src/css/home.css';
-import {one_line_powershell} from "@site/static/version_const/v240104.js"
+import {latest_installer_URL, one_line_powershell} from "@site/static/version_const/v240104.js"
+
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href="https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer.ps1">Windows 64ビットパッケージをダウンロード</a>
+<a class="card" href={latest_installer_URL}>Windows 64ビットパッケージをダウンロード</a>
 </div></div>
 
 ## 期待される環境
@@ -28,15 +29,18 @@ import {one_line_powershell} from "@site/static/version_const/v240104.js"
 ## 必要なもの
 
 * Python 3.11
-* Git
 
 ## Sensing-devソフトウェアパッケージ
 
-ページのトップにあるインストーラースクリプトをダウンロードするか、[こちら](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer.ps1)からダウンロードしてください。
+ページのトップにあるインストーラースクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
 
-PowerShellターミナルを開いて、`.\installer.ps1 -version v23.11.01`と入力して、SDKをインストールできます。アドミン権限を持っていない場合は`-user <ユーザー名>`オプションをつけることでシステムに影響することなくインストールが可能です。
+Windowsで管理者権限を持っていて、最小限のコンポーネントをインストールしたい場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
 
-デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
+それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
+
+OpenCVをお持ちでなく、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
+
+デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev-installer"`です。
 
 :::caution なぜ動作しないのか
 次のエラーが表示された場合：
@@ -46,7 +50,7 @@ PowerShellターミナルを開いて、`.\installer.ps1 -version v23.11.01`と�
 PowerShellはスクリプトの実行を許可していない可能性があります。その場合、次の例のように`-ExecutionPolicy Bypass`オプションを追加してください。
 
 ```bash
-powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名> -version v23.11.01
+powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <ユーザー名>
 ```
 :::
 
@@ -54,12 +58,12 @@ Pythonで開発を進めたい場合、pipでionpyをインストールしてく
 
 ```bash
 pip3 install -U pip
-pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python" 
+pip3 install ion-python
+pip3 install gendc-python==0.1.0
 ```
 
 
 ## U3VデバイスにWinUSBドライバーをインストール
-
 
 U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
@@ -89,7 +93,6 @@ U3V カメラデバイスをダブルクリックし、ポップアップウィ�
 | Basler daA1280-54uc | 2676      | BA03       |
 | Sony Kizashi1.2     | 054C      | 0D7D       |
 
-
 :::tip ドライバーをアンインストールしたい場合
 
 1. 再度デバイスマネージャーを開き、デバイスを右クリックして、「デバイスのアンインストール」を選択してください。
@@ -106,7 +109,6 @@ U3V カメラデバイスをダブルクリックし、ポップアップウィ�
 
 もしデバイスが未知のデバイスとして表示されているなら、おめでとうございます！WinUSBドライバーは正常にアンインストールされました！
 :::
-
 
 
 ## 環境変数の設定
@@ -131,7 +133,6 @@ installer.ps1スクリプトを実行すると、SDKが必要とする環境変�
 | --------   | ------- | ------- |
 | SENSING_DEV_ROOT | `<SDKをインストールした場所>` | 新規 |
 | PATH | `<SDKをインストールした場所>/bin` | 編集（追加） |
-| PYTHONPATH | `<SDKをインストールした場所>/lib/site-package` | 編集（追加） |
 
 :::info 確認
 `arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できるかもしれません。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
