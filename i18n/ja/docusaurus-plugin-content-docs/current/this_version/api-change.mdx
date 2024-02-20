@@ -1,35 +1,5 @@
 # APIアップデート: 新機能とヒント
 
-このページは、v23.11.01からv24.01.04のSensing-Dev SDKにアップデートするユーザー向けです。
+このページは、v24.01.04から最新版のSensing-Dev SDKにアップデートするユーザー向けです。
 
-このアップデートにはion-kitのメジャーリリースが含まれており、いくつかのAPI変更があります。
-
-古いAPIはまだv24.01.04でサポートされていることに注意してください。
-
-## API変更
-
-### `dispose` 入力ポートの削除
-
-Sensing-Dev v23.11.01（ion-kit 0.3.5）では、USB 3 Vision Cameraを使用するBBは、デバイスを閉じるタイミングを明示的に設定するために `dispose` 入力が必要でした。
-
-Sensing-Dev v24.01.04（ion-kit 1.6.0）では、USB 3 Vision Cameraを使用するBBはこれ以上この入力を必要とせず、`builder` のインスタンスが解放されるとカメラが停止します。
-
-インスタンスが解放されるタイミングを見たい場合は、環境変数`ION_LOG_LEVEL`を`debug`に設定してください。詳しくは[デバッグのヒント](../lessons/ion-log)を参照してください。
-
-### オプションの `gain`/`exposuretime` 入力ポート
-
-Sensing-Dev v23.11.01（ion-kit 0.3.5）では、USB 3 Vision Cameraを使用するBBは、カメラのGainとExposureTimeを設定するために `gain` と `exposuretime` 入力が必要でした。
-
-Sensing-Dev v24.01.04（ion-kit 1.6.0）では、これらの入力はオプションであり、 `enable_control` 入力パラメータを使用して `gain` と `exposuretime` 入力を設定できます。それ以外の場合、明示的に設定する必要はありません。
-
-### `PortMap` の削除
-
-Sensing-Dev v23.11.01（ion-kit 0.3.5）では、各入力/出力 `Port` に入力値を設定するために `PortMap` のオブジェクトが必要でした。
-
-Sensing-Dev v24.01.04（ion-kit 1.6.0）では、`Port` のメンバー関数である `bind()` を使用して直接入力値を設定できます。
-
-### BBに入力ポートを設定するAPIの名前変更
-
-Sensing-Dev v23.11.01（ion-kit 0.3.5）では、BBに入力ポートを設定する関数の名前は `set_port` でした。
-
-Sensing-Dev v24.01.04（ion-kit 1.6.0）では、BBに入力ポートを設定する関数の名前は `set_iport` です。
+新たなリリースがあるたびに、このページは更新されます。
