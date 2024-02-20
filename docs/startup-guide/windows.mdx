@@ -7,7 +7,8 @@ sidebar_position: 2
 This document describes the steps to install the Kizashi hardware and software development environment and the audio/video synchronous recording sample application Harmony for those who are starting development on Windows.
 
 import '/src/css/home.css';
-import {latest_installer_URL, one_line_powershell} from "@site/static/version_const/latest.js"
+import {is_latest, latest_version, one_line_install, latest_installer_URL, one_line_powershell} from "@site/static/version_const/latest.js"
+import LangSwitcher from '@site/static/locale_const.js';
 
 <div class="jsx-section">
 <div class="board">
@@ -33,9 +34,7 @@ In this document, the following environment is assumed.
 
 Please DL the installer script at the top of the page or <a href={latest_installer_URL}>here</a>.
 
-If you have admin privileges on windows and wishes the minimum components of SDK, you can just right-click the downloaded script and choose "Run with Posweshell".
-
-Otherwise, you can open powershell terminal and type `.\installer.ps1 -user <username>`.
+<LangSwitcher islatest={is_latest} version={latest_version}/>
 
 If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
 
@@ -48,9 +47,12 @@ When you get
 
 your powershell does not allow to run the script. If so, please add `-ExecutionPolicy Bypass` option as the following example:
 
-```bash
-powershell.exe -ExecutionPolicy Bypass -File .\installer.ps1 -user <username>
-```
+<pre>
+<code class="language-powershell">
+{one_line_install}
+</code>
+</pre>
+
 :::
 
 If you with to use python-binding (ionpy), please install with pip.
