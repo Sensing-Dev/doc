@@ -105,8 +105,6 @@ while(user_input == -1)
 
 チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial2_control_camera.cpp)です。
 
-プログラムのコンパイルおよびビルドには、[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)で提供されているCMakeLists.txtを使用できます。
-
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。
 :::

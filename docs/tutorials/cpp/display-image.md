@@ -197,14 +197,13 @@ The lifespan of the camera instance instance is bound by the building block inst
 [2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
 ```
 From the above debug infomation, users are able to know how long it takes to release the camera instance.
+See the detail in [Debug Tips](../../lessons/ion-log). 
 :::
 
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)
-
-You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp).
 
 :::caution why it does not work
 * If you are using OpenCV that you install by yourself, please confirm that it is linked to your program appropriately.

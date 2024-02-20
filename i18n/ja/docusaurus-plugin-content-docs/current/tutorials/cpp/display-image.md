@@ -196,12 +196,11 @@ while(user_input == -1)
 [2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
 ```
 上記のデバッグ情報から、ユーザーはカメラインスタンスの解放にかかる時間を知ることができます。
+詳細はは[デバッグのヒント](../../lessons/ion-log)を参照してください。
 :::
 ## 完全なコード
 
 チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp)です。
-
-プログラムのコンパイルとビルドには[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)に提供されているCMakeLists.txtを使用できます。
 
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。

@@ -39,9 +39,7 @@ std::cout << frame_counts[0](0) << std::endl;
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial3_getting_frame_count.cpp)
-
-You can Use the CMakeLists.txt provided [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt) to compile and build the program.
+Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial3_getting_frame_count.cpp).
 
 :::caution why it does not work
 * If you are using OpenCV that you install by yourself, please confirm that it is linked to your program appropriately.

@@ -191,6 +191,7 @@ The lifespan of the camera instance instance is bound by the building block inst
 [2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
 ```
 From the above debug infomation, users are able to know how long it takes to release the camera instance.
+See the detail in [Debug Tips](../../lessons/ion-log). 
 :::
 ## Complete code
 

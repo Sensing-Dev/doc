@@ -123,5 +123,3 @@ Aravis Python APIの代わりに、arv-toolも使用できます。詳細は[Ara
 ## 完全なコード
 
 このチュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial0_set_device_info.cpp)です。
-
-プログラムのコンパイルとビルドには[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/CMAKELists.txt)に提供されているCMakeLists.txtを使用できます。
