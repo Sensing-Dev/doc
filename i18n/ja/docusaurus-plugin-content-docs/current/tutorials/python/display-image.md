@@ -21,10 +21,6 @@ pip3 install ion-python
 
 ## チュートリアル
 
-:::info
-v23.11.01またはそれ以前のチュートリアルでは、デバイスを制御するためにGainとExposureTimeの入力が必要でしたが、このバージョンではそれらがもはや必要ありません。これらの値を制御したい場合は、[BB内でカメラを制御する](./control_camera.md)を参照してください。
-:::
-
 ### デバイス情報の取得
 
 ionpyを使用して画像を表示するには、デバイスの以下の情報を取得する必要があります。
@@ -93,12 +89,6 @@ realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 
 これで、ノードにポートとパラメータを持つBBをパイプラインに追加できます。
 
-:::tip v23.11.01 からの変更点
-v23.11.01では`Gain`と`ExposureTime`の入力ポートをBBが必要としていましたが、このバージョンではオプションになりました。詳細は[BB内でカメラを制御する](./control_camera.md)を参照してください。
-
-また、別の入力ポート`dispose`は廃止され、ビルダーのインスタンスが解放されるとカメラは自動的にかつ暗黙的に閉じられます。スコープを外れた時にインスタンスは自動的に解放されますが、どこで解放されるかを視覚的に確認したい場合は[デバッグのヒント](../../lessons/ion-log)を参照し、`ION_LOG_LEVEL`を`debug`に設定してください。
-:::
-
 ```python
 # パイプラインにノードを追加
 node = builder.add(bb_name)\
@@ -137,11 +127,6 @@ output_p.bind(output)
 builder.run()
 ```
 
-:::tip v23.11.01 からの変更点
-* `PortMap`は廃止されました
-* `Builder`の`run`は`PortMap`の引数を受け取りません。
-:::
-
 ### OpenCVで表示
 
 出力ポートがバッファ`output`にバインドされている間、出力データ（つまり画像データ）はnumpy配列（`output_data`）に格納されます。
@@ -176,21 +161,6 @@ while(user_input == -1):
 ```python
 cv2.destroyAllWindows()
 ```
-:::tip カメラインスタンスが正確に解放されるのは
-カメラインスタンスの寿命はビルディングブロックインスタンスによって制限されています。つまり、プログラムが終了するとともに自動的に破棄されます。正確なタイミングを観察するには、ユーザーはWindowsコマンドラインでset ION_LOG_LEVEL=debug、またはUnixターミナルでexport ION_LOG_LEVEL=debugを設定できます。ユーザーは、ターミナルで以下の行を見た場合、aravis経由でカメラにアクセスできます：
-```
-[2024-02-14 08:17:19.560] [ion] [info]  Device/USB 0::Command : AcquisitionStart
-[2024-02-14 08:17:27.789] [ion] [debug] U3V::release_instance() :: is called
-[2024-02-14 08:17:27.790] [ion] [debug] U3V::dispose() :: is called
-[2024-02-14 08:17:27.791] [ion] [debug] U3V::dispose() :: AcquisitionStop
-[2024-02-14 08:17:28.035] [ion] [debug] U3V::dispose() :: g_object_unref took 244 ms
-[2024-02-14 08:17:28.109] [ion] [debug] U3V::dispose() :: g_object_unref took 72 ms
-[2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
-[2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
-```
-上記のデバッグ情報から、ユーザーはカメラインスタンスの解放にかかる時間を知ることができます。
-詳細はは[デバッグのヒント](../../lessons/ion-log)を参照してください。
-:::
 
 ## 完全なコード
 

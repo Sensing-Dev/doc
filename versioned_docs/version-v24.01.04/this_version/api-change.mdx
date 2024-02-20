@@ -1,0 +1,35 @@
+# API Update: What's New & Tips
+
+This page is for the users updating Sensing-Dev SDK from v23.11.01 to v24.01.04.
+
+The update including ion-kit major release and there's some API changes. 
+
+Note that the old API is still supported on v24.01.04.
+
+## API changes
+
+### Removed `dispose` input port
+
+In Sensing-Dev v23.11.01 (ion-kit 0.3.5), BB using USB 3 Vision Camera requires `dispose` input to explicitly set when to close the device. 
+
+In Sensing-Dev v24.01.04 (ion-kit 1.6.0), BB using USB 3 Vision Camera does not retuire this input anymore, and stop camera when the instance of your `builder` is released.
+
+If you want to see exactly when the instance and camer is released, you can set environment variable `ION_LOG_LEVEL` to `debug`. See the detail in [Debug Tips](../lessons/ion-log).
+
+### Optional `gain`/`exposuretime` input port
+
+In Sensing-Dev v23.11.01 (ion-kit 0.3.5), BB using USB 3 Vision Camera requires `gain` and `exposuretime` inputs to set the camera's Gain and ExposureTime.
+
+In Sensing-Dev v24.01.04 (ion-kit 1.6.0), these inputs are optional, and you can use input Param `enable_control` to set `gain` and `exposuretime` inputs; otherwise, you don't have to set them explicitly.
+
+### Remove `PortMap`
+
+In Sensing-Dev v23.11.01 (ion-kit 0.3.5), we needed object of `PortMap` to set input value to each input/output `Port`.
+
+In Sensing-Dev v24.01.04 (ion-kit 1.6.0), we can directly set input value with `bind()` which is a member function of `Port`.
+
+### Rename API to set input port to BB
+
+In Sensing-Dev v23.11.01 (ion-kit 0.3.5), the name of function to set input port to BB is `set_port`.
+
+In Sensing-Dev v24.01.04 (ion-kit 1.6.0), the name of function to set input port to BB is `set_iport`.

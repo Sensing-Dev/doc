@@ -13,10 +13,6 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 
 ## Tutorial
 
-:::tip API updates from v23.11.01
-The tutorial of v23.11.01 or older took the input of `Gain` and `ExposureTime` to control the device, but this version does not require them anymore. If you would like to control those values, please see [Control Camera in BB](./control_camera.md).
-:::
-
 ### Get Device Information
 
 To display image with ionpy, we need to get the following information of the device.
@@ -94,12 +90,6 @@ Node n = b.add(bb_name)()
     );
 ```
 
-:::tip API updates from v23.11.01
-While v23.11.01 requires BB to take a input port for `Gain` and `ExposureTime`, it became optional in this version. See the detail in [Control Camera in BB](./control_camera.md).
-
-Also, another input port `dispose` is deprecated, and the camera is automatically and implicitly closed when the instance of builder is released. The camera is available when the builder is out of scope. To see exaclty where the instance is released, you can set environment variable `ION_LOG_LEVEL` to `debug`. See the detail in [Debug Tips](../../lessons/ion-log). 
-:::
-
 Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, `n["output"]`.
 
 Our pipeline with BB and port looks like this:
@@ -133,16 +123,11 @@ The pipeline is ready to run. Each time you call `run()`, the buffer in the vect
 b.run();
 ```
 
-:::tip API updates from v23.11.01
-* `PortMap` is deprecated 
-* `Builder`'s `run` does not take argument of `PortMap` anymore.
-:::
-
 ### Display with OpenCV
 
 Since our output data (i.e. image data) is binded with **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.
 
-Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
+Note that OpenCV has different order of channel (dimension) on their buffer.
 
 ```c++
 int coef =  positive_pow(2, num_bit_shift_map[pixel_format]);
@@ -184,21 +169,6 @@ while(user_input == -1)
     user_input = cv::waitKeyEx(1);
 }
 ```
-:::tip when exactly camera instance is released
-The lifespan of the camera instance instance is bound by the building block instance. Meaning it'll be automatically destroyed, along with the building block instance once the program exits. To observe the precise moment, the user can `set ION_LOG_LEVEL=debug` in the Windows command line or `export ION_LOG_LEVEL=debug` in the Unix terminal. The user can access the camera via aravis if they see the following lines in terminal:
-```
-[2024-02-14 08:17:19.560] [ion] [info]  Device/USB 0::Command : AcquisitionStart
-[2024-02-14 08:17:27.789] [ion] [debug] U3V::release_instance() :: is called
-[2024-02-14 08:17:27.790] [ion] [debug] U3V::dispose() :: is called
-[2024-02-14 08:17:27.791] [ion] [debug] U3V::dispose() :: AcquisitionStop
-[2024-02-14 08:17:28.035] [ion] [debug] U3V::dispose() :: g_object_unref took 244 ms
-[2024-02-14 08:17:28.109] [ion] [debug] U3V::dispose() :: g_object_unref took 72 ms
-[2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
-[2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
-```
-From the above debug infomation, users are able to know how long it takes to release the camera instance.
-See the detail in [Debug Tips](../../lessons/ion-log). 
-:::
 
 
 ## Complete code

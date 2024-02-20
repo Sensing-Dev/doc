@@ -165,7 +165,7 @@ After setting the dynamic port, use `builder.run` to execute the pipeline.
 
 Since our output data (i.e. image data) is mapped into Buffer `outputs`, we can copy this to OpenCV buffer to image process or display.
 
-Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
+Note that OpenCV has different order of channel (dimension) on their buffer.
 
 ```python
 buf_size_opencv = (height, width)
