@@ -7,6 +7,7 @@ sidebar_position: 2
 このドキュメントでは、Kizashiハードウェアおよびソフトウェア開発環境、およびオーディオ/ビデオ同期録音サンプルアプリケーションHarmonyのインストール手順について説明します。これは、Windowsで開発を始める人々のためのものです。
 
 import '/src/css/home.css';
+import {one_line_powershell} from "@site/static/config.js"
 
 <div class="jsx-section">
 <div class="board">
@@ -62,22 +63,32 @@ pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdi
 
 U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
-1. タスクバーの検索ボックスに「device manager」と入力し、メニューからDevice Managerを選択して、U3Vカメラデバイスを確認してください。
+1. WinUSB を対象の USB デバイスに適用するには、デバイスのベンダー IDとプロダクトID を知る必要があります。タスクバーの検索ボックスに「device manager」と入力し、メニューから**Device Manager**を選択して、U3Vカメラデバイスを確認してください。
 
 ![before_installed](./img/winusb-install-before_installed.png)
 
 画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバーをインストールする必要があります。
 
-2. **[ここ](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer-WinUSB.ps1)**からスクリプトをダウンロードし、PowerShellで右クリックして実行してください。
+U3V カメラデバイスをダブルクリックし、ポップアップウィンドウの**詳細**タブを選択します。ドロップダウンメニューから**ハードウェア ID**を選択し、`VID_`の後にベンダー ID を、`PID_`のあとにプロダクトIDを見ることができます。下記の例では、それぞれ`2676`と`BA03`です。
+
+![before_installed](./img/winusb-install-vendorid.png)
+
+2. 次のコマンドを実行します。このコマンドは、ステップ1で確認したベンダー ID を使用して、PowerShell コンソールで実行します。
 このプロセスには、アカウントに管理者権限が必要であり、最大で5分かかる場合があります。
 
+<pre>
+<code class="language-powershell">
+{one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
+</code>
+</pre>
 
-3. もし以下の画像であなたのデバイス名が見えるなら、WinUSBドライバーがインストールされています。
+* U3V camera devicesにおける各IDの例
 
-![installed](./img/winusb-install-installed.png)
+|                     | Vendor ID | Product ID |
+|---------------------|-----------|------------|
+| Basler daA1280-54uc | 2676      | BA03       |
+| Sony Kizashi1.2     | 054C      | 0D7D       |
 
-
-次の画像でデバイス名が表示されている場合、WinUSBドライバーがインストールされています。
 
 :::tip ドライバーをアンインストールしたい場合
 

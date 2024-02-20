@@ -86,20 +86,14 @@ Param realtime_diaplay_mode{"realtime_diaplay_mode", "false"};
 す。
 
 ::::caution
-`gain_key` と `exposure_key` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキ 
-ーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で `Gain` および 
-`ExposureTime` として設定されていますが、一部のデバイスには異なるキーと異なるタイプがあるかもし 
-れません。
+`gain_key` と `exposure_key` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキ ーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で `Gain` および `ExposureTime` として設定されていますが、一部のデバイスには異なるキーがあるかもし れません。
 
-その場合、ポートのタイプとパラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
+その場合、パラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
 プする方法を確認してください。
 
 ```c++
 #define FEATURE_GAIN_KEY <デバイスのゲインを制御するフィーチャの名前>
 #define FEATURE_EXPOSURE_KEY <露光時間を制御するフィーチャの名前>
-
-Port gain_p{ "gain", Halide::type_of<TypeCode for your device>(), 1 };
-Port exposure_p{ "exposure", Halide::type_of<TypeCode for your device>(), 1 };
 ```
 ::::
 

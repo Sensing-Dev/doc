@@ -86,6 +86,18 @@ for i in range(num_device):
 * `set_port` が `set_iport`　に名称変更されました。
 :::
 
+::::caution
+`Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもし れません。
+
+その場合、パラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
+プする方法を確認してください。
+
+```python
+gain_key = Param('gain_key', <デバイスのゲインを制御するフィーチャの名前>)
+exposure_key = Param('exposure_key', <露光時間を制御するフィーチャの名前>)
+```
+::::
+
 ### パイプラインの実行
 
 `builder.run()` を実行してパイプラインを終了します。

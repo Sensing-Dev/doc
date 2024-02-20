@@ -7,6 +7,7 @@ sidebar_position: 2
 This document describes the steps to install the Kizashi hardware and software development environment and the audio/video synchronous recording sample application Harmony for those who are starting development on Windows.
 
 import '/src/css/home.css';
+import {one_line_powershell} from "@site/static/config.js"
 
 <div class="jsx-section">
 <div class="board">
@@ -60,19 +61,32 @@ pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdi
 ## Install WinUSB driver on U3V device.
 
 This step is only required the first time a U3V camera device is connected to a host machine.
-1. Check your U3V camera device using Device Manager. In the search box on the taskbar, type device manager, then select Device Manager from the menu.
+1. To apply WinUSB to the target USB device, you need to know Vendor ID and Product ID of the device.
+Check your U3V camera device using **Device Manager**.
+In the search box on the taskbar, type device manager, then select Device Manager from the menu.
 
 ![before_installed](./img/winusb-install-before_installed.png)
 
-The image shows there are two unknown U3V camera devices connected on my host machine and we need to install the WinUSB driver.
+The image shows there are two unknown U3V camera devices connected on my host machine and we need to install the WinUSB driver. 
+You now double-click the U3V camera device and select the **Details** tab on the pop up window. 
+From the dropdown menu, choose **Hardware Ids** and now you can see the Vendor ID in the box following `VID_`, and Product after `PID_BA03`. 
+In the example below, they are `2676` and `BA03` respectively. 
 
+![before_installed](./img/winusb-install-vendorid.png)
 
-2. **Download the script from [HERE](https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/v23.11.01/installer-WinUSB.ps1)** and right-click to run it in PowerShell.
-Please note that this process requires administrative privileges on your account and may take up to 5 minutes.
+2. Execute the following command on powershell console with Vendor ID that you checked in the step1. This process may take up to 5 minutes.
+<pre>
+<code class="language-powershell">
+{one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
+</code>
+</pre>
 
-3. If you can see your device name in the following image, it means the WinUSB driver is installed.
+* Example with some U3V camera devices
 
-![installed](./img/winusb-install-installed.png)
+|                     | Vendor ID | Product ID |
+|---------------------|-----------|------------|
+| Basler daA1280-54uc | 2676      | BA03       |
+| Sony Kizashi1.2     | 054C      | 0D7D       |
 
 
 :::tip If you want to uninstall driver

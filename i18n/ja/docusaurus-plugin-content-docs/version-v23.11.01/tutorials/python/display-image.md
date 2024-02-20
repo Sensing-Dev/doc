@@ -101,15 +101,10 @@ exposure_key = Param('exposure_key', 'ExposureTime')
 
 ::::caution
 `gain_key` および `exposure_key` はデバイスのゲインおよび露光時間を制御するGenICamのフィーチャ 
-キーです。**SFNC（Standard Features Naming Convention）**によるemvaの規格では、これらは通常、 `Gain` および `ExposureTime` を `FLOAT64` で設定しますが、一部のデバイスでは異なるキーと異なるタイ
-プを持っている場合があります。
+キーです。**SFNC（Standard Features Naming Convention）**によるemvaの規格では、これらは通常、 `Gain` および `ExposureTime` を `FLOAT64` で設定しますが、一部のデバイスでは異なるキーを持っている場合があります。
 
-その場合、ポートのタイプとパラメータのキーの名前を変更する必要があります。[このページ](../../external/aravis/arv-tools#list-the-available-genicam-features)を確認して、使用可能なフィーチャをリス 
-トする方法を確認してください。
+その場合、パラメータのキーの名前を変更する必要があります。[このページ](../../external/aravis/arv-tools#list-the-available-genicam-features)を確認して、使用可能なフィーチャをリス トする方法を確認してください。
 ```python
-gain_p = Port('gain', Type(<TypeCode>, <Size of the data type>, 1), 1)
-exposuretime_p = Port('exposuretime', Type(<TypeCode>, <Size of the data type>, 1), 1)
-
 gain_key = Param('gain_key', <name of the feature to control gain>)
 exposure_key = Param('exposure_key', <name of the feature to control exposure time>)
 ```
