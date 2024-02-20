@@ -160,7 +160,7 @@ After setting the dynamic port, use `b.run(pm);` to execute the pipeline.
 
 Since our output data (i.e. image data) is mapped into **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.
 
-Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
+Note that OpenCV has different order of channel (dimension) on their buffer.
 
 ```c++
 for (int i = 0; i < num_device; ++i){

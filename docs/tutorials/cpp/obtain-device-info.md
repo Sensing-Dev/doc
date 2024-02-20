@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Access and Display Device Info
 
-In this tutorial, we learn how to get device informatin with Aravis API.
+In this tutorial, we learn how to get device information with Aravis API.
 
 ## Prerequisite
 

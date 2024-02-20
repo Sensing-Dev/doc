@@ -127,7 +127,7 @@ b.run();
 
 Since our output data (i.e. image data) is binded with **the vector of Buffer** `output`, we can copy this to OpenCV buffer to image process or display.
 
-Note that OpenCV has dirfferent order of channel (dimension) on their buffer.
+Note that OpenCV has different order of channel (dimension) on their buffer.
 
 ```c++
 int coef =  positive_pow(2, num_bit_shift_map[pixel_format]);

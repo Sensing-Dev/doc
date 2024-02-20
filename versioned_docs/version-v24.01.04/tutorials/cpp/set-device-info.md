@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Access and Set Device Info
 
-In this tutorial, we learn how to set device informatin with Aravis API.
+In this tutorial, we learn how to set device information with Aravis API.
 
 ## Prerequisite
 
