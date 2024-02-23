@@ -165,4 +165,7 @@ cv2.destroyAllWindows()
 ```
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display.py)
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial1_display" />

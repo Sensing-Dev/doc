@@ -103,7 +103,10 @@ while(user_input == -1)
 
 ## 完全なコード
 
-チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial2_control_camera.cpp)です。
+import {tutorial_version} from "@site/static/version_const/v240104.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial2_control_camera" />
 
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。

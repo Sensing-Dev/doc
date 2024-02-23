@@ -39,7 +39,11 @@ std::cout << frame_counts[0](0) << std::endl;
 
 ## 完全なコード
 
-チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial3_getting_frame_count.cpp)です。
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial3_getting_frame_count" />
+
 
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。
