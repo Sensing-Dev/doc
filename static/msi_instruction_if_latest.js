@@ -11,7 +11,7 @@ const user_install_ja2 = "と入力します。";
 
 const shorter_install_default = "installer.ps1 -user <username>";
 
-const LangSwitcher = ({islatest, version}) => {
+const AddMsiInstructionIfLatest = ({islatest, version}) => {
   const {siteConfig, i18n}  = useDocusaurusContext();
   
   if (i18n.currentLocale == 'en'){
@@ -34,4 +34,4 @@ const LangSwitcher = ({islatest, version}) => {
 
 }
 
-export default LangSwitcher;
+export default AddMsiInstructionIfLatest;

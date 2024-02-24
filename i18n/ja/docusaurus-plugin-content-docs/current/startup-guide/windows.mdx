@@ -8,7 +8,7 @@ sidebar_position: 2
 
 import '/src/css/home.css';
 import {is_latest, latest_version, one_line_install, latest_installer_URL, one_line_powershell} from "@site/static/version_const/latest.js"
-import LangSwitcher from '@site/static/locale_const.js';
+import AddMsiInstructionIfLatest from '@site/static/msi_instruction_if_latest.js';
 
 <div class="jsx-section">
 <div class="board">
@@ -34,7 +34,7 @@ import LangSwitcher from '@site/static/locale_const.js';
 
 ページのトップにあるインストーラースクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
 
-<LangSwitcher islatest={is_latest} version={latest_version}/>
+<AddMsiInstructionIfLatest islatest={is_latest} version={latest_version}/>
 
 OpenCVをお持ちでなく、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
 

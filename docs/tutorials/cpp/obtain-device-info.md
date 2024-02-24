@@ -110,4 +110,7 @@ Instead of using Aravis Python API, you can also use arv-tool. See the detail in
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial0_get_device_info.cpp).
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial0_get_device_info" />

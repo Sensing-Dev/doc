@@ -173,7 +173,10 @@ while(user_input == -1)
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial1_display.cpp).
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial1_display" />
 
 :::caution why it does not work
 * If you are using OpenCV that you install by yourself, please confirm that it is linked to your program appropriately.

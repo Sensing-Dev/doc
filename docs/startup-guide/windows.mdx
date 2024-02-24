@@ -8,7 +8,7 @@ This document describes the steps to install the software development environmen
 
 import '/src/css/home.css';
 import {is_latest, latest_version, one_line_install, latest_installer_URL, one_line_powershell} from "@site/static/version_const/latest.js"
-import LangSwitcher from '@site/static/locale_const.js';
+import AddMsiInstructionIfLatest from '@site/static/msi_instruction_if_latest.js';
 
 <div class="jsx-section">
 <div class="board">
@@ -34,7 +34,7 @@ In this document, the following environment is assumed.
 
 Please DL the installer script at the top of the page or <a href={latest_installer_URL}>here</a>.
 
-<LangSwitcher islatest={is_latest} version={latest_version}/>
+<AddMsiInstructionIfLatest islatest={is_latest} version={latest_version}/>
 
 If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
 

@@ -39,7 +39,10 @@ std::cout << frame_counts[0](0) << std::endl;
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial3_getting_frame_count.cpp).
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial3_getting_frame_count" />
 
 :::caution why it does not work
 * If you are using OpenCV that you install by yourself, please confirm that it is linked to your program appropriately.

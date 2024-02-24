@@ -10,7 +10,7 @@ const latest_installer_URL = latest_URL + '/installer.ps1';
 
 const one_line_install = (is_latest === true) ? one_line_install_default : one_line_install_default + " -version " + latest_version ;
 
-// WinUSB
+const tutorial_version = (is_latest) ? "main" :  latest_version;
 
 const one_line_powershell = "Invoke-WebRequest -Uri https://github.com/Sensing-Dev/WinUSB-installer-generator/releases/download/"+latest_winUSB_URL+"/generate_and_apply_WinUSB.ps1 -OutFile generate_and_apply_WinUSB.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./generate_and_apply_WinUSB.ps1"
 
@@ -20,4 +20,5 @@ module.exports = {
     latest_installer_URL,
     one_line_powershell,
     one_line_install,
+    tutorial_version
 };

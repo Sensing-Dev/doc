@@ -100,7 +100,10 @@ while(user_input == -1)
 
 ## Complete code
 
-Complete code used in the tutorial is [here](https://github.com/Sensing-Dev/tutorials/blob/main/cpp/src/tutorial2_control_camera.cpp).
+import {tutorial_version} from "@site/static/version_const/v240104.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial2_control_camera" />
 
 :::caution why it does not work
 * If you are using OpenCV that you install by yourself, please confirm that it is linked to your program appropriately.

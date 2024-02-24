@@ -41,4 +41,4 @@ When we have the latest release, update `static\version_const\latest.js`.
 
 5. Remove the API update admonition from tutorials.
 
-Note that you don't have to update Windows setup guilde to remove right-click instruction. It is automatically updated by step 3. See the detail in `static\locale_const.js`
+Note that you don't have to update Windows setup guilde to remove right-click instruction. It is automatically updated by step 3. See the detail in `static\msi_instruction_if_latest.js`

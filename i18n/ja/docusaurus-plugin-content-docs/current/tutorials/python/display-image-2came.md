@@ -92,6 +92,10 @@ while(user_input == -1):
 cv2.destroyAllWindows()
 ```
 
+
 ## 完全なコード
 
-チュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial1_display_2cam.py)です。
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial1_display_2cam" />

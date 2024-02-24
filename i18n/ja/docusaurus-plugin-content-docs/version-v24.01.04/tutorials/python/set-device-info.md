@@ -96,4 +96,7 @@ Aravis Python APIの代わりに、arv-toolも使用できます。詳細は[Ara
 
 ## 完全なコード
 
-このチュートリアルで使用される完全なコードは[こちら](https://github.com/Sensing-Dev/tutorials/blob/main/python/tutorial0_set_device_info.py)
+import {tutorial_version} from "@site/static/version_const/v240104.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial0_set_device_info" />
