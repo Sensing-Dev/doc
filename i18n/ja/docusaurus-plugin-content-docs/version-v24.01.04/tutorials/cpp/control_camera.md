@@ -2,11 +2,11 @@
 sidebar_position: 5
 ---
 
-# BB内でカメラを制御する
+# BBでカメラを制御する
 
 このチュートリアルでは、ビルディングブロック内でGainとExposureTimeを制御する方法について学びます。
 
-BBなしでGainとExposureTimeを制御するには、[アクセスとデバイス情報の設定](./set-device-info)または[arv-tool-0.8](../../external/aravis/arv-tools)を参照してください。
+BBなしでGainとExposureTimeを制御するには、[デバイス情報へのアクセスと設定](./set-device-info)または[arv-tool-0.8](../../external/aravis/arv-tools)を参照してください。
 
 ## 前提条件
 
@@ -27,11 +27,11 @@ ionpyを使用して画像を表示するには、デバイスの次の情報を
 
 ### パイプラインの構築
 
-BBの構造は[1台のカメラ画像を表示するチュートリアル](display-image)と同じですが、`Gain`および`ExposureTime`の設定を有効にするためには、いくつかの小さな変更が必要です。
+BBの構造は[1台のカメラ画像を表示するチュートリアル](display-image)と同じですが、`Gain`および`ExposureTime`の設定を有効にするためには、いくつか小さな変更が必要です。
 
 このチュートリアルでは、`enable_control`を`true`に設定することで、`Gain`と`ExposureTime`を手動で設定できます。
 
-入力ポートは動的で、つまり、各ランで更新できますが、これらの値のキーは静的であるため、Paramを使用して静的な値を文字列で設定できます。たとえば、`Gain`および`ExposureTime`の値は、各ランで更新するためにポートによって設定され、これらの値のキーは静的であるため、次のようにParamで設定する必要があります。
+入力ポートは動的で、つまり、各実行で更新できますが、これらの値のキーは静的であるため、Paramを使用して静的な値を文字列で設定できます。たとえば、`Gain`および`ExposureTime`の値は、各実行で更新するためにポートによって設定され、これらの値のキーは静的であるため、次のようにParamで設定する必要があります。
 
 ```c++
 // パラメータの設定
@@ -68,10 +68,9 @@ v23.11.01ではGainおよびExposureTimeのポートを取るためにBBが必�
 :::
 
 ::::caution
-`Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもし れません。
+`Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもしれません。
 
-その場合、パラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
-プする方法を確認してください。
+その場合、パラメータのキーを変更する必要があります。[このページ](../../external/aravis/arv-tools#利用可能なGenICam機能の一覧表示)を参照して、利用可能なフィーチャをリストアップする方法を確認してください。
 
 ```c++
 Param("gain_key", <デバイスのゲインを制御するフィーチャの名前>)
@@ -89,7 +88,7 @@ b.run();
 
 ### OpenCVで表示
 
-[前のチュートリアル](display-image)では、各ランで単に出力画像を表示していました。今回は、`Gain`または`ExposureTime`の値を更新できます。次の例は、`Gain`を毎回`1.0`増やす方法を示しています。
+[前のチュートリアル](display-image)では、各実行で単に出力画像を表示していました。今回は、`Gain`または`ExposureTime`の値を更新します。次の例は、`Gain`を毎回`1.0`増やす方法を示しています。
 
 ```c++
 while(user_input == -1)

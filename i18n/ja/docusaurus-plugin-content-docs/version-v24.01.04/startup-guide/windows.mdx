@@ -3,7 +3,7 @@ sidebar_position: 2
 ---
 
 # インストール - Windows
-この文書では、Windows上でU3Vカメラのソフトウェア開発を始める人々のために開発環境のインストール手順を説明します。
+このドキュメントでは、Windows上にU3Vカメラ用ソフトウェア開発環境をインストールする手順について説明します。
 
 import '/src/css/home.css';
 import {is_latest, latest_version, one_line_install, latest_installer_URL, one_line_powershell} from "@site/static/version_const/v240104.js"
@@ -31,15 +31,15 @@ import AddMsiInstructionIfLatest from '@site/static/msi_instruction_if_latest.js
 
 ## Sensing-devソフトウェアパッケージ
 
-ページのトップにあるインストーラースクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
+ページのトップにあるインストーラスクリプトをダウンロードするか、<a href={latest_installer_URL}>こちら</a>からダウンロードしてください。
 
 <AddMsiInstructionIfLatest islatest={is_latest} version={latest_version}/>
 
 Windowsで管理者権限を持っていて、最小限のコンポーネントをインストールしたい場合、ダウンロードしたスクリプトを右クリックして「PowerShellで実行」を選択するだけで済みます。
 
-それ以外の場合、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
+それ以外の場合は、PowerShellターミナルを開いて`.\installer.ps1 -user <ユーザー名>`と入力します。
 
-OpenCVをお持ちでなく、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
+OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
 
 デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
 
@@ -66,21 +66,21 @@ pip3 install gendc-python==0.1.0
 ```
 
 
-## U3VデバイスにWinUSBドライバーをインストール
+## U3VデバイスにWinUSBドライバをインストール
 
 U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
-1. WinUSB を対象の USB デバイスに適用するには、デバイスのベンダー IDとプロダクトID を知る必要があります。タスクバーの検索ボックスに「device manager」と入力し、メニューから**Device Manager**を選択して、U3Vカメラデバイスを確認してください。
+1. WinUSBを対象のUSBデバイスに適用するには、デバイスのベンダーIDとプロダクトIDを知る必要があります。タスクバーの検索ボックスに「device manager」と入力し、メニューから**Device Manager**を選択して、U3Vカメラデバイスを確認してください。
 
 ![before_installed](./img/winusb-install-before_installed.png)
 
-画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバーをインストールする必要があります。
+画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバをインストールする必要があります。
 
-U3V カメラデバイスをダブルクリックし、ポップアップウィンドウの**詳細**タブを選択します。ドロップダウンメニューから**ハードウェア ID**を選択し、`VID_`の後にベンダー ID を、`PID_`のあとにプロダクトIDを見ることができます。下記の例では、それぞれ`2676`と`BA03`です。
+U3Vカメラデバイスをダブルクリックし、ポップアップウィンドウの**詳細**タブを選択します。ドロップダウンメニューから**ハードウェアID**を選択し、`VID_`の後にベンダーIDを、`PID_`のあとにプロダクトIDを確認することができます。下記の例では、それぞれ`2676`と`BA03`です。
 
 ![before_installed](./img/winusb-install-vendorid.png)
 
-2. 次のコマンドを実行します。このコマンドは、ステップ1で確認したベンダー ID を使用して、PowerShell コンソールで実行します。
+2. 次のコマンドを実行します。このコマンドは、ステップ1で確認したベンダーIDを使用して、PowerShellコンソールで実行します。
 このプロセスには、アカウントに管理者権限が必要であり、最大で5分かかる場合があります。
 
 <pre>
@@ -89,28 +89,28 @@ U3V カメラデバイスをダブルクリックし、ポップアップウィ�
 </code>
 </pre>
 
-* U3V camera devicesにおける各IDの例
+* U3Vカメラデバイスにおける各IDの例
 
 |                     | Vendor ID | Product ID |
 |---------------------|-----------|------------|
 | Basler daA1280-54uc | 2676      | BA03       |
 | Sony Kizashi1.2     | 054C      | 0D7D       |
 
-:::tip ドライバーをアンインストールしたい場合
+:::tip ドライバをアンインストールしたい場合
 
 1. 再度デバイスマネージャーを開き、デバイスを右クリックして、「デバイスのアンインストール」を選択してください。
 
 <img src={require("./img/winusb-uninstall-uninstall.png").default} alt="uninstall"/>
 
-2. チェックボックスをクリックして、「デバイスのアンインストール」をクリックしてください。
+2. チェックボックスをクリックして、「アンインストール」をクリックしてください。
 
 <img src={require("./img/winusb-uninstall-checkbox.png").default } width="60%" alt="checkbox"/>
 
-3. "Action"を開き、"scan for hardware changes"をクリックしてください。
+3. 「操作」を開き、「ハードウェア変更のスキャン」をクリックしてください。
 
 <img src={require("./img/winusb-uninstall-hardware.png").default} width="80%" alt="hardware"/>
 
-もしデバイスが未知のデバイスとして表示されているなら、おめでとうございます！WinUSBドライバーは正常にアンインストールされました！
+もしデバイスが未知のデバイスとして表示されているなら、成功です！WinUSBドライバーは正常にアンインストールされました！
 :::
 
 
@@ -138,5 +138,5 @@ installer.ps1スクリプトを実行すると、SDKが必要とする環境変�
 | PATH | `<SDKをインストールした場所>/bin` | 編集（追加） |
 
 :::info 確認
-`arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できるかもしれません。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
+`arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているかを確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を参照してください。
 :::
