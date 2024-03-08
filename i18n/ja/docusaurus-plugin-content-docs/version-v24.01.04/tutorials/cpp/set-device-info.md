@@ -27,7 +27,7 @@ aravisヘッダーを含めるプロセスは、前回のチュートリアル�
 
 ### デバイスの現在の値の取得
 
-まず最初に、`Gain`と`ExposureTime`の現在の値を知りたいです。前回のチュートリアルで学んだように、カメラを開いた後に`arv_device_get_float_feature_value`を使用してカメラ情報を取得します。
+最初に、`Gain`と`ExposureTime`の現在の値を知りたいです。前回のチュートリアルで学んだように、カメラを開いた後に`arv_device_get_float_feature_value`を使用してカメラ情報を取得します。
 
 ```c++
 for (unsigned int i = 0; i < n_devices; ++i){
