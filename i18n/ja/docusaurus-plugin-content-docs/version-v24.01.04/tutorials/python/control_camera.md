@@ -4,9 +4,9 @@ sidebar_position: 5
 
 # BBでカメラを制御する
 
-このチュートリアルでは、1つのカメラ画像を表示する[前のチュートリアル](display-image)および[複数のカメラ画像を表示する](display-image-2came)の基づいて、ion-kitでGainおよびExposure timeを手動で設定する方法を学びます。
+このチュートリアルでは、1つのカメラ画像を表示する[前のチュートリアル](display-image)と[複数のカメラを使用する](display-image-2came)に基づいて、ion-kitでGainおよびExposure timeを手動で設定する方法を学びます。
 
-BBを用いずにGainやExposureTimeなどのカメラ情報を変更するためには、[アクセスとデバイス情報の設定](./set-device-info) や [arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
+BBを用いずにGainやExposureTimeなどのカメラ情報を変更するためには、[デバイス情報へのアクセスと設定](./set-device-info) や [arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
 
 
 ## 前提条件
@@ -36,11 +36,11 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 
 ### パイプラインの構築
 
-BBの構造は[1台のカメラ画像を表示するチュートリアル](display-image)および[複数のカメラ画像を表示するチュートリアル](display-image-2came)と同じですが、`Gain`および`ExposureTime`の設定を有効にするためにはいくつかの小さな変更が必要です。
+BBの構造は[1台のカメラ画像を表示するチュートリアル](display-image)および[複数のカメラ画像を表示するチュートリアル](display-image-2came)と同じですが、`Gain`および`ExposureTime`の設定を有効にするためにはいくつか小さな変更が必要です。
 
-このチュートリアルでは、`enable_control`を`true`に設定することで`Gain`および`ExposureTime`を手動で設定できます。
+このチュートリアルでは、`enable_control`を`true`に設定することで`Gain`および`ExposureTime`を手動で設定します。
 
-ポートの入力は動的で、つまり各実行ごとに更新できますが、静的な値をParamを介して文字列で設定できます。例えば、`Gain`および`ExposureTime`の値は実行ごとに更新されるべきですが、これらの値のキーは静的であるため、次のようにParamで設定することができます。
+ポートの入力は動的で、つまり各実行ごとに更新できますが、静的な値をParamを介して文字列で設定できます。たとえば、`Gain`および`ExposureTime`の値は実行ごとに更新されるべきですが、これらの値のキーは静的であるため、次のようにParamで設定できます。
 
 ```python
 # set params
@@ -83,14 +83,13 @@ for i in range(num_device):
 これで、`Gain`および`ExposureTime`が正常に設定されました！
 
 :::tip v23.11.01 からの変更点
-* `set_port` が `set_iport`　に名称変更されました。
+* `set_port`が `set_iport`に名称変更されました。
 :::
 
 ::::caution
-`Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもし れません。
+`Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもしれません。
 
-その場合、パラメータのキーを変更する必要があります。[このページ](../external/aravis/arv-tools#list-the-available-genicam-features)を参照して、利用可能なフィーチャをリストアッ 
-プする方法を確認してください。
+その場合、パラメータのキーを変更する必要があります。[このページ](../../external/aravis/arv-tools#利用可能なGenICam機能の一覧表示)を参照して、利用可能な機能をリストアップする方法を確認してください。
 
 ```python
 gain_key = Param('gain_key', <デバイスのゲインを制御するフィーチャの名前>)
@@ -104,7 +103,7 @@ exposure_key = Param('exposure_key', <露光時間を制御するフィーチャ
 
 ### 各実行で入力ポートの値を更新
 
-[前のチュートリアルでは](display-image)、各実行で単に出力画像を表示していました。今回は`Gain`または`ExposureTime`の値を更新できます。次の例は、`gain_values`を更新して再バインドすることで、毎回`Gain`を`1.0`ずつ増やす方法を示しています。
+[前のチュートリアルでは](display-image)、各実行で単に出力画像を表示していました。今回は`Gain`または`ExposureTime`の値を更新します。次の例は、`gain_values`を更新して再バインドすることで、毎回`Gain`を`1.0`ずつ増やす方法を示しています。
 
 ```python
 while(user_input == -1):

@@ -4,9 +4,9 @@ sidebar_position: 1
 
 # Intro
 
-In this tutorial, you may learn the overview of image processing framework **ion-kit**. 
+In this tutorial, you may learn the overview of image processing framework **ion-kit**.
 
-ion-kit is an image processing framework which enables to efficiently describe and compile a user-defined image processing pipeline. 
+ion-kit is an image processing framework which enables to efficiently describe and compile a user-defined image processing pipeline.
 
 The fundamental idea of ion-kit is creating a single **pipeline** consists of **building blocks** which deal with image I/O and image processing.
 
@@ -44,7 +44,7 @@ For example, if you would like to connect a U3V camera to your host machine and 
 then execute your pipeline.
 
 Another example, if you would like to save the series of GenDC Container from U3V camera stream, you just need to chain the following BBs
-* image-io: 
+* image-io:
     * to get gendc data
     * to save gendc data
 
@@ -59,7 +59,7 @@ Port is either used to 1. connect between BBs or 2. use as pipeline's I/O.
 
 ### Connection
 
-Building blocks can be connected as long as the previous BB's output port **types** and **dimensions** match the ones of the preceding BB's input ports.
+Building blocks can be connected as long as the previous BB's output port **types** and **dimensions** match the ones of the succeeding BB's input ports.
 
 The following diagram shows the second example above.
 

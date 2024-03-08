@@ -10,7 +10,7 @@ id: software-reference
 
 :::info
 
-U3Vカメラを制御するためのシンプルなツールの使用方法については、**[Aravisツール](../external/aravis/arv-tools.md)**で紹介されています。
+U3Vカメラを制御するためのシンプルなツールの使用方法については、**[Aravisのツール](../external/aravis/arv-tools.md)**で紹介されています。
 
 :::
 
