@@ -34,19 +34,18 @@ ionpyで画像を表示するには、デバイスの以下の情報を取得す
 
 ### パイプラインの構築
 
-まず最初に、ionpyのモジュールをロードします。これはion-kitのPythonバインディングです。
+最初に、ion-kitのpythonバインディングであるionpyのモジュールをロードします。
 
 ```python
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
-:::caution
+:::caution なぜ動作しないのか
 * Pythonユーザーの場合、ionpyのモジュールをロードする際にC/C++ランタイムライブラリがない可能性があります。ionpyのモジュールをロードする際に問題が発生する場合は、[Microsoftの公式ウェブページの記事](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022)からライブラリをインストールできます。
 * ionpyのバージョンがv0.1.0a0でないと動かないことがあります。`pip3 show ionpy`でお使いのバージョンをご確認いただき、異なるバージョンをお使いの場合は`pip3 install "git+https://github.com/fixstars/ion-kit.git@v0.3.5#egg=ionpy&subdirectory=python"`コマンドによりv23.11.01で動作するモジュールのインストールが可能です。
 :::
 
-[イントロダクション](../intro.mdx)で学んだように、画像I/Oおよび処理のためのパイプラインを構築お
-よび実行します。
+[イントロ](../intro.mdx)で学んだように、画像のI/Oと処理のためにパイプラインを構築して実行します。
 
 このチュートリアルでは、U3Vカメラから画像を取得する唯一のビルディングブロックを持つ非常にシンプ
 ルなパイプラインを構築します。
@@ -62,18 +61,16 @@ builder.set_target('host')
 builder.with_bb_module(module_name)
 ```
 
-`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。    
+`set_target`は、ビルダーによって構築されたパイプラインが実行されるハードウェアを指定します。  
 
 使用するBBが `ion-bb.dll` で定義されているため、`with_bb_module` 関数でモジュールをロードする必
 要があります。
 
 使用するBBは `image_io_u3v_cameraN_u8x2` で、各ピクセルデータが8ビットの深さで、2次元（例：Mono8）のU3Vカメラ向けに設計されています。
 
-ピクセルフォーマットがMono10またはMono12の場合は、各ピクセルデータに16ビットの深さが必要なので 
-`image_io_u3v_cameraN_u16x2` を使用する必要があります。
+ピクセルフォーマットがMono10またはMono12の場合は、各ピクセルデータに16ビットの深さが必要なので `image_io_u3v_cameraN_u16x2` を使用する必要があります。
 
-ピクセルフォーマットがRGB8の場合、ビット深度が8で次元が3（幅と高さに加えて、カラーチャネルがあ 
-ります）であるため、 `image_io_u3v_cameraN_u8x3` を使用します。
+ピクセルフォーマットがRGB8の場合、深度が8で次元が3（幅と高さに加えてカラーチャネルがある）であるため、`image_io_u3v_cameraN_u8x3`を使用します。
 
 これらのBBのいずれも、 `dispose` 、 `gain` 、および `exposuretime` と呼ばれる入力が必要なので、
 パイプラインに値を渡すためにポートを設定する必要があります。
@@ -150,11 +147,9 @@ port_map.set_buffer_array(output_p, outputs)
 port_map.set_u1(dispose_p, False)
 ```
 
-ここでの `output_size` は2Dイメージ用に設計されています。ピクセルフォーマットがRGB8の場合、カラ
-ーチャンネルを追加するために `(width, height, 3)` を設定する必要があります。
+ここでの`output_size`は2D画像用に設計されています。ピクセルフォーマットがRGB8の場合、色チャネルを追加するために`(width, height, 3)`を設定する必要があります。
 
-`depth_of_buffer` はビット単位のピクセルサイズで、例えばMono8およびRGB8の場合は `8` 、Mono10お 
-よびMono12の場合は `16` です。
+`depth_of_buffer` はビット単位のピクセルサイズで、例えばMono8およびRGB8の場合は `8` 、Mono10およびMono12の場合は `16` です。
 
 ### パイプラインの実行
 
@@ -165,8 +160,8 @@ port_map.set_u1(dispose_p, False)
 する必要があります。これにより、デバイスが安全に閉じられます。
 
 ```python
-for x in range(loop_num):
-    port_map.set_u1(dispose_p, x==loop_num-1)
+while(True):
+    port_map.set_u1(dispose_p, user_input!=-1)
     # builderを実行
     builder.run(port_map)
 ```
@@ -203,10 +198,9 @@ cv2.waitKey(0)
 注意: `outputs`はBufferのリストです（複数のデバイスを制御するために`num_device`を`1`より大きく 
 することができます）、 `outputs[0]` にアクセスして画像データを取得します。
 
-このプロセスのセットを `for` ループで繰り返すと、カメラデバイスからの連続した画像が表示されます
-。
+連続した画像を取得するには、`cv2.waitKeyEx(1)`を使用してwhileループを設定できます。これにより、プログラムが1ミリ秒間保持され、ユーザー入力があると-1以外の値が返されます。以下のコードは、ユーザーが任意のキーを入力するまで無限にループします。
 
-`for` ループの後に画像を表示したウィンドウを破棄することを忘れないでください。
+`while` ループの後に画像を表示したウィンドウを破棄することを忘れないでください。
 
 ```python
 cv2.destroyAllWindows()

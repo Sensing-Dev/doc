@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # デバイス情報へのアクセスと表示
 
-このチュートリアルでは、aravis APIを使用してデバイス情報を取得する方法について学びます。       
+このチュートリアルでは、Aravis APIを使用してデバイス情報を取得する方法について学びます。      
 
 ## 前提条件
 
@@ -82,23 +82,19 @@ for i in range(num_device):
 | フィーチャ名 | 説明 | タイプ |
 | --------   | ------- | ------- |
 | `DeviceModelName` | デバイスの名前 | 文字列 |
-| `Width` | センサーイメージの幅 | 整数 |
-| `Height` | センサーイメージの高さ | 整数 |
-| `PayloadSize` | センサーから転送されるデータのサイズ | 整数 |
-| `PixelFormat` | センサーイメージデータのピクセルフォーマット | 文字列 |
+| `Width` | センサイメージの幅 | 整数 |
+| `Height` | センサイメージの高さ | 整数 |
+| `PayloadSize` | センサから転送されるデータのサイズ | 整数 |
+| `PixelFormat` | センサイメージデータのピクセルフォーマット | 文字列 |
 
 ::::tip
-これらのフィーチャキーとタイプはemvaによる**SFNC（Standard Features Naming Convention）**で定義
-されていますが、一部のデバイスは独自の特徴やキーを持っている場合があります。すべてのアクセス可能
-なフィーチャを知るには、`arv-tool-0.8`を使用します。詳細は[利用可能なGenICamフィーチャのリスト](../../external/aravis/arv-tools)を参照してください。
+これらのフィーチャキーとタイプはemvaによる**SFNC（Standard Features Naming Convention）**で定義されていますが、一部のデバイスは独自のフィーチャやキーを持っている場合があります。すべてのアクセス可能なフィーチャを知るには、`arv-tool-0.8`を使用します。詳細は[利用可能なGenICam機能のリスト](../../external/aravis/arv-tools)を参照してください。
 ::::
 
 ::::caution
 `arv-device-error-quark` がエラーを返す場合:
-* デバイスにキーがない（`Not found (1)`）：フィーチャキーが正しいか確認してください。詳細は[利 
-用可能なGenICamフィーチャのリスト](../../external/aravis/arv-tools)を参照。
-* タイプが間違っていた（`Not a ArvGcString (0)`または`Not a ArvGcFlaot (0)`）：フィーチャタイプ
-が正しいか確認してください。詳細は[利用可能なGenICamフィーチャのリスト](../../external/aravis/arv-tools)を参照。
+* デバイスにキーがない（`Not found (1)`）：フィーチャキーが正しいか確認してください。詳細は[利用可能なGenICam機能の一覧表示](../../external/aravis/arv-tools)を参照。
+* タイプが間違っていた（`Not a ArvGcString (0)`または`Not a ArvGcFlaot (0)`）：フィーチャタイプが正しいか確認してください。詳細は[利用可能なGenICam機能の一覧表示](../../external/aravis/arv-tools)を参照。
 ::::
 
 ### 値の表示
@@ -113,14 +109,14 @@ for i in range(num_device):
 
 ### クローズ
 
-Aravisの以下の関数を使用すると、メモリリークを防ぐためのリソースが解放されます。
+Aravisの以下の関数を使用すると、メモリリークを防ぐためにリソースが解放されます。
 
 ```python
 Aravis.shutdown()
 ```
 
 ::::tip
-Aravis Python APIの代わりに、arv-toolを使用することもできます。詳細は[Aravisからのツール](../../external/aravis/arv-tools.md)を参照してください。
+Aravis Python APIの代わりに、arv-toolを使用することもできます。詳細は[Aravisのツール](../../external/aravis/arv-tools.md)を参照してください。
 ::::
 
 ## 完全なコード
