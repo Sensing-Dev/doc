@@ -31,8 +31,7 @@ n["frame_count"].bind(frame_counts);
 
 `builder.run()`を実行してパイプラインを完了します。
 
-フレーム数のディレクトリは、numpy配列`frame_counts[i]`に対してi番目のデバイスの場合、各フレームカウントを次のように出力できます。
-
+フレームカウントディレクトリは、numpy配列`frame_counts[i]`にi番目のデバイスのフレームカウントを格納するので、各フレームカウントは次のように出力できます。
 ```c++
 std::cout << frame_counts[0](0) << std::endl;
 ```

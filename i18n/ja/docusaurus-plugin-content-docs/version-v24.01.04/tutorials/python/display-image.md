@@ -1,10 +1,10 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 # 画像の表示
 
-このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpwnCVを使って表示する方法を学びます。
+このチュートリアルでは、ion-kitを使用してデバイスから画像データを取得し、OpenCVを使って表示する方法を学びます。
 
 ## 必要なもの
 
@@ -22,7 +22,7 @@ pip3 install ion-python
 ## チュートリアル
 
 :::info
-v23.11.01またはそれ以前のチュートリアルでは、デバイスを制御するためにGainとExposureTimeの入力が必要でしたが、このバージョンではそれらがもはや必要ありません。これらの値を制御したい場合は、[BB内でカメラを制御する](./control_camera.md)を参照してください。
+v23.11.01またはそれ以前のチュートリアルでは、デバイスを制御するためにGainとExposureTimeの入力が必要でしたが、このバージョンではそれらが必要ありません。これらの値を制御したい場合は、[BBでカメラを制御する](./control_camera.md)を参照してください。
 :::
 
 ### デバイス情報の取得
@@ -37,17 +37,17 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 
 ### パイプラインの構築
 
-まず最初に、ion-kitのpythonバインディングであるionpyのモジュールをロードします。
+最初に、ion-kitのpythonバインディングであるionpyのモジュールをロードします。
 
 ```python
 from ionpy import Node, Builder, Buffer, PortMap, Port, Param, Type, TypeCode
 ```
 
-:::caution why it does not work
+:::caution なぜ動作しないのか
 Pythonユーザーの場合、C/C++ランタイムライブラリがない可能性があります。ionpyのモジュールをロードするのに問題がある場合は、[Microsoft公式ウェブページの記事](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-160#visual-studio-2015-2017-2019-and-2022)からライブラリをインストールできます。
 :::
 
-[前回の紹介](../intro.mdx)で学んだように、画像のI/Oと処理のためにパイプラインを構築して実行します。
+[イントロ](../intro.mdx)で学んだように、画像のI/Oと処理のためにパイプラインを構築して実行します。
 
 このチュートリアルでは、U3Vカメラから画像を取得する唯一のビルディングブロックを持つ非常に単純なパイプラインを構築します。
 
@@ -60,7 +60,7 @@ builder.set_target('host')
 builder.with_bb_module('ion-bb')
 ```
 
-`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。
+`set_target`は、ビルダーによって構築されたパイプラインが実行されるハードウェアを指定します。
 
 `ion-bb.dll`で定義されたBBを使用するためには、`with_bb_module`関数でモジュールをロードする必要があります。
 
@@ -68,7 +68,7 @@ builder.with_bb_module('ion-bb')
 
 ピクセルフォーマットがMono10またはMono12の場合、各ピクセルデータの深度が16ビットであるため、`image_io_u3v_cameraN_u16x2`が必要です。
 
-ピクセルフォーマットがRGB8の場合、深度が8で次元が3（幅と高さに加えてカラーチャンネルがある）であるため、`image_io_u3v_cameraN_u8x3`を使用します。
+ピクセルフォーマットがRGB8の場合、深度が8で次元が3（幅と高さに加えてカラーチャネルがある）であるため、`image_io_u3v_cameraN_u8x3`を使用します。
 
 | BBの名前 | ビット深度 | 次元 | `PixelFormat`の例 |
 | --------   | ------- | ------- | ------- |
@@ -94,7 +94,7 @@ realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 これで、ノードにポートとパラメータを持つBBをパイプラインに追加できます。
 
 :::tip v23.11.01 からの変更点
-v23.11.01では`Gain`と`ExposureTime`の入力ポートをBBが必要としていましたが、このバージョンではオプションになりました。詳細は[BB内でカメラを制御する](./control_camera.md)を参照してください。
+v23.11.01では`Gain`と`ExposureTime`の入力ポートをBBが必要としていましたが、このバージョンではオプションになりました。詳細は[BBでカメラを制御する](./control_camera.md)を参照してください。
 
 また、別の入力ポート`dispose`は廃止され、ビルダーのインスタンスが解放されるとカメラは自動的にかつ暗黙的に閉じられます。スコープを外れた時にインスタンスは自動的に解放されますが、どこで解放されるかを視覚的に確認したい場合は[デバッグのヒント](../../lessons/ion-log)を参照し、`ION_LOG_LEVEL`を`debug`に設定してください。
 :::
@@ -127,7 +127,7 @@ output.append(Buffer(array= output_data))
 output_p.bind(output)
 ```
 
-ここでの`output_size`は2D画像用に設計されています。ピクセルフォーマットがRGB8の場合、色チャンネルを追加するために`(width, height, 3)`を設定する必要があります。
+ここでの`output_size`は2D画像用に設計されています。ピクセルフォーマットがRGB8の場合、色チャネルを追加するために`(width, height, 3)`を設定する必要があります。
 
 ### パイプラインの実行
 
@@ -156,7 +156,7 @@ output_data *= coef
 cv2.imshow("img", output_data)
 ```
 
-連続した画像を取得するには、`cv2.waitKeyEx(1)`を使用してwhileループを設定できます。これにより、プログラムが1ミリ秒間保持され、ユーザー入力があると非-1の値が返されます。以下のコードは、ユーザーが任意のキーを入力するまで無限にループします。
+連続した画像を取得するには、`cv2.waitKeyEx(1)`を使用してwhileループを設定できます。これにより、プログラムが1ミリ秒間保持され、ユーザー入力があると-1以外の値が返されます。以下のコードは、ユーザーが任意のキーを入力するまで無限にループします。
 
 ```python
 coef = pow(2, num_bit_shift)
@@ -177,7 +177,7 @@ while(user_input == -1):
 cv2.destroyAllWindows()
 ```
 :::tip カメラインスタンスが正確に解放されるのは
-カメラインスタンスの寿命はビルディングブロックインスタンスによって制限されています。つまり、プログラムが終了するとともに自動的に破棄されます。正確なタイミングを観察するには、ユーザーはWindowsコマンドラインでset ION_LOG_LEVEL=debug、またはUnixターミナルでexport ION_LOG_LEVEL=debugを設定できます。ユーザーは、ターミナルで以下の行を見た場合、aravis経由でカメラにアクセスできます：
+カメラインスタンスの寿命はビルディングブロックインスタンスによって制限されています。つまり、プログラムが終了するとともに自動的に破棄されます。正確なタイミングを観察するには、ユーザーはWindowsコマンドラインでset ION_LOG_LEVEL=debug、またはUnixターミナルでexport ION_LOG_LEVEL=debugを設定します。ユーザーは、ターミナルで以下の行が表示された場合、aravis経由でカメラにアクセスできます：
 ```
 [2024-02-14 08:17:19.560] [ion] [info]  Device/USB 0::Command : AcquisitionStart
 [2024-02-14 08:17:27.789] [ion] [debug] U3V::release_instance() :: is called
