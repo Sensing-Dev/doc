@@ -28,20 +28,21 @@ pip3 install ion-python
 画像を表示しながら、フレーム数情報も取得したいと考えています。前のチュートリアルとの唯一の違いは、フレーム数の値を新しいポートにバインドする必要があることです。
 
 ```python
-fcdata = np.full((1), fill_value=0, dtype=np.uint32)
-frame_count = []
+fcdatas = []
+frame_counts = []
 for i in range(num_device):
-    frame_count.append(Buffer(array=fcdata))
+    fcdatas.append(np.zeros(1, dtype=np.uint32))
+    frame_counts.append(Buffer(array=fcdatas[i]))
 ```
 
 ### パイプラインの実行
 
 `builder.run()` を実行してパイプラインを終了します。
 
-フレーム数ディレクトリはnumpy array `fcdata` にあるため、次のように各フレーム数をプリントできます。
+フレーム数ディレクトリはnumpy array `fcdata` にあるため、次のように`i`番目のセンサのframecountをプリントできます。
 
 ```python
-print(fcdata[0])
+print(fcdatas[i][0], end=" ")
 ```
 ## 完全なコード
 

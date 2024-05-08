@@ -28,10 +28,11 @@ The process of setting up the pipeline is the exactly same as the one in the pre
 While displaying image, we also want to retrieve the frame count information. The only difference from previous tutorials is that we need to bind the frame count value to a new port.
 
 ```python
-fcdata = np.full((1), fill_value=0, dtype=np.uint32)
-frame_count = []
+fcdatas = []
+frame_counts = []
 for i in range(num_device):
-    frame_count.append(Buffer(array=fcdata))
+    fcdatas.append(np.zeros(1, dtype=np.uint32))
+    frame_counts.append(Buffer(array=fcdatas[i]))
 ```
 
 
@@ -39,10 +40,10 @@ for i in range(num_device):
 
 Execute `builder.run()` to finish the pipeline.
 
-Since frame count directory does to numpy array `fcdata`, you can print each framecount as follows:
+Since frame counts are directory stored to numpy array `fcdata`, you can print each framecount for `i`th sensor as follows:
 
 ```python
-print(fcdata[0])
+print(fcdatas[i][0], end=" ")
 ```
 
 
