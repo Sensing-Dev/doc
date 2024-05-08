@@ -20,11 +20,11 @@ sidebar_position: 6
 画像を表示している間に、フレーム数情報も取得したいと思います。前のチュートリアルとの唯一の違いは、フレーム数の値を新しいポートにバインドする必要があることです。
 
 ```c++
-std::vector<Halide::Buffer<uint32_t>> frame_counts;
+std::vector<Halide::Buffer<uint32_t>> fc;
 for (int i = 0; i < num_device; ++i){
-    frame_counts.push_back(Halide::Buffer<uint32_t>(1));
+    fc.push_back(Halide::Buffer<uint32_t>(1));
 }
-n["frame_count"].bind(frame_counts);
+n["frame_count"].bind(fc);
 ```
 
 ### パイプラインの実行
@@ -34,7 +34,7 @@ n["frame_count"].bind(frame_counts);
 フレーム数のディレクトリは、numpy配列`frame_counts[i]`に対してi番目のデバイスの場合、各フレームカウントを次のように出力できます。
 
 ```c++
-std::cout << frame_counts[0](0) << std::endl;
+std::cout << fc[i](0) << " " << std::endl;
 ```
 
 ## 完全なコード
