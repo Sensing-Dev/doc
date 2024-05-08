@@ -2,23 +2,69 @@
 sidebar_position: 3
 ---
 
+import '/src/css/home.css';
+import {latest_setup_URL} from "@site/static/version_const/latest.js"
+
 # Installation - Linux 
 
 This document describes the steps to install the software development environment for U3V camera on Linux.
 
 ## Expected environment
 
-TBD;
+In this document, the following environment is assumed.
+
+* OS: ubuntu 22.04 **with sudo privilege**
+* Development environment (One of them)
+    * Python 3.11 
+* Hardware:
+    * USB3.0 compatible USB port x2
+
 
 ## Prerequisite
 
-TBD;
+* Python 3.11
 
 ## Sensing-dev Software Packages
 
-TBD;
-link to the repository
+### Download the setup script
+
+<pre>
+<code class="language-bash">
+wget -O setup.sh {latest_setup_URL}
+</code>
+</pre>
+
+### Install and setup SDK
+
+Note that `--install-opencv` is optional.
+
+The following command install SDK and its dependencies
+
+<pre>
+<code class="language-bash">
+sudo bash setup.sh --install-opencv
+</code>
+</pre>
+
+### Set Environment Variables
+
+<pre>
+<code class="language-bash">
+export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH<br />
+export GI_TYPELIB_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/girepository-1.0:$GI_TYPELIB_PATH
+</code>
+</pre>
+
+If you with to use python-binding (ion-python), please install with pip.
+
+<pre>
+<code class="language-bash">
+    pip3 install -U pip<br />
+    pip3 install ion-python<br />
+    pip3 install gendc-python==0.1.0<br />
+</code>
+</pre>
 
 :::info Confirmation
-Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](/docs/external/aravis/arv-tools.md) to know the procedure.
+Using `/opt/sensing-dev/bin/arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](/docs/external/aravis/arv-tools.md) to know the procedure.
 :::

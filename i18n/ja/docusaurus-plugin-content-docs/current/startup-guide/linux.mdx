@@ -2,23 +2,69 @@
 sidebar_position: 3
 ---
 
+import '/src/css/home.css';
+import {latest_setup_URL} from "@site/static/version_const/latest.js"
+
 # インストール - Linux
 
-このドキュメントでは、Linux上にU3Vカメラ用ソフトウェア開発環境をインストールする手順について説明します。
+この文書では、Linux上でU3Vカメラのソフトウェア開発を始める人々のために開発環境をインストールする手順について説明します。
 
 ## 期待される環境
 
-TBD;
+このドキュメントでは、以下の環境を前提としています。
+
+* OS: Ubuntu 22.04
+* 権限: root (sudoコマンドの実行が可能)
+* 開発環境
+    * Python 3.11
+* ハードウェア：
+    * USB3.0対応のUSBポート x2
 
 ## 必要条件
 
-TBD;
+* Python 3.11
 
-## Sensing-dev ソフトウェアパッケージ
+## Sensing-devソフトウェアパッケージ
 
-TBD;
-リポジトリへのリンク
+### セットアップスクリプトのダウンロード
+
+<pre>
+<code class="language-bash">
+wget -O setup.sh {latest_setup_URL}
+</code>
+</pre>
+
+### SDKのインストールとセットアップ
+
+OpenCVをお持ちでなく、チュートリアルなどでご利用になりたい方はオプションに`--install-opencv`とつけてください。
+
+以下のコマンドは、SDKとその依存ライブラリをインストールします。
+
+<pre>
+<code class="language-bash">
+sudo bash setup.sh --install-opencv
+</code>
+</pre>
+
+### 環境変数の設定
+
+<pre>
+<code class="language-bash">
+export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH<br />
+export GI_TYPELIB_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/girepository-1.0:$GI_TYPELIB_PATH
+</code>
+</pre>
+
+もしpython-binding（ion-python）を使用したい場合は、pipでインストールしてください。
+
+<pre>
+<code class="language-bash">
+    pip3 install -U pip<br />
+    pip3 install ion-python<br />
+    pip3 install gendc-python==0.1.0<br />
+</code>
+</pre>
 
 :::info 確認
-`arv-tool-0.8`を使用すると、ソフトウェアパッケージが適切にインストールされているかどうかを確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を参照してください。
+`/opt/sensing-dev/bin/arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
 :::
