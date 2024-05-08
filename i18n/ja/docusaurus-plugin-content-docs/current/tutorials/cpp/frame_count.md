@@ -31,8 +31,7 @@ n["frame_count"].bind(fc);
 
 `builder.run()`を実行してパイプラインを完了します。
 
-フレーム数のディレクトリは、numpy配列`frame_counts[i]`に対してi番目のデバイスの場合、各フレームカウントを次のように出力できます。
-
+フレームカウントディレクトリは、numpy配列`frame_counts[i]`にi番目のデバイスのフレームカウントを格納するので、各フレームカウントは次のように出力できます。
 ```c++
 std::cout << fc[i](0) << " " << std::endl;
 ```
@@ -43,7 +42,6 @@ import {tutorial_version} from "@site/static/version_const/latest.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial3_getting_frame_count" />
-
 
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。

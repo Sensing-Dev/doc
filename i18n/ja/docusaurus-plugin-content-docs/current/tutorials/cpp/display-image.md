@@ -25,7 +25,7 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 
 ### パイプラインの構築
 
-[導入](../intro.mdx)で学んだように、画像の入出力と処理のためのパイプラインを構築して実行します。
+[イントロ](../intro.mdx)で学んだように、画像の入出力と処理のためのパイプラインを構築して実行します。
 
 ion-kitおよびOpenCVのAPIを使用するために、次のヘッダーを含める必要があります：
 
@@ -48,7 +48,7 @@ b.set_target(ion::get_host_target());
 b.with_bb_module("ion-bb");
 ```
 
-`set_target`は、Builderによって構築されたパイプラインが実行されるハードウェアを指定します。
+`set_target`は、ビルダーによって構築されたパイプラインが実行されるハードウェアを指定します。
 
 `ion-bb.dll`で定義されたBBを使用したいので、`with_bb_module`関数でモジュールをロードする必要があります。
 
@@ -56,7 +56,7 @@ b.with_bb_module("ion-bb");
 
 デバイスのピクセルフォーマットがMono10またはMono12の場合、10ビットおよび12ビットのピクセルデータを格納するために16ビット深度のピクセルが必要なので、`image_io_u3v_cameraN_u16x2`が必要です。
 
-ピクセルフォーマットがRGB8の場合、ビットの深度は8で、次元は3です（幅と高さに加えて、カラーチャンネルがあります）、そのため`image_io_u3v_cameraN_u8x3`を使用します。
+ピクセルフォーマットがRGB8の場合、ビットの深度は8で、次元は3です（幅と高さに加えて、カラーチャネルがあります）、そのため`image_io_u3v_cameraN_u8x3`を使用します。
 
 | BBの名前 | ビットの深さ | 次元 | `PixelFormat`の例 |
 | --------   | ------- | ------- | ------- |
@@ -110,7 +110,7 @@ for (int i = 0; i < num_device; ++i){
 n["output"].bind(output);
 ```
 
-注意：ここでの`buf_size`は2Dイメージ用に設計されています。ピクセルフォーマットがRGB8の場合、カラーチャンネルを追加するには`(width、height、3)`を設定する必要があります。
+注意：ここでの`buf_size`は2Dイメージ用に設計されています。ピクセルフォーマットがRGB8の場合、カラーチャネルを追加するには`(width、height、3)`を設定する必要があります。
 
 `T`は出力バッファのタイプです。たとえば、Mono8およびRGB8用に`uint8_t`、Mono10およびMono12用に`uint16_t`です。
 
@@ -168,14 +168,27 @@ while(user_input == -1)
     user_input = cv::waitKeyEx(1);
 }
 ```
-
+:::tip カメラインスタンスが正確に解放されるのは
+カメラインスタンスの寿命はビルディングブロックインスタンスによって制限されています。つまり、プログラムが終了するとともに自動的に破棄されます。正確なタイミングを観察するには、ユーザーはWindowsコマンドラインでset ION_LOG_LEVEL=debug、またはUnixターミナルでexport ION_LOG_LEVEL=debugを設定できます。ユーザーは、ターミナルで以下の行が表示された場合、aravis経由でカメラにアクセスできます：
+```
+[2024-02-14 08:17:19.560] [ion] [info]  Device/USB 0::Command : AcquisitionStart
+[2024-02-14 08:17:27.789] [ion] [debug] U3V::release_instance() :: is called
+[2024-02-14 08:17:27.790] [ion] [debug] U3V::dispose() :: is called
+[2024-02-14 08:17:27.791] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-14 08:17:28.035] [ion] [debug] U3V::dispose() :: g_object_unref took 244 ms
+[2024-02-14 08:17:28.109] [ion] [debug] U3V::dispose() :: g_object_unref took 72 ms
+[2024-02-14 08:17:28.110] [ion] [debug] U3V::dispose() :: Instance is deleted
+[2024-02-14 08:17:28.111] [ion] [debug] U3V::release_instance() :: is finished
+```
+上記のデバッグ情報から、ユーザーはカメラインスタンスの解放にかかる時間を知ることができます。
+詳細はは[デバッグのヒント](../../lessons/ion-log)を参照してください。
+:::
 ## 完全なコード
 
 import {tutorial_version} from "@site/static/version_const/latest.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial1_display" />
-
 
 :::caution 動かない時は
 * もしお使いのOpenCVがSensing-Devインストール時に`-InstallOpenCV`オプションをつけてインストールしたものでない場合、プログラムに正しくリンクされているかを確認してください。
