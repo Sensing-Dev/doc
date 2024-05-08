@@ -73,8 +73,6 @@ gendc_descriptor = gendc.Container(filecontent[cursor:])
 
 This may return error if the file content does not have GenDC signature.
 
-GenDC Separator has `isGenDC` to check if the data has GenDC signature. Before parsing the whole data, it is always a good idea to make sure if the data is actually saved as GenDC format.
-
 Now this object contains all information written in the GenDC Descriptor. You can get the size of Descriptor and the size of data. 
 ```python
 # get GenDC container information
@@ -120,8 +118,6 @@ typespecific3 = gendc_descriptor.get("TypeSpecific", image_component, 0)[2]
 print("Framecount: ", int.from_bytes(typespecific3.to_bytes(8, 'little')[0:4], "little"))          
 ```
 :::
-
-
 
 ## Complete code
 
