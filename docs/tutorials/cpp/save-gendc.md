@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # Save Sensor Data
 
-In this tutorial, we learn how to save data transferred from sensor into a binary file.
+"In this tutorial, we will learn how to save data transferred from a sensor into a binary file.
 
 ## Prerequisite
  
@@ -12,13 +12,13 @@ In this tutorial, we learn how to save data transferred from sensor into a binar
 
 ## Tutorial
 
-In the previous tutorials, we used a single BB in a pipeline to obtain sensor data. Now, we add binarysaver BB so that we have the flow 1. Acquire data then 2. Save data in the pipeline.
+In previous tutorials, we utilized a single building block (BB) in a pipeline to acquire sensor data. Now, we're incorporating the binarysaver BB to enable a two-step flow: 1. Acquiring data, and 2. Saving data within the pipeline.
 
 ![binarysaver-bb-after-data-acquisition-BB](../img/tutorial4-single-sensor.png)
 
 ### Build a pipeline
 
-The process of initialize the pipeline `Builder` is the exactly same as the one in the previous tutorials. 
+The process of initializing the pipeline `Builder` is exactly the same as in the previous tutorials. 
 
 ```c++
 // pipeline setup
@@ -27,16 +27,16 @@ b.set_target(ion::get_host_target());
 b.with_bb_module("ion-bb");
 ```
 
-As the succeesind BB of the sensor data acquisision BB, we connect binarysaver BB so that we have the flow 1. Acquire data then 2. Save data in the pipeline.
+As the succeeding building block (BB) after the sensor data acquisition BB, we connect the binarysaver BB to establish the flow: 1. Acquire data, then 2. Save data in the pipeline.
 
-The actual BB depends on what type of sensor data you use. In this tutorial, we introduce the example how to save GenDC data.
+The specific building block (BB) utilized depends on the type of sensor data being used. In this tutorial, we present an example demonstrating how to save GenDC data.
 
 |           | Data Acquisition BB                            | Binary saver BB                                  |
 |-----------|------------------------------------------------|--------------------------------------------------|
 | GenDC     | image_io_u3v_gendc                             | image_io_u3v_binary_gendc_saver                  |
 | non-GenDC | image_io_u3v_cameraN_u&ltbyte-depth&gtx<dim&gt | image_io_binarysaver_u&ltbyte-depth&gtx&ltdim&gt |
 
-Now, we add two BBs to our pipeline `b`. The second BB `image_io_u3v_binary_gendc_saver` requires 3 input for BB's port: GenDC data, Device Information, and PayloadSize.
+We are now adding two BBs to our pipeline `b`. The second BB, `image_io_u3v_binary_gendc_saver`, requires three inputs for its ports: GenDC data, Device Information, and PayloadSize.
 
 ```c++
 // add the first BB to acquire data
@@ -45,29 +45,28 @@ Node n = b.add("image_io_u3v_gendc")();
 n = b.add("image_io_binary_gendc_saver")(n["gendc"], n["device_info"], &payloadsize);
 ```
 
-GenDC data and Device Information are obtained by the acuisition BB in the previous node `image_io_u3v_gendc`. Payloadsize is the whole size of GenDC container, which you can gain with `arv-tool-0.8 -n <device name> control PayloadSize` on console. To see the detail usage, please check [arv-tool-0.8](../../external/aravis/arv-tools).
-
+The GenDC data and Device Information are obtained by the acquisition BB in the previous node, `image_io_u3v_gendc`. The PayloadSize represents the entire size of the GenDC container, which can be retrieved using the command `arv-tool-0.8 -n <device name> control PayloadSize` in the console. For detailed usage instructions, please refer to [arv-tool-0.8](../../external/aravis/arv-tools).
 
 :::tip
 
 ### For non-GenDC data
 
-If the BBs are for GenDC, it does not have input/output of `frame_count`, while non-GenDC BBs have it. See the details in the following table.
+When the BBs are designed for GenDC, they do not have inputs/outputs for `frame_count`, whereas non-GenDC BBs include it. For further details, please refer to the table below
 
 |           | Output of Data Acquisition BB                  | Input of Binary saver BB                         |
 |-----------|------------------------------------------------|--------------------------------------------------|
 | GenDC     | gendc; device_info                             | gendc; device_info; payloadsize                  |
 | non-GenDC | output; device_info; frame_count               | output; device_info; frame_count; width; height  |
 
-width and height could be obtained with [arv-tool-0.8](../../external/aravis/arv-tools) as same as payloadsize in the example above.
+Width and height can also be obtained using [arv-tool-0.8](../../external/aravis/arv-tools), similar to how payload size was retrieved in the example above.
 
 ### For multi-sensor data
 
-If you acquire more than 1 sensor data in the first BB with `Param("num_devices", 2)`, you have to save them in the separate binary saver BB, otherwise one sensor data will overwrite the other.
+If you acquire data from more than one sensor in the first BB using `Param("num_devices", 2)`, you must save them separately using individual binary saver BBs. Otherwise, the data from one sensor will overwrite the data from the other.
 
 ![binarysaver-bb-after-data-acquisition-BB-multi-sensor](../img/tutorial4-multi-sensor.png)
 
-You can access each sensor's output data of the first BB by using index `[]` as follows. Make sure that you set `Param("prefix", "sensor0-")` and `Param("prefix", "sensor1-")` for each binary saver BB so that it won't overwrite the content each other.
+To access the output data from each sensor in the first BB, you can use indexing `[]` as follows. Ensure that you set `Param("prefix", "sensor0-")` and `Param("prefix", "sensor1-")` for each binary saver BB to prevent them from overwriting each other's content.
 
 ```c++
 Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
@@ -94,9 +93,9 @@ n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &pa
 
 ### Set output port
 
-Binary file would be saved inside of the process of binary saver BB, while we get a scaler output of the pipeline.
+The binary file will be saved within the binary saver BB process, while we obtain a scalar output from the pipeline.
 
-This is just a terminal flag to see if the BB successfully saved the data or not, so you may not care the value inside. We just need to create an output buffer to receive it.
+This is merely a terminal flag to indicate whether the BB successfully saved the data or not, so the specific value inside may not be of concern. We simply need to create an output buffer to receive it.
 
 ```c++
 Halide::Buffer<int> output = Halide::Buffer<int>::make_scalar();
@@ -107,7 +106,7 @@ n["output"].bind(output);
 
 Execute `builder.run()` to finish the pipeline as usual.
 
-The binary data will be saved `<output directory>/<prefix>0.bin`, `<output directory>/<prefix>1.bin`, `<output directory>/<prefix>2.bin`... as a default, output directory is the current directory and prefix is `raw-`. To set these values, please use `Param` in the binary saver BB.
+By default, the binary data will be saved in the following format: `<output directory>/<prefix>0.bin`, `<output directory>/<prefix>1.bin`, `<output directory>/<prefix>2.bin`, and so forth. The default output directory is the current directory, and the default prefix is `raw-`. To customize these values, please utilize the `Param` within the binary saver BB.
 
 ## Complete code
 

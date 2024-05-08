@@ -12,11 +12,11 @@ In this tutorial, we learn how to user GenDC separator library.
 
 ## Tutorial
 
-In the [previous tutorial](save-gendc), we learn how to save GenDC data into a binary file. Now we load the data and parse the container, and get some information of the sensor from its descriptor.
+In the [previous tutorial](save-gendc), we learned how to save GenDC data into a binary file. Now, we will load the data, parse the container, and retrieve some information about the sensor from its descriptor.
 
 ### GenDC
 
-GenDC is Generic Data Container defined by EMVA. As it is named with generic, it can contain any types of data defined by the camera device no matter what data dimension is, metadata is, and image sequences/bursts are. 
+GenDC, or Generic Data Container, is defined by the EMVA (European Machine Vision Association). True to its name, it can contain any types of data defined by the camera device, regardless of the data dimension, metadata, or whether they are image sequences/bursts. 
 
 While the format rule is defined in [the official document](https://www.emva.org/wp-content/uploads/GenICam_GenDC_v1_1.pdf), GenDC Separator helps you with easily parsing the whole container.
 
@@ -30,7 +30,7 @@ std::string directory_name = "tutorial_save_gendc_XXXXXXXXXXXXXX";
 std::string prefix = "sensor0-";
 ```
 
-In the following snippet tries to get all bin file starting with this prefix under the directory. Also, reordering all the found binaries in the recorded order.
+The following snippet attempts to retrieve all binary files starting with a specified prefix from a directory. It then reorders all the found binaries according to their recorded order.
 
 ```c++
 std::vector<std::string> bin_files;
