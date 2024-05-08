@@ -1,6 +1,6 @@
 //THIS IS WHERE YOU UPDATE
 const is_latest = true;
-const latest_version = 'v24.04.00-test7';
+const latest_version = 'v24.05.00';
 const latest_winUSB_URL = "v24.02.02"
 
 const GenerateVersionInfo = require('./generate_version_info.js');
