@@ -101,29 +101,65 @@ The whole container size is this DescriptorSize and DataSize, so if you want to 
 ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_size + data_size);
 ```
 
-In this tutorial, let's get the first available component data size and offset, so that you can get only that sensor data from the container data. `getFirstAvailableDataOffset` returns the tuple of component index and part index of the first available image data. If this returns `(-1, -1)`, no data is set as valid on the sensor side.
+In this tutorial, let's display the data of the first available image data component, allowing you to extract only that sensor data from the container data. The function `getFirstComponentIndexWithDatatypeOf()` returns the index of the first available data component if its datatype matches the parameter. If it returns `-1`, it means no valid data is set on the sensor side.
+
+Here are some datatype difined by GenICam.
+
+| Datatype key | Datatype ID Value |
+|--------------|-------------------|
+| Undefined    | 0                 |
+| Intensity    | 1                 |
+| Infrared     | 2                 |
+| Ultraviolet  | 3                 |
+| Range        | 4                 |
+| ...          | ...               |
+| Metadata     | 0x8001            |
+
+[reference: 4.13ComponentIDValue on GenICam Standard Features Naming Convention](https://www.emva.org/wp-content/uploads/GenICam_SFNC_v2_7.pdf)
+
+
+Since we want to get image (i.e. intensity) data, use `1` for Datatype ID Value.
+
 
 ```c++
 // get first available image component
-std::tuple<int32_t, int32_t> data_comp_and_part = gendc_descriptor.getFirstAvailableDataOffset(true);
-std::cout << "First available image data component is Comp " 
-    << std::get<0>(data_comp_and_part)
-    << ", Part "
-    << std::get<1>(data_comp_and_part) << std::endl;
+int32_t image_component_index = gendc_descriptor.getFirstComponentIndexWithDatatypeOf(1);
 ```
 
-We now want to know `std::get<0>(data_comp_and_part)`th component and `std::get<1>(data_comp_and_part)`th part data size and offset, so you call `getDataSize()`.
+Now, we can access the header information of the component that contains the image data.
+```c++
+ComponentHeader image_component = gendc_descriptor.getComponentHeader(image_component_index);
+```
+
+To copy image data, we need to create a buffer to store the data.
+```c++
+uint8_t* imagedata;
+imagedata = new uint8_t [image_component.getDataSize()];
+int32_t datasize = image_component.getData(reinterpret_cast<char*>(imagedata));
+```
+
+Currently, the image data is in a 1D array format `imagedata`. To display the preview image, we can reshape it by setting the following information:
+* Width
+* Height
+* Color-channel
+* Byte-depth
+
+`getImageDimension()` returns a vector containing the width, height, and color channel information. If the color channel is singular, it returns only the width and height.
+
+To determine the byte-depth, you can calculate it from the total size of the data and the obtained dimension values above.
 
 ```c++
-int image_datasize = gendc_descriptor.getDataSize(std::get<0>(data_comp_and_part), std::get<1>(data_comp_and_part));
-int image_offseet = gendc_descriptor.getDataOffset(std::get<0>(data_comp_and_part), std::get<1>(data_comp_and_part));
-std::cout << "\tData size: " << image_datasize << std::endl;
-std::cout << "\tData offset: " << image_offseet << std::endl;
-
+int32_t bd = datasize / WxHxC;
 ```
 
-Now, you can copy `filecontent` from offset `image_offseet` for the size of `image_datasize` to obtain imagedata.
+Now, we copy the data from 1D array `imagedata` to the image-formatized cv::Mat `img` with `memcpy` to display:
+```c++
+cv::Mat img(image_dimension[1], image_dimension[0], CV_8UC1);
+std::memcpy(img.ptr(), imagedata, datasize);
+cv::imshow("First available image component", img);
 
+cv::waitKeyEx(1);
+```
 
 :::tip
 
@@ -132,8 +168,7 @@ If you want to access some device-specific data stored in TypeSpecific field of 
 For example, the following GenDC data has `framecount` data at the TypeSpecific3 in the size of integer.
 
 ```c++
-int offset = gendc_descriptor.getOffsetFromTypeSpecific(std::get<0>(data_comp_and_part), std::get<1>(data_comp_and_part), 3, 0);
-std::cout << "Framecount: " << *reinterpret_cast<int*>(filecontent + cursor + offset) << std::endl;             
+std::cout << "Framecount: " << *reinterpret_cast<uint32_t*>(filecontent + cursor + offset) << std::endl;            
 ```
 :::
 
