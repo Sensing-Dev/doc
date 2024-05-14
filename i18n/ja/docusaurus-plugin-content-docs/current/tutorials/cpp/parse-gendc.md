@@ -100,28 +100,65 @@ int64_t data_size = gendc_descriptor.getContainerDataSize();
 ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_size + data_size);
 ```
 
-このチュートリアルでは、最初に利用可能なコンポーネントデータのサイズとオフセットを取得しましょう。 `getFirstAvailableDataOffset` は、最初に利用可能なイメージデータのコンポーネントインデックスとパートインデックスのタプルを返します。これが `(-1、-1)` を返す場合、センサー側でデータが有効に設定されていません。
+このチュートリアルでは、最初に利用可能な画像データコンポーネントのデータを表示するために、コンテナデータからそのセンサーデータのみを抽出できるようにします。`getFirstComponentIndexWithDatatypeOf()`関数は、そのデータ型がパラメータと一致する最初の利用可能なデータコンポーネントのインデックスを返します。もし`-1`を返した場合は、センサー側に有効なデータが設定されていないことを意味します。
+
+以下は、GenICamで定義されたいくつかのデータ型です。
+
+| Datatype key | Datatype ID Value |
+|--------------|-------------------|
+| Undefined    | 0                 |
+| Intensity    | 1                 |
+| Infrared     | 2                 |
+| Ultraviolet  | 3                 |
+| Range        | 4                 |
+| ...          | ...               |
+| Metadata     | 0x8001            |
+
+[reference: 4.13ComponentIDValue on GenICam Standard Features Naming Convention](https://www.emva.org/wp-content/uploads/GenICam_SFNC_v2_7.pdf)
+
+
+画像（つまりintensity）データを取得したいので、データ型ID値に`1`を使用します。
 
 ```c++
 // 最初に利用可能な画像コンポーネントを取得します
-std::tuple<int32_t, int32_t> data_comp_and_part = gendc_descriptor.getFirstAvailableDataOffset(true);
-std::cout << "最初に利用可能な画像データのコンポーネントは Comp " 
-   << std::get<0>(data_comp_and_part)
-   << "、Part "
-   << std::get<1>(data_comp_and_part) << std::endl;
+int32_t image_component_index = gendc_descriptor.getFirstComponentIndexWithDatatypeOf(1);
 ```
 
-次に、`std::get<0>(data_comp_and_part)` 番目のコンポーネントと `std::get<1>(data_comp_and_part)` 番目のパートのデータサイズとオフセットを取得します。 `getDataSize()` を呼び出します。
+このコンポーネントインデックスを利用して画像データを含むコンポーネントのヘッダー情報にアクセスできます。
 
 ```c++
-int image_datasize = gendc_descriptor.getDataSize(std::get<0>(data_comp_and_part), std::get<1>(data_comp_and_part));
-int image_offseet = gendc_descriptor.getDataOffset(std::get<0>(data_comp_and_part), std::get<1>(data_comp_and_part));
-std::cout << "\tデータサイズ: " << image_datasize << std::endl;
-std::cout << "\tデータオフセット: " << image_offseet << std::endl;
-
+ComponentHeader image_component = gendc_descriptor.getComponentHeader(image_component_index);
 ```
 
-これで、`filecontent` を `image_offseet` から `image_datasize` のサイズでコピーして画像データを取得できます。
+画像データをコピーするには、データを格納するためのバッファーを作成する必要があります。
+```c++
+uint8_t* imagedata;
+imagedata = new uint8_t [image_component.getDataSize()];
+int32_t datasize = image_component.getData(reinterpret_cast<char*>(imagedata));
+```
+
+現在、画像データは1次元配列形式の`imagedata`に格納されています。プレビュー画像を表示するために、次の情報を設定する必要があります。
+* 幅(Width)
+* 高さ(Height)
+* カラーチャネル(Color-channel)
+* バイト深度(Byte-depth)
+
+`getImageDimension()`は、幅、高さ、およびカラーチャンネル情報を含むベクトルを返します。カラーチャンネルが単数の場合、幅と高さのみを返します。
+
+バイトの深さを決定するには、データの総サイズと上記で得られた次元の値から計算できます。
+```c++
+int32_t bd = datasize / WxHxC;
+```
+
+これらの情報がそろったので`memcpy`を使用して、1次元配列`imagedata`から画像形式のcv::Matである`img`にデータをコピーし、表示することができます。
+
+```c++
+cv::Mat img(image_dimension[1], image_dimension[0], CV_8UC1);
+std::memcpy(img.ptr(), imagedata, datasize);
+cv::imshow("First available image component", img);
+
+cv::waitKeyEx(1);
+```
 
 :::tip
 
@@ -130,8 +167,7 @@ GenDCのTypeSpecificフィールドに保存されているデバイス固有の
 たとえば、次のGenDCデータには、TypeSpecific3にサイズが整数の `framecount` データがあります。
 
 ```c++
-int offset = gendc_descriptor.getOffsetFromTypeSpecific(std::get<0>(data_comp_and_part), std::get<1>(data_comp_and_part), 3, 0);
-std::cout << "Framecount: " << *reinterpret_cast<int*>(filecontent + cursor + offset) << std::endl;                
+std::cout << "Framecount: " << *reinterpret_cast<uint32_t*>(filecontent + cursor + offset) << std::endl;            
 ```
 :::
 
