@@ -23,11 +23,11 @@ While the format rule is defined in [the official document](https://www.emva.org
 
 ### Find Binary file.   
 
-If you use the binary file saved in the previous tutorial, the name of the directory should be `tutorial_save_gendc_XXXXXXXXXXXXXX` and binary file prefix is `sensor0-`.
+If you use the binary file saved in the previous tutorial, the name of the directory should be `tutorial_save_gendc_XXXXXXXXXXXXXX` and binary file prefix is `gendc0-`.
 
 ```c++
 std::string directory_name = "tutorial_save_gendc_XXXXXXXXXXXXXX";
-std::string prefix = "sensor0-";
+std::string prefix = "gendc0-";
 ```
 
 The following snippet attempts to retrieve all binary files starting with a specified prefix from a directory. It then reorders all the found binaries according to their recorded order.
@@ -87,13 +87,13 @@ isGenDC(filecontent)
 
 If it returns `true`, we can create an GenDC `ContainerHeader` object from the data.
 ```c++
-ContainerHeader gendc_descriptor= ContainerHeader(filecontent);
+ContainerHeader gendc_descriptor = ContainerHeader(filecontent);
 ```
 
 Now this object contains all information written in the GenDC Descriptor. You can get the size of Descriptor and the size of data. 
 ```c++
 int32_t descriptor_size = gendc_descriptor.getDescriptorSize();
-int64_t data_size = gendc_descriptor.getContainerDataSize();
+int64_t container_data_size = gendc_descriptor.getDataSize();
 ```
 
 The whole container size is this DescriptorSize and DataSize, so if you want to load the next container information, you can just add the total as the offset of the original data.
@@ -101,7 +101,7 @@ The whole container size is this DescriptorSize and DataSize, so if you want to 
 ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_size + data_size);
 ```
 
-In this tutorial, let's display the data of the first available image data component, allowing you to extract only that sensor data from the container data. The function `getFirstComponentIndexWithDatatypeOf()` returns the index of the first available data component if its datatype matches the parameter. If it returns `-1`, it means no valid data is set on the sensor side.
+In this tutorial, let's display the data of the first available image data component, allowing you to extract only that sensor data from the container data. The function `getFirstComponentIndexByTypeID()` returns the index of the first available data component if its datatype matches the parameter. If it returns `-1`, it means no valid data is set on the sensor side.
 
 Here are some datatype difined by GenICam.
 
@@ -123,19 +123,27 @@ Since we want to get image (i.e. intensity) data, use `1` for Datatype ID Value.
 
 ```c++
 // get first available image component
-int32_t image_component_index = gendc_descriptor.getFirstComponentIndexWithDatatypeOf(1);
+int32_t image_component_index = gendc_descriptor.getFirstComponentIndexByTypeID(1);
 ```
 
 Now, we can access the header information of the component that contains the image data.
 ```c++
-ComponentHeader image_component = gendc_descriptor.getComponentHeader(image_component_index);
+ComponentHeader image_component = gendc_descriptor.getComponentByIndex(image_component_index);
 ```
 
-To copy image data, we need to create a buffer to store the data.
+The component has one or more parts. We can iterate through them using a for loop.
+
+```c++
+for (int idx = 0; idx < part_count; idx++) {
+    PartHeader part = image_component.getPartByIndex(idx);
+    int part_data_size = part.getDataSize();
+```
+
+To copy image data, we need to create a buffer to store the data in each Part.
 ```c++
 uint8_t* imagedata;
-imagedata = new uint8_t [image_component.getDataSize()];
-int32_t datasize = image_component.getData(reinterpret_cast<char*>(imagedata));
+imagedata = new uint8_t [part_data_size];
+part.getData(reinterpret_cast<char *>(imagedata));
 ```
 
 Currently, the image data is in a 1D array format `imagedata`. To display the preview image, we can reshape it by setting the following information:
@@ -144,12 +152,15 @@ Currently, the image data is in a 1D array format `imagedata`. To display the pr
 * Color-channel
 * Byte-depth
 
-`getImageDimension()` returns a vector containing the width, height, and color channel information. If the color channel is singular, it returns only the width and height.
+`getDimension()` returns a vector containing the width and height. If the component has more than 1 Part, it has more than one color channel.
+```c++
+std::vector <int32_t> image_dimension = part.getDimension();
+```
 
 To determine the byte-depth, you can calculate it from the total size of the data and the obtained dimension values above.
 
 ```c++
-int32_t bd = datasize / WxHxC;
+int32_t bd = part_data_size / WxH;
 ```
 
 Now, we copy the data from 1D array `imagedata` to the image-formatized cv::Mat `img` with `memcpy` to display:

@@ -22,11 +22,11 @@ GenDC、ジェネリックデータコンテナは、EMVA（European Machine Vis
 
 ### バイナリファイルを見つける
 
-前のチュートリアルで保存したバイナリファイルを使用する場合、ディレクトリの名前は `tutorial_save_gendc_XXXXXXXXXXXXXX` で、バイナリファイルのプレフィックスは `sensor0-` にする必要があります。
+前のチュートリアルで保存したバイナリファイルを使用する場合、ディレクトリの名前は `tutorial_save_gendc_XXXXXXXXXXXXXX` で、バイナリファイルのプレフィックスは `gendc0-` にする必要があります。
 
 ```c++
 std::string directory_name = "tutorial_save_gendc_XXXXXXXXXXXXXX";
-std::string prefix = "sensor0-";
+std::string prefix = "gendc0-";
 ```
 
 次のスニペットは、指定されたプレフィックスで始まるすべてのバイナリファイルをディレクトリから取得し、すべてのバイナリを記録された順序に並べ替えます。
@@ -86,13 +86,13 @@ isGenDC(filecontent)
 
 これが `true` を返す場合、データからGenDC `ContainerHeader` オブジェクトを作成できます。
 ```c++
-ContainerHeader gendc_descriptor= ContainerHeader(filecontent);
+ContainerHeader gendc_descriptor = ContainerHeader(filecontent);
 ```
 
 このオブジェクトにはGenDCディスクリプターに書かれたすべての情報が含まれます。以下の例ではディスクリプターサイズとデータサイズを取得できます。
 ```c++
 int32_t descriptor_size = gendc_descriptor.getDescriptorSize();
-int64_t data_size = gendc_descriptor.getContainerDataSize();
+int64_t container_data_size = gendc_descriptor.getDataSize();
 ```
 
 コンテナ全体のサイズはこのディスクリプターサイズとデータサイズであり、次のコンテナ情報をロードする場合は、元のデータのオフセットに合計を追加するだけです。
@@ -100,7 +100,7 @@ int64_t data_size = gendc_descriptor.getContainerDataSize();
 ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_size + data_size);
 ```
 
-このチュートリアルでは、最初に利用可能な画像データコンポーネントのデータを表示するために、コンテナデータからそのセンサーデータのみを抽出できるようにします。`getFirstComponentIndexWithDatatypeOf()`関数は、そのデータ型がパラメータと一致する最初の利用可能なデータコンポーネントのインデックスを返します。もし`-1`を返した場合は、センサー側に有効なデータが設定されていないことを意味します。
+このチュートリアルでは、最初に利用可能な画像データコンポーネントのデータを表示するために、コンテナデータからそのセンサーデータのみを抽出できるようにします。`getFirstComponentIndexByTypeID()`関数は、そのデータ型がパラメータと一致する最初の利用可能なデータコンポーネントのインデックスを返します。もし`-1`を返した場合は、センサー側に有効なデータが設定されていないことを意味します。
 
 以下は、GenICamで定義されたいくつかのデータ型です。
 
@@ -121,20 +121,27 @@ ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_
 
 ```c++
 // 最初に利用可能な画像コンポーネントを取得します
-int32_t image_component_index = gendc_descriptor.getFirstComponentIndexWithDatatypeOf(1);
+int32_t image_component_index = gendc_descriptor.getFirstComponentIndexByTypeID(1);
 ```
 
 このコンポーネントインデックスを利用して画像データを含むコンポーネントのヘッダー情報にアクセスできます。
 
 ```c++
-ComponentHeader image_component = gendc_descriptor.getComponentHeader(image_component_index);
+ComponentHeader image_component = gendc_descriptor.getComponentByIndex(image_component_index);
+```
+
+コンポーネントは１つ以上のパートで構成されています。for loopを使ってそれぞれのPartのデータを取得してみましょう。
+```c++
+for (int idx = 0; idx < part_count; idx++) {
+    PartHeader part = image_component.getPartByIndex(idx);
+    int part_data_size = part.getDataSize();
 ```
 
 画像データをコピーするには、データを格納するためのバッファーを作成する必要があります。
 ```c++
 uint8_t* imagedata;
-imagedata = new uint8_t [image_component.getDataSize()];
-int32_t datasize = image_component.getData(reinterpret_cast<char*>(imagedata));
+imagedata = new uint8_t [part_data_size];
+part.getData(reinterpret_cast<char *>(imagedata));
 ```
 
 現在、画像データは1次元配列形式の`imagedata`に格納されています。プレビュー画像を表示するために、次の情報を設定する必要があります。
@@ -143,11 +150,14 @@ int32_t datasize = image_component.getData(reinterpret_cast<char*>(imagedata));
 * カラーチャネル(Color-channel)
 * バイト深度(Byte-depth)
 
-`getImageDimension()`は、幅、高さ、およびカラーチャンネル情報を含むベクトルを返します。カラーチャンネルが単数の場合、幅と高さのみを返します。
+`getDimension()`は、幅と高さ情報を含むベクトルを返します。カラーチャンネルの数はコンポーネントに含まれるパートの数と同じです。
+```c++
+std::vector <int32_t> image_dimension = part.getDimension();
+```
 
 バイトの深さを決定するには、データの総サイズと上記で得られた次元の値から計算できます。
 ```c++
-int32_t bd = datasize / WxHxC;
+int32_t bd = part_data_size / WxH;
 ```
 
 これらの情報がそろったので`memcpy`を使用して、1次元配列`imagedata`から画像形式のcv::Matである`img`にデータをコピーし、表示することができます。

@@ -66,7 +66,7 @@ widthとheightは、上記の例でペイロードサイズを取得したのと
 
 ![binarysaver-bb-after-data-acquisition-BB-multi-sensor](../img/tutorial4-multi-sensor.png)
 
-最初のBBから各センサの出力データにアクセスするには、次のようにインデックス `[]` を使用します。各バイナリセーバBBに `Param("prefix", "sensor0-")` と `Param("prefix", "sensor1-")` を設定して、お互いの内容を上書きしないように注意してください。
+最初のBBから各センサの出力データにアクセスするには、次のようにインデックス `[]` を使用します。各バイナリセーバBBに `Param("prefix", "gendc0-")` と `Param("prefix", "gendc1-")` を設定して、お互いの内容を上書きしないように注意してください。
 
 ```c++
 Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
@@ -74,7 +74,7 @@ Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
 if (num_device == 2){
    Node n1 = b.add("image_io_binary_gendc_saver")(n["gendc"][1], n["device_info"][1], &payloadsize)
    .set_param(
-       Param("prefix", "sensor1-"),
+       Param("prefix", "gendc1-"),
        Param("output_directory", saving_diretctory)
    );
    Halide::Buffer<int> output1 = Halide::Buffer<int>::make_scalar();
@@ -83,7 +83,7 @@ if (num_device == 2){
 
 n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &payloadsize)
    .set_param(
-       Param("prefix", "sensor0-"),
+       Param("prefix", "gendc0-"),
        Param("output_directory", saving_diretctory)
    );
 ```
