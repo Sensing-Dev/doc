@@ -12,12 +12,16 @@ In this tutorial, we learn how to access 2 cameras and obtain their images via i
 * numpy
 * OpenCV
 
-```bash
-pip3 install -U pip
-pip3 install opencv-python
-pip3 install numpy
-pip3 install ion-python
-```
+import this_version from "@site/static/version_const/latest.js"
+
+<pre>
+<code class="language-bash">
+pip3 install -U pip<br />
+pip3 install opencv-python<br />
+pip3 install numpy<br />
+pip3 install ion-python=={this_version.ion_python_version}<br />
+</code>
+</pre>
 
 ## Tutorial
 
