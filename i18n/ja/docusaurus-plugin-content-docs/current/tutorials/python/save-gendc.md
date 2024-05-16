@@ -8,12 +8,16 @@ sidebar_position: 7
 
 ## 前提条件
 
-* ionpy 1.8.1 or later
+* ion-python
 
-```bash
-pip3 install -U pip
-pip3 install ion-python==1.8.1
-```
+import this_version from "@site/static/version_const/latest.js"
+
+<pre>
+<code class="language-bash">
+pip3 install -U pip<br />
+pip3 install ion-python=={this_version.ion_python_version}<br />
+</code>
+</pre>
 
 ## チュートリアル
 
