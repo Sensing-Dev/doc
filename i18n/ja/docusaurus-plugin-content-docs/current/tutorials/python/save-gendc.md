@@ -79,19 +79,18 @@ widthとheightは、上記の例でペイロードサイズを取得したのと
 
 ![binarysaver-bb-after-data-acquisition-BB-multi-sensor](../img/tutorial4-multi-sensor.png)
 
-最初のBBから各センサの出力データにアクセスするには、次のようにインデックス `[]` を使用します。各バイナリセーバBBに `Param("prefix", "sensor0-")` と `Param("prefix", "sensor1-")` を設定して、お互いの内容を上書きしないように注意してください。
+最初のBBから各センサの出力データにアクセスするには、次のようにインデックス `[]` を使用します。各バイナリセーバBBに `Param("prefix", "gendc0-")` と `Param("prefix", "gendc1-")` を設定して、お互いの内容を上書きしないように注意してください。
 
 ```python
-if num_devices == 2:
-    payloadsize1_p = Port('payloadsize1', Type(TypeCode.Int, 32, 1), 0)
-    node_sensor1 = builder.add("image_io_binary_gendc_saver")\
-        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize1_p, ])\
-        .set_param([output_directory, 
-                    Param('prefix', 'sensor1-') ])
-    terminator1 = node_sensor1.get_port('output')
+if num_device ==2 :
+    t_node1 = builder.add("image_io_binary_gendc_saver") \
+        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_p, ]) \
+        .set_param([output_directory,
+                    Param('prefix', 'gendc1-')])
+    # create halide buffer for output port
+    terminator1 = t_node1.get_port('output')
     output1 = Buffer(Type(TypeCode.Int, 32, 1), ())
     terminator1.bind(output1)
-    payloadsize1_p.bind(payloadsize)
 ```
 
 :::
