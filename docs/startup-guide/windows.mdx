@@ -7,12 +7,12 @@ sidebar_position: 2
 This document describes the steps to install the software development environment for U3V camera on Windows.
 
 import '/src/css/home.css';
-import {is_latest, latest_version, one_line_install, latest_installer_URL, one_line_powershell} from "@site/static/version_const/latest.js"
+import this_version from "@site/static/version_const/latest.js"
 import AddMsiInstructionIfLatest from '@site/static/msi_instruction_if_latest.js';
 
 <div class="jsx-section">
 <div class="board">
-<a class="card" href={latest_installer_URL}>DL Windows 64-bit Package</a>
+<a class="card" href={this_version.latest_installer_URL}>DL Windows 64-bit Package</a>
 </div></div>
 
 ## Expected environment
@@ -32,9 +32,9 @@ In this document, the following environment is assumed.
 
 ## Sensing-dev Software Packages
 
-Please DL the installer script at the top of the page or <a href={latest_installer_URL}>here</a>.
+Please DL the installer script at the top of the page or <a href={this_version.latest_installer_URL}>here</a>.
 
-<AddMsiInstructionIfLatest islatest={is_latest} version={latest_version}/>
+<AddMsiInstructionIfLatest islatest={this_version.is_latest} version={this_version.latest_version}/>
 
 If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
 
@@ -49,7 +49,7 @@ your powershell does not allow to run the script. If so, please add `-ExecutionP
 
 <pre>
 <code class="language-powershell">
-{one_line_install}
+{this_version.one_line_install}
 </code>
 </pre>
 
@@ -57,11 +57,13 @@ your powershell does not allow to run the script. If so, please add `-ExecutionP
 
 If you with to use python-binding (ionpy), please install with pip.
 
-```bash
-pip3 install -U pip
-pip3 install ion-python
-pip3 install gendc-python==0.2.3
-```
+<pre>
+<code class="language-bash">
+pip3 install -U pip<br />
+pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install gendc-python=={this_version.gendc_python_version}<br />
+</code>
+</pre>
 
 
 ## Install WinUSB driver on U3V device.
@@ -83,7 +85,7 @@ In the example below, they are `2676` and `BA03` respectively.
 2. Execute the following command on powershell console with Vendor ID that you checked in the step1. This process may take up to 5 minutes.
 <pre>
 <code class="language-powershell">
-{one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
+{this_version.one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
 </code>
 </pre>
 
