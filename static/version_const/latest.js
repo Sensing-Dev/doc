@@ -2,6 +2,8 @@
 const is_latest = true;
 const latest_version = 'v24.05.01';
 const latest_winUSB_URL = "v24.02.02"
+const ion_python_version = '1.8.2'
+const gendc_python_version = '0.2.4'
 
 const GenerateVersionInfo = require('./generate_version_info.js');
 
@@ -20,5 +22,7 @@ module.exports = {
     one_line_powershell,
     one_line_install,
     tutorial_version,
-    latest_setup_URL
+    latest_setup_URL,
+    ion_python_version,
+    gendc_python_version
 };
