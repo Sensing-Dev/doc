@@ -35,11 +35,11 @@ GenDC、ジェネリックデータコンテナは、EMVA（European Machine Vis
 
 ### Find Binary file.   
 
-前のチュートリアルで保存したバイナリファイルを使用する場合、ディレクトリの名前は `tutorial_save_gendc_XXXXXXXXXXXXXX` で、バイナリファイルのプレフィックスは `sensor0-` にする必要があります。
+前のチュートリアルで保存したバイナリファイルを使用する場合、ディレクトリの名前は `tutorial_save_gendc_XXXXXXXXXXXXXX` で、バイナリファイルのプレフィックスは `gendc0-` にする必要があります。
 
 ```python
 directory_name = "tutorial_save_gendc_XXXXXXXXXXXXXX"
-prefix = "sensor0-"
+prefix = "gendc0-"
 ```
 
 次のスニペットは、指定されたプレフィックスで始まるすべてのバイナリファイルをディレクトリから取得し、すべてのバイナリを記録された順序に並べ替えます。
@@ -71,12 +71,12 @@ with open(bin_file, mode='rb') as ifs:
 GenDC Separatorを使用するためにモジュールを読み込みます。
 
 ```python
-from  gendc_python.gendc_separator import descriptor as gendc
+from gendc_python.gendc_separator import descriptor as gendc
 ```
 
 データからGenDC `Container` オブジェクトを作成できます。
 ```python
-gendc_descriptor = gendc.Container(filecontent[cursor:])
+gendc_container = gendc.Container(filecontent[cursor:])
 ``` 
 
 上記がエラーを返す場合、データにGenDCの署名がないことが考えられます。
@@ -86,46 +86,76 @@ This may return error if the file content does not have GenDC signature.
 
 ```python
 # get GenDC container information
-descriptor_size = gendc_descriptor.get("DescriptorSize")
+descriptor_size = gendc_container.get_descriptor_size()
 print("GenDC Descriptor size:", descriptor_size)
-data_size = gendc_descriptor.get("DataSize")
-print("GenDC Data size:", data_size)
+container_data_size = gendc_container.get_data_size()
+print("GenDC Data size:", container_data_size)
 ```
 
 コンテナ全体のサイズはこのディスクリプターサイズとデータサイズであり、次のコンテナ情報をロードする場合は、元のデータのオフセットに合計を追加するだけです。
 ```python
-next_gendc_descriptor= gendc.Container(filecontent[cursor + descriptor_size + data_size:])
+next_gendc_container= gendc.Container(filecontent[cursor + descriptor_size + container_data_size:])
 ```
 
-このチュートリアルでは、最初に利用可能な画像センサによるコンポーネントデータのサイズとオフセットを取得しましょう。 `get_first_get_datatype_of` は、最初に利用可能なデータのコンポーネントインデックスとパートインデックスのタプルを返します。センサタイプはパラメタで指定が可能です。今回はイメージデータを探すために`0x0000000000000001`を指定しマスタ。これが `-1` を返す場合、センサー側でデータが有効に設定されていません。
+このチュートリアルでは、最初に利用可能な画像センサによるコンポーネントデータのサイズとオフセットを取得しましょう。 `get_1st_component_idx_by_typeid` は、最初に利用可能なデータのコンポーネントインデックスとパートインデックスのタプルを返します。センサタイプはパラメタで指定が可能です。今回はイメージデータを探すために`0x0000000000000001`を指定しマスタ。これが `-1` を返す場合、センサー側でデータが有効に設定されていません。
 
 ```python
 # get first available component
-image_component = gendc_descriptor.get_first_get_datatype_of(GDC_INTENSITY)
-print("First available image data component is Comp", image_component)
+image_component_idx = gendc_container.get_1st_component_idx_by_typeid(GDC_INTENSITY)
+print("First available image data component is Comp", image_component_idx)
 ```
 
-次に、この`image_component` 番目のコンポーネントのデータサイズとオフセットを取得します。 `get()` を呼び出して、コンポーネントの番号とキーを設定します。
+`image_component_idx`番目のコンポーネントにアクセスをして情報を得るために`gendc_container()`を呼び出します。
+
+各コンポーネントには1つ以上のパーツがあり、コンポーネントが画像データを持つ場合、パーツの数は一般的にカラーチャネルを表します。forループの処理によって各パーツにアクセスが可能です。
 
 ```python
-image_offseet = gendc_descriptor.get("DataOffset", image_component, 0)
-image_datasize = gendc_descriptor.get("DataSize", image_component, 0)
-print("\tData offset:", image_offseet)
-print("\tData size:", image_datasize)
+for part_id in range(part_count):
+    part = image_component.get_part_by_index(part_id)
+    part_data_size =part.get_data_size()
 ```
 
-これで、`filecontent` を `image_offseet` から `image_datasize` のサイズでコピーして画像データを取得できます。
+画像を表示するためには、画像のサイズ`part_data_size`以外にも以下の情報が必要です。
+* 幅 (Width)
+* 高さ (Height)
+* カラーチャネル (Color-channel)
+* バイト深度 (Byte-depth)
 
+`ged_dimension`は幅と高さを含むベクターを返します。コンポーネントに1つ以上のパーツがある場合、それは複数のカラーチャネルを持っています。
+
+```python
+dimension = part.get_dimension()
+```
+
+バイト深度はデータの総サイズと上記の取得した寸法値から計算することができます。
+```python
+w_h_c = part_count
+for d in dimension:
+    w_h_c *= d
+byte_depth = int(part_data_size / w_h_c)
+```
+
+画像を表示するのに必要な準備ができたので、OpenCVを使って、読み取ったGenDCコンテナから画像を表示させましょう。
+```python
+width = dimension[0]
+height = dimension[1]
+if byte_depth == 1:
+    image = np.frombuffer(part.get_data(), dtype=np.uint8).reshape((height, width))
+elif byte_depth == 2:
+    image = np.frombuffer(part.get_data(), dtype=np.uint16).reshape((height, width))
+cv2.imshow("First available image component", image)
+cv2.waitKey(1)
+```
 
 :::tip
 
 GenDCのTypeSpecificフィールドに保存されているデバイス固有のデータにアクセスしたい場合は、次のようにします。
 
-たとえば、次のGenDCデータには、TypeSpecific3にサイズが整数の `framecount` データがあります。
+たとえば、次のGenDCデータには、8バイトサイズであるTypeSpecific3のうち下位4バイトに `framecount` データがあります。
 
 ```python
-typespecific3 = gendc_descriptor.get("TypeSpecific", image_component, 0)[2]
-print("Framecount: ", int.from_bytes(typespecific3.to_bytes(8, 'little')[0:4], "little"))          
+typespecific3 = part.get_typespecific_by_index(3)
+print("Framecount: ", int.from_bytes(typespecific3.to_bytes(8, 'little')[0:4], "little"))        
 ```
 :::
 
