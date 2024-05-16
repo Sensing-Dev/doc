@@ -156,7 +156,7 @@ cv2.waitKey(1)
 
 If you want to access some device-specific data stored in TypeSpecific field of GenDC. 
 
-For example, the following GenDC data has `framecount` data at the upper 4 bytes of the 8-byte TypeSpecific3.
+For example, the following GenDC data has `framecount` data at the lower 4 bytes of the 8-byte TypeSpecific3.
 ```python
 typespecific3 = part.get_typespecific_by_index(3)
 print("Framecount: ", int.from_bytes(typespecific3.to_bytes(8, 'little')[0:4], "little"))          

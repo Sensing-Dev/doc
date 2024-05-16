@@ -151,7 +151,7 @@ cv2.waitKey(1)
 
 GenDCのTypeSpecificフィールドに保存されているデバイス固有のデータにアクセスしたい場合は、次のようにします。
 
-たとえば、次のGenDCデータには、8バイトサイズであるTypeSpecific3のうち上位4バイトに `framecount` データがあります。
+たとえば、次のGenDCデータには、8バイトサイズであるTypeSpecific3のうち下位4バイトに `framecount` データがあります。
 
 ```python
 typespecific3 = part.get_typespecific_by_index(3)

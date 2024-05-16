@@ -176,10 +176,12 @@ cv::waitKeyEx(1);
 
 If you want to access some device-specific data stored in TypeSpecific field of GenDC. 
 
-For example, the following GenDC data has `framecount` data at the TypeSpecific3 in the size of integer.
+For example, the following GenDC data has `framecount` data at the lower 4 bytes of the 8-byte TypeSpecific3.
 
 ```c++
-std::cout << "Framecount: " << *reinterpret_cast<uint32_t*>(filecontent + cursor + offset) << std::endl;            
+int64_t typespecific3 = part.getTypeSpecificByIndex(3);
+int32_t framecount = static_cast<int32_t>(typespecific3 & 0xFFFFFFFF);
+std::cout << "Framecount: " << framecount<< std::endl;          
 ```
 :::
 
