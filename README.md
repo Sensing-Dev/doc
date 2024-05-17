@@ -31,11 +31,11 @@ When we have the latest release, update `static\version_const\latest.js`.
 
 ## Versioning
 
-1. `npm run docusaurus docs:version 1.1.0` to create a new version.
+1. `npm run docusaurus docs:version vXX.YY` to create a new version.
 
-2. Duplicate `static\version_const\latest.js` and rename it to `static\version_const\vXXXXXX.js`
+2. Duplicate `static\version_const\latest.js` and rename it to `static\version_const\vXXYY.js`
 
-3. Make `const is_latest = false;` on `static\version_const\vXXXXXX.js`
+3. Make `const is_latest = false;` on `static\version_const\vXXYY.js`
 
 4. Clean up `docs\this_version\api-change.mdx` (en) and `i18n\ja\docusaurus-plugin-content-docs\current\this_version\api-change.mdx` (ja) to reset the API update.
 
