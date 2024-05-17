@@ -174,12 +174,12 @@ cv::waitKeyEx(1);
 
 GenDCのTypeSpecificフィールドに保存されているデバイス固有のデータにアクセスしたい場合は、次のようにします。
 
-たとえば、次のGenDCデータには、8バイトサイズであるTypeSpecific3のうち下位4バイトに `framecount` データがあります。
+たとえば、次のGenDCデータには、8バイトサイズであるTypeSpecific3のうち下位4バイトに `framecount` データがあります。注意するのは、Typespecificの番号がN=1,2,3...と1から始まるのに対し、インデックスは0,1,2...となることです。そのためTypespecific3のインデックスは2になります。
 
 ```c++
-int64_t typespecific3 = part.getTypeSpecificByIndex(3);
+int64_t typespecific3 = part.getTypeSpecificByIndex(2);
 int32_t framecount = static_cast<int32_t>(typespecific3 & 0xFFFFFFFF);
-std::cout << "Framecount: " << framecount<< std::endl;          
+std::cout << "Framecount: " << framecount<< std::endl;           
 ```
 :::
 
