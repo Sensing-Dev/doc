@@ -88,6 +88,16 @@ n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &pa
    );
 ```
 
+複数のセンサのペイロードサイズがそれぞれ正しいことを確認してください。
+```C++
+# bind input values to the input port
+std::vector<int32_t> payloadsize = {2074880, 2074880};
+int32_t payloadsize0 = payloadsize[0];
+...
+n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &payloadsize0)
+...
+```
+
 :::
 
 ### 出力ポートを設定する
