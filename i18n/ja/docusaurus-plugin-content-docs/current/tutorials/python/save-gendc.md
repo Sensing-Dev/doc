@@ -84,7 +84,7 @@ widthとheightは、上記の例でペイロードサイズを取得したのと
 ```python
 if num_device ==2 :
     t_node1 = builder.add("image_io_binary_gendc_saver") \
-        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_p, ]) \
+        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_ps[1], ]) \
         .set_param([output_directory,
                     Param('prefix', 'gendc1-')])
     # create halide buffer for output port
