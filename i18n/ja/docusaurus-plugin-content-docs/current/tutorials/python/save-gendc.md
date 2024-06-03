@@ -84,7 +84,7 @@ widthとheightは、上記の例でペイロードサイズを取得したのと
 ```python
 if num_device ==2 :
     t_node1 = builder.add("image_io_binary_gendc_saver") \
-        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_p, ]) \
+        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_ps[1], ]) \
         .set_param([output_directory,
                     Param('prefix', 'gendc1-')])
     # create halide buffer for output port
@@ -93,6 +93,13 @@ if num_device ==2 :
     terminator1.bind(output1)
 ```
 
+複数センサのペイロードサイズがそれぞれ正しくバインドされていることを確認してください。
+
+```python
+# bind input values to the input port
+for i in range(num_device):
+    payloadsize_ps[i].bind(payloadsize[i])
+```
 :::
 
 ### 出力ポートを設定する
