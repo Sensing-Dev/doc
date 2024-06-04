@@ -78,8 +78,7 @@ if (num_device == 2){
        Param("prefix", "gendc1-"),
        Param("output_directory", saving_diretctory)
    );
-   Halide::Buffer<int> output1 = Halide::Buffer<int>::make_scalar();
-   n1["output"].bind(output1);
+   n1["output"].bind(outputs[1]);
 }
 
 int32_t payloadsize0 = payloadsize[0];
@@ -88,6 +87,7 @@ n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &pa
        Param("prefix", "gendc0-"),
        Param("output_directory", saving_diretctory)
    );
+n["output"].bind(outputs[0]);
 ```
 
 複数のセンサのペイロードサイズがそれぞれ正しいことを確認してください。
