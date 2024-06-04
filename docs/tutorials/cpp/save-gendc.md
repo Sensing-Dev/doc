@@ -74,20 +74,20 @@ Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
 if (num_device == 2){
     int32_t payloadsize1 = payloadsize[1];
     Node n1 = b.add("image_io_binary_gendc_saver")(n["gendc"][1], n["device_info"][1], &payloadsize1)
-    .set_param(
-        Param("prefix", "gendc1-"),
-        Param("output_directory", saving_diretctory)
-    );
-    Halide::Buffer<int> output1 = Halide::Buffer<int>::make_scalar();
-    n1["output"].bind(output1);
+   .set_param(
+       Param("prefix", "gendc1-"),
+       Param("output_directory", saving_diretctory)
+   );
+   n1["output"].bind(outputs[1]);
 }
 
 int32_t payloadsize0 = payloadsize[0];
 n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &payloadsize0)
-    .set_param(
-        Param("prefix", "gendc0-"),
-        Param("output_directory", saving_diretctory)
-    );
+   .set_param(
+       Param("prefix", "gendc0-"),
+       Param("output_directory", saving_diretctory)
+   );
+n["output"].bind(outputs[0]);
 ```
 
 If we have multiple devices, make sure that each payloadsize matches:
