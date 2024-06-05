@@ -1,5 +1,13 @@
 # API Update: What's New & Tips
 
-This page is for the users updating Sensing-Dev SDK from v24.01.04 to the latest.
+This page is for the users updating Sensing-Dev SDK from v24.01.04 to v24.05.05.
 
-This page will be updated with each new release.
+Note that the old API is still supported on v24.05.05.
+
+## API changes
+
+### framecount output
+
+In Sensing-Dev v24.01.04 (ion-kit 1.6.0), the optional output `framecount` is a single Halide Buffer whose length is the number of device.
+
+In Sensing-Dev v24.05.05 (ion-kit 1.8.2), the optional output `framecount` is a array of length-1 Halide Buffer, and the length of array is the number of device.
