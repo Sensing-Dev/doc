@@ -1,0 +1,68 @@
+---
+sidebar_position: 3
+---
+
+# デバッグのヒント
+
+ここは、効果的にアプリケーションをデバッグしたいユーザー向けのページです。
+デバッグの複雑な細部を理解するには、当社のソフトウェア開発キット（SDK）の複数のレベルに対する洞察が必要です。
+このトピックをさらに掘り下げていくと、[ソフトウェアパッケージ](../startup-guide/software-stack)をチェックすることで、各レベルに関する詳細な情報を見つけることができます。
+また、Aravis（カメラ取得ライブラリ）とion-kit（画像処理フレームワーク）用のデバッグツールを提供しており、これにより、問題を正確かつ効率的に特定できるようにします。
+
+## Aravis
+
+Aravisでは、環境変数 `ARV_DEBUG` を設定して、このライブラリの内部プロセスを見るためのログレベルを設定できます。
+
+デバイス、トランスポート、またはストリームに問題があると思われる場合は、各カテゴリを確認するためにログレベルを設定することができます。
+
+詳細は[公式ウェブサイト](https://aravisproject.github.io/docs/aravis-0.4/aravis-building.html)を参照してください。
+
+### ion-kit
+
+ion-kitでは、環境変数 `ION_LOG_LEVEL` を設定して、このライブラリの内部プロセスを見るためのログレベルを設定できます。
+
+ion-kitを介したフレームワークやデバイスの制御に問題があると思われる場合は、ログレベルをデバッグ用に設定することができます。
+
+#### チュートリアル1のBalserの例
+
+環境変数 `ION_LOG_LEVEL=debug` を設定した後の[Tutorial 1](../tutorials/python/display-image)のコンソール出力は次のとおりです。
+
+このシンプルなチュートリアルコードは、BBで画像を取得し、OpenCVを使用して画像を表示するだけです。
+
+* ion-kitのバージョン
+* U3VクラスインスタンスのID
+* 使用するカメラ情報
+* デバイスが `AcquisitionStart`/`AcquisitionStop` を実行したタイミング
+* デバイスが閉じられたタイミング (`U3V::release_instance() :: is finished`)
+
+```bash
+$ python python/tutorial1_display.py
+[2024-02-15 14:35:15.080] [ion] [debug] ion-kit version is v1.5.1
+[2024-02-15 14:35:15.090] [ion] [info] Start building pipeline
+[2024-02-15 14:35:15.091] [ion] [info] Builder::register_disposer
+[2024-02-15 14:35:15.778] [ion] [info] Create U3V instance: 1150c5e9-9e57-4373-b984-c840c2f3c68f
+[2024-02-15 14:35:15.781] [ion] [debug] U3V:: 23-11-18 : updating obtain and write
+[2024-02-15 14:35:15.782] [ion] [info] Using aravis-0.8.31
+[2024-02-15 14:35:16.809] [ion] [info] Creating U3V instance with 1 devices...
+[2024-02-15 14:35:16.809] [ion] [info] Acquisition option::frame_sync_ is false
+[2024-02-15 14:35:16.810] [ion] [info] Acquisition option::realtime_display_mode_ is true
+[2024-02-15 14:35:16.810] [ion] [info]  Device/USB 0::DeviceID : Basler-26760159D7CC-22665164
+[2024-02-15 14:35:16.874] [ion] [info]  Device/USB 0::PixelFormat : RGB8
+[2024-02-15 14:35:16.876] [ion] [info]  Device/USB 0::PayloadSize : 3686400
+[2024-02-15 14:35:16.878] [ion] [info]  Device/USB 0::GenDC : Not Supported
+[2024-02-15 14:35:16.879] [ion] [info]  Device/USB 0::Width : 1280
+[2024-02-15 14:35:16.879] [ion] [info]  Device/USB 0::Height : 960
+[2024-02-15 14:35:16.881] [ion] [info]  Device/USB 0::Buffer Size : 1073741824
+[2024-02-15 14:35:16.882] [ion] [info]  Device/USB 0::Number of Buffers : 292
+[2024-02-15 14:35:16.882] [ion] [info]  Device/USB 0::Command : AcquisitionMode
+[2024-02-15 14:35:16.886] [ion] [info]  Device/USB 0::Command : AcquisitionStart
+[2024-02-15 14:35:27.351] [ion] [debug] U3V::release_instance() :: is called
+[2024-02-15 14:35:27.352] [ion] [debug] U3V::dispose() :: is called
+[2024-02-15 14:35:27.393] [ion] [debug] U3V::dispose() :: AcquisitionStop
+[2024-02-15 14:35:27.442] [ion] [debug] U3V::dispose() :: g_object_unref took 48 ms
+[2024-02-15 14:35:27.506] [ion] [debug] U3V::dispose() :: g_object_unref took 63 ms
+[2024-02-15 14:35:27.507] [ion] [debug] U3V::dispose() :: Instance is deleted
+[2024-02-15 14:35:27.507] [ion] [debug] U3V::release_instance() :: is finished
+```
+
+アプリケーションが正常に機能しない場合は、これらのログを表示して問題の発生箇所を確認できます。

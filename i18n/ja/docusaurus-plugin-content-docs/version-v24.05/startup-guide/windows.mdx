@@ -1,0 +1,140 @@
+---
+sidebar_position: 2
+---
+
+# インストール - Windows
+このドキュメントでは、Windows上にU3Vカメラ用ソフトウェア開発環境をインストールする手順について説明します。
+
+import '/src/css/home.css';
+import this_version from "@site/static/version_const/latest.js"
+import AddMsiInstructionIfLatest from '@site/static/msi_instruction_if_latest.js';
+
+<div class="jsx-section">
+<div class="board">
+<a class="card" href={this_version.latest_installer_URL}>Windows 64ビットパッケージをダウンロード</a>
+</div></div>
+
+## 期待される環境
+
+このドキュメントでは、以下の環境を前提としています。
+
+* OS: Windows 10/11、64ビット版
+* 開発環境（いずれか）
+    * Python 3.11（VS Codeとともに）
+    * C++: Visual Studio 2019/2022
+* ハードウェア:
+    * USB3.0互換USBポート x2
+
+## 必要なもの
+
+* Python 3.11
+
+## Sensing-devソフトウェアパッケージ
+
+ページのトップにあるインストーラスクリプトをダウンロードするか、<a href={this_version.latest_installer_URL}>こちら</a>からダウンロードしてください。
+
+<AddMsiInstructionIfLatest islatest={this_version.is_latest} version={this_version.latest_version}/>
+
+OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
+
+デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
+
+:::caution なぜ動作しないのか
+次のエラーが表示された場合：
+
+> installer.ps1 cannot be loaded because running scripts is disabled on this system
+
+PowerShellはスクリプトの実行を許可していない可能性があります。その場合、次の例のように`-ExecutionPolicy Bypass`オプションを追加してください。
+
+<pre>
+<code class="language-powershell">
+{this_version.one_line_install}
+</code>
+</pre>
+:::
+
+Pythonで開発を進めたい場合、pipでionpyをインストールしてください。
+
+<pre>
+<code class="language-bash">
+pip3 install -U pip<br />
+pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install gendc-python=={this_version.gendc_python_version}<br />
+</code>
+</pre>
+
+
+## U3VデバイスにWinUSBドライバをインストール
+
+U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
+
+1. WinUSBを対象のUSBデバイスに適用するには、デバイスのベンダーIDとプロダクトIDを知る必要があります。タスクバーの検索ボックスに「device manager」と入力し、メニューから**Device Manager**を選択して、U3Vカメラデバイスを確認してください。
+
+![before_installed](./img/winusb-install-before_installed.png)
+
+画像には、ホストマシンに接続された2つの未知のU3Vカメラデバイスが表示されており、WinUSBドライバをインストールする必要があります。
+
+U3Vカメラデバイスをダブルクリックし、ポップアップウィンドウの**詳細**タブを選択します。ドロップダウンメニューから**ハードウェアID**を選択し、`VID_`の後にベンダーIDを、`PID_`のあとにプロダクトIDを確認することができます。下記の例では、それぞれ`2676`と`BA03`です。
+
+![before_installed](./img/winusb-install-vendorid.png)
+
+2. 次のコマンドを実行します。このコマンドは、ステップ1で確認したベンダーIDを使用して、PowerShellコンソールで実行します。
+このプロセスには、アカウントに管理者権限が必要であり、最大で5分かかる場合があります。
+
+<pre>
+<code class="language-powershell">
+{this_version.one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
+</code>
+</pre>
+
+* U3Vカメラデバイスにおける各IDの例
+
+|                     | Vendor ID | Product ID |
+|---------------------|-----------|------------|
+| Basler daA1280-54uc | 2676      | BA03       |
+| Sony Kizashi1.2     | 054C      | 0D7D       |
+
+:::tip ドライバをアンインストールしたい場合
+
+1. 再度デバイスマネージャーを開き、デバイスを右クリックして、「デバイスのアンインストール」を選択してください。
+
+<img src={require("./img/winusb-uninstall-uninstall.png").default} alt="uninstall"/>
+
+2. チェックボックスをクリックして、「アンインストール」をクリックしてください。
+
+<img src={require("./img/winusb-uninstall-checkbox.png").default } width="60%" alt="checkbox"/>
+
+3. 「操作」を開き、「ハードウェア変更のスキャン」をクリックしてください。
+
+<img src={require("./img/winusb-uninstall-hardware.png").default} width="80%" alt="hardware"/>
+
+もしデバイスが未知のデバイスとして表示されているなら、成功です！WinUSBドライバーは正常にアンインストールされました！
+:::
+
+
+## 環境変数の設定
+
+installer.ps1スクリプトを実行すると、SDKが必要とする環境変数`%PATH%`と`%SENSING_DEV_ROOT%`を**自動的に設定**しますので、このステップをスキップできます。
+
+ただし、デフォルトのパスを変更したり、パッケージの場所を移動した場合は、次の手順で手動で設定する必要があります。
+
+1. Windowsキー **&#8862;** を押すか、タスクバーの角にある **&#8862;** をクリックしてスタートメニューを使用します。
+
+2. **Environment variable** と入力して、**アカウントの環境変数を編集** を探して、**環境変数** ウィンドウを開きます。
+
+![Start-menu](./img/start-menu.png)
+
+3. ウィンドウの上部および下部にはユーザーとシステム用の環境変数があり、ユーザー変数を編集します。
+
+![Start-menu](./img/environment-variables.png)
+
+4. `新規` および `編集` を使用して、次の環境変数を設定します。
+
+| 変数名 | 値 | 新規/編集（追加） |
+| --------   | ------- | ------- |
+| SENSING_DEV_ROOT | `<SDKをインストールした場所>` | 新規 |
+| PATH | `<SDKをインストールした場所>/bin` | 編集（追加） |
+
+:::info 確認
+`arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
+:::

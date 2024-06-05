@@ -1,0 +1,81 @@
+---
+sidebar_position: 1
+---
+
+# Intro
+
+In this tutorial, you may learn the overview of image processing framework **ion-kit**. 
+
+ion-kit is an image processing framework which enables to efficiently describe and compile a user-defined image processing pipeline. 
+
+The fundamental idea of ion-kit is creating a single **pipeline** consists of **building blocks** which deal with image I/O and image processing.
+
+:::info
+
+This section focus on ion-kit. If you would like tto know how to use the simple tools to control U3V cameras, please check **[Tools from Aravis](../external/aravis/arv-tools.md)**.
+
+:::
+
+## Building Block
+
+Usually, image-processing program has three steps: obtain image, processing it, and save/display the processed image.
+
+ion-kit allows us to chain the BBs to create a single pipeline that handles all these steps, and each component element of the pipeline is called Building Block (BB).
+
+Here is some examples of Building blocks:
+
+| Name | Type | Description |
+| --------   | ------- | ------- |
+| `image_io_u3v_cameraN_u16x2` | image-io | Obrain 16-bit depth image from U3V camera and send it out as its output |
+| `image_io_u3v_gendc` | image-io | Obtain GenDC Container data from U3V camera and send it out as its output |
+| `core_cast_1d_uint16_to_float` | core(data-type cast) | Cast 1-D unsigned 16-bit int input data to float type and send it out as its output |
+| `image_processing_bayer_demosaic_linear` | image-processing | Reconstruct input bayer image to 3-color channel image and send them out as its output |
+| `image_io_gui_display` | image-io | Take an image as input and display it |
+| `image_io_binary_gendc_saver` | image-io | Take a GenDC Container data as input and save to binary file |
+
+For example, if you would like to connect a U3V camera to your host machine and would like to display the image stream, you need to create a pipeline consisting of minimum 5 BBs as follows
+* image-io: to get image data
+* image-processing:
+    * to normalize the raw-image
+    * to convert bayer to RGB/BGR
+    * to adjust white balance
+* image-io: to display the image
+
+then execute your pipeline.
+
+Another example, if you would like to save the series of GenDC Container from U3V camera stream, you just need to chain the following BBs
+* image-io: 
+    * to get gendc data
+    * to save gendc data
+
+### Port
+
+Each BB has input and output port. They have three properties:
+- key (name)
+- type
+- size (dimension)
+
+Port is either used to 1. connect between BBs or 2. use as pipeline's I/O.
+
+### Connection
+
+Building blocks can be connected as long as the previous BB's output port **types** and **dimensions** match the ones of the preceding BB's input ports.
+
+The following diagram shows the second example above.
+
+![BB-dual](./img/BB-double.png)
+
+The first BB (`image_io_u3v_gendc`)'s output is "gendc" and "device_info", both are 1-D `uint8` data. Since the successing BB (`image_io_binary_gendc_saver`) takes two input and both 1-D `uint8`, the connection works.
+
+
+Imagine we need to create Directed acyclic graph (DAG) where BB is a node and connections are edges between nodes. Edges are valid only when two nodes output-input have the same dimension/type and there's no isolated node.
+
+## Where to start:
+
+<article class="margin-top--lg"  ><section class="row">
+<article class="col col--6 margin-bottom--lg"><a class="shadow card" href="cpp/obtain-device-info"><h2 >Access Divice Info in C++</h2><p>c++ tutorial code to access and display device info</p></a></article>
+<article class="col col--6 margin-bottom--lg"><a class="shadow card" href="cpp/display-image"><h2 >Display Image in C++ </h2><p>c++ tutorial code to retreive and display the images </p></a></article>
+<article class="col col--6 margin-bottom--lg"><a class="shadow card" href="python/obtain-device-info"><h2 >Access Divice Info in Python</h2><p>python tutorial code to access and display device info</p></a></article>
+<article class="col col--6 margin-bottom--lg"><a class="shadow card" href="python/display-image"><h2 >Display Image in Python</h2><p>python tutorial code to retreive and display the images</p></a></article>
+</section></article>
+
