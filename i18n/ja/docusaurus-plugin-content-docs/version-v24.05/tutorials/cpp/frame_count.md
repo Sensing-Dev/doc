@@ -36,7 +36,7 @@ n["frame_count"].bind(fc);
 std::cout << fc[i](0) << " " << std::endl;
 ```
 
-::: v24 .01.04からのAPIアップデート
+:::info
 最新のSDKのAPIでは、出力の `framecount` は、デバイスの数に対応する長さの配列として返されます。各要素はHalide Bufferで、[0]に`framecount`が格納されています。一方、バージョン24.01.04では、`framecount` の出力はデバイスの数に等しい長さの単一のHalide Bufferとして返されます。
 :::
 

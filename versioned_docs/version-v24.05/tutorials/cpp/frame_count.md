@@ -37,7 +37,7 @@ Since frame count directory does to numpy array `frame_counts[i]` for ith device
 std::cout << fc[i](0) << " " << std::endl;
 ```
 
-:::tip API updates from v24.01.04
+:::info
 The latest SDK's API returns the output `framecount` as an array whose length corresponds to the number of devices, with each element being a Halide Buffer. [0] contains the value of `framecount`. In contrast, version 24.01.04 returns the output of `framecount` as a single Halide Buffer, with a length equal to the number of devices.
 :::
 
