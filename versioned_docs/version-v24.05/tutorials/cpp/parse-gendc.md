@@ -189,7 +189,7 @@ std::cout << "Framecount: " << framecount<< std::endl;
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/latest.js"
+import {tutorial_version} from "@site/static/version_const/v240505.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial5_parse_gendc_data" />

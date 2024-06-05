@@ -12,7 +12,7 @@ In this tutorial, we learn how to get frame count from camera with ion-kit.
 * numpy
 * OpenCV
 
-import this_version from "@site/static/version_const/latest.js"
+import this_version from "@site/static/version_const/v240505.js"
 
 <pre>
 <code class="language-bash">
@@ -53,7 +53,7 @@ print(fcdatas[i][0], end=" ")
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/latest.js"
+import {tutorial_version} from "@site/static/version_const/v240505.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial3_getting_frame_count" />

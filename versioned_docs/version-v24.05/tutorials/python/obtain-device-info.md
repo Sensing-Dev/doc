@@ -118,7 +118,7 @@ Instead of using Aravis Python API, you can also use arv-tool. See the detail in
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/latest.js"
+import {tutorial_version} from "@site/static/version_const/v240505.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial0_get_device_info" />

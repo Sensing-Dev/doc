@@ -173,7 +173,7 @@ while(user_input == -1)
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/latest.js"
+import {tutorial_version} from "@site/static/version_const/v240505.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial1_display" />

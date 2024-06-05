@@ -10,7 +10,7 @@ sidebar_position: 7
 
 * ion-python
 
-import this_version from "@site/static/version_const/latest.js"
+import this_version from "@site/static/version_const/v240505.js"
 
 <pre>
 <code class="language-bash">
@@ -124,7 +124,7 @@ terminator0.bind(output0)
 
 ## 完全なコード
 
-import {tutorial_version} from "@site/static/version_const/latest.js"
+import {tutorial_version} from "@site/static/version_const/v240505.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial4_save_data" />
