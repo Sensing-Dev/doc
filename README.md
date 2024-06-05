@@ -33,9 +33,7 @@ When we have the latest release, update `static\version_const\latest.js`.
 
 1. `npm run docusaurus docs:version vXX.YY` to create a new version.
 
-2. Duplicate `static\version_const\latest.js` and rename it to `static\version_const\vXXYY.js`
-
-3. Make `const is_latest = false;` on `static\version_const\vXXYY.js`
+2. Run `python3 version_update.py vXX.YY` to replace all js file path
 
 4. Clean up `docs\this_version\api-change.mdx` (en) and `i18n\ja\docusaurus-plugin-content-docs\current\this_version\api-change.mdx` (ja) to reset the API update.
 

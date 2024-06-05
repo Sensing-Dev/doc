@@ -1,0 +1,143 @@
+---
+sidebar_position: 2
+---
+
+# Installation - Windows
+
+This document describes the steps to install the software development environment for U3V camera on Windows.
+
+import '/src/css/home.css';
+import this_version from "@site/static/version_const/v240505.js"
+import AddMsiInstructionIfLatest from '@site/static/msi_instruction_if_latest.js';
+
+<div class="jsx-section">
+<div class="board">
+<a class="card" href={this_version.latest_installer_URL}>DL Windows 64-bit Package</a>
+</div></div>
+
+## Expected environment
+
+In this document, the following environment is assumed.
+
+* OS: Windows 10/11, 64 bit version
+* Development environment (One of them)
+    * Python 3.11 (with VS Code)
+    * C++: Visual Studio 2019/2022
+* Hardware:
+    * USB3.0 compatible USB port x2
+
+## Prerequisite
+
+* Python 3.11
+
+## Sensing-dev Software Packages
+
+Please DL the installer script at the top of the page or <a href={this_version.latest_installer_URL}>here</a>.
+
+<AddMsiInstructionIfLatest islatest={this_version.is_latest} version={this_version.latest_version}/>
+
+If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+
+The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
+
+:::caution why it does not work
+When you get 
+
+> installer.ps1 cannot be loaded because running scripts is disabled on this system
+
+your powershell does not allow to run the script. If so, please add `-ExecutionPolicy Bypass` option as the following example:
+
+<pre>
+<code class="language-powershell">
+{this_version.one_line_install}
+</code>
+</pre>
+
+:::
+
+If you with to use python-binding (ionpy), please install with pip.
+
+<pre>
+<code class="language-bash">
+pip3 install -U pip<br />
+pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install gendc-python=={this_version.gendc_python_version}<br />
+</code>
+</pre>
+
+
+## Install WinUSB driver on U3V device.
+
+This step is only required the first time a U3V camera device is connected to a host machine.
+1. To apply WinUSB to the target USB device, you need to know Vendor ID and Product ID of the device.
+Check your U3V camera device using **Device Manager**.
+In the search box on the taskbar, type device manager, then select Device Manager from the menu.
+
+![before_installed](./img/winusb-install-before_installed.png)
+
+The image shows there are two unknown U3V camera devices connected on my host machine and we need to install the WinUSB driver. 
+You now double-click the U3V camera device and select the **Details** tab on the pop up window. 
+From the dropdown menu, choose **Hardware Ids** and now you can see the Vendor ID in the box following `VID_`, and Product after `PID_BA03`. 
+In the example below, they are `2676` and `BA03` respectively. 
+
+![before_installed](./img/winusb-install-vendorid.png)
+
+2. Execute the following command on powershell console with Vendor ID that you checked in the step1. This process may take up to 5 minutes.
+<pre>
+<code class="language-powershell">
+{this_version.one_line_powershell} &lt;Vendor ID&gt; &lt;Product ID&gt;
+</code>
+</pre>
+
+* Example with some U3V camera devices
+
+|                     | Vendor ID | Product ID |
+|---------------------|-----------|------------|
+| Basler daA1280-54uc | 2676      | BA03       |
+| Sony Kizashi1.2     | 054C      | 0D7D       |
+
+:::tip If you want to uninstall driver
+
+1. Open Device Manager again, and right click on your device and choose uninstall device.
+
+<img src={require("./img/winusb-uninstall-uninstall.png").default} alt="uninstall"/>
+
+2. Click the checkbox and click uninstall device
+
+<img src={require("./img/winusb-uninstall-checkbox.png").default } width="60%" alt="checkbox"/>
+
+
+3. Open Action and click scan for hardware changes
+
+<img src={require("./img/winusb-uninstall-hardware.png").default} width="80%" alt="hardware"/>
+
+If your device is displaying as an unknown device, congratulations! The WinUSB driver has been successfully uninstalled!
+:::
+
+
+## Set environment variables.
+
+Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.
+
+However, if you change the default path or move the package location, it requires to set them manually with the following precedure:
+
+1. Hit Windows key **&#8862;** or click **&#8862;** at the corner of task bar to use start-menu.
+
+2. Type **Environment variable** to find **Edit environment variables got your account** to open the window of **Environment Variables**.
+
+![Start-menu](./img/start-menu.png)
+
+3. There's environment variables for user and system at the top and bottom of the window respectively, and we edit user variables.
+
+![Start-menu](./img/environment-variables.png)
+
+4. With `New` and `Edit`, set the following environment variables.
+
+| Name of variable | Value | New/Edit(append) |
+| --------   | ------- | ------- |
+| SENSING_DEV_ROOT | `<where you installed SKD>` | NEW |
+| PATH | `<where you installed SKD>/bin` | Edit(append) |
+
+:::info Confirmation
+Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools.md) to know the procedure.
+:::

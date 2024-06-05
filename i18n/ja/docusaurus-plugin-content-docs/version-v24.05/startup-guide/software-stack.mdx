@@ -1,0 +1,85 @@
+---
+sidebar_position: 1
+---
+
+# ソフトウェアパッケージ
+
+import '/src/css/home.css';
+
+<div class="jsx-section">
+<p>
+インストーラと手順は、Windows 64ビットおよびLinuxで利用可能です。
+</p>
+<div class="board">
+
+
+<a class="card on-board" href="windows">Windows 64ビット</a>
+<a class="card on-board" href="linux">Linux</a>
+</div></div>
+
+このページでは、インストーラによって設定されたソフトウェアパッケージのコンポーネントを示します。
+
+## 概要
+
+提供されるソフトウェアパッケージの構成は以下のようになっています：
+
+![ソフトウェアスタックの概要](./img/generic-sw-stack.png)
+
+| コンポーネント | パッケージに含まれるOSS | ライセンス |
+| --------   | ------- | ------- |
+| **ドライバ** | [libUSB (Linux)](#libusbwinusb) | LGPL-2.1 |
+| **カメラ取得ライブラリ** | [Aravis](#aravis) | LGPL-2.1 |
+| **画像処理フレームワーク** | [ion-kit](#ion-kit) | MIT |
+| 画像処理言語 | [Halide](https://halide-lang.org/) | MIT |
+| 画像処理ライブラリ (フレームワーク内で使用) | [OpenCV](https://opencv.org/) | BSD |
+| データ処理ライブラリ| [GenDC Sepatrator](https://github.com/Sensing-Dev/GenDC) | MIT |
+
+:::note
+
+Windowsでは、ドライバ（WinUSB）はWindows OSに同梱されています。
+
+:::
+
+:::note
+
+HalideはC/C++ベースの言語でion-kit内で画像処理の高速化のために使われています。また、GenDC Separatorは[GenDC データフォーマット](../lessons/camera.md)を処理するために使われています。
+
+:::
+
+## libUSB/WinUSB
+
+ドライバはコンピュータのOSとハードウェアとの通信を可能にします。ソフトウェアスタックの上部では、LinuxおよびWindowsのそれぞれでU3Vカメラを制御するAravisと呼ばれるカメラ取得ライブラリを使用しており、Linuxでは**libUSB**、Windowsでは**WinUSB**を介しています。
+
+Linux用のインストールスクリプトにはlibUSBが含まれています。
+
+一方、WinUSBはWindows OSに同梱されていますが、ドライバをU3Vデバイスに適用するためのプログラムはインストーラに含まれています。
+
+## Aravis
+
+[**Aravis**&#128279;](https://aravisproject.github.io/aravis/)は、U3VカメラおよびGigEカメラデバイスを制御することを可能にするGObjectベースのカメラ取得ライブラリです。
+
+このライブラリには、カメラデバイスを制御するためのAPIがあり、一部のパラメータを設定/取得したり、デバイスを起動/停止したり、デバイスから画像データを取得したりできます。
+
+また、GenICamの機能にアクセスするためのいくつかの簡単なツールを提供し、ストリーミングデータのペイロードを取得したり、キャプチャした画像を表示したりすることができます。
+
+:::info
+
+Aravisツールの使用方法については、**[Aravisのツール](../external/aravis/arv-tools.md)**セクションを確認してください。
+
+:::
+
+## ion-kit
+
+[**ion-kit**&#128279;](https://github.com/fixstars/ion-kit)は、ユーザー定義の画像処理パイプラインを効率的に記述およびコンパイルできる画像処理フレームワークです。
+
+一般的な画像処理プログラムは、主に3つのステップから構成されています：入力（ファイルから読み込みまたはデバイスからデータの取得）、画像処理、出力（保存または表示）。
+
+しかし、ion-kitにはこれらのステップのための準備済みのビルディングブロック（BB）があり、それらのBBの組み合わせからなる単一のパイプラインによってプロセス全体を実行できます。
+
+ビルディングブロックは、効率的な画像処理のための言語であるHalideで記述され、C++に組み込まれています。
+
+:::note
+
+**Halide**について詳しく知りたい場合は、[公式ウェブページ](https://halide-lang.org/)をご覧ください。
+
+:::
