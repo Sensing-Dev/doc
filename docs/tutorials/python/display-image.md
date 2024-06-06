@@ -167,6 +167,23 @@ Do not forget to destroy windows that displayed the image after `while` loop.
 ```python
 cv2.destroyAllWindows()
 ```
+
+Now, you can run the script and will see the images that the device captured.
+
+:::tip
+If your Linux desktop environment is GNOME, you may see the following warning. However, it does not affect your program's functionality or performance, so you can safely ignore it.
+
+```bash
+Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+```
+
+or 
+
+```bash
+qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in "/home/<username>/.local/lib/python3.10/site-packages/cv2/qt/plugins"
+```
+:::
+
 ## Complete code
 
 import {tutorial_version} from "@site/static/version_const/latest.js"
