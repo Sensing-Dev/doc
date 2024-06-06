@@ -165,6 +165,23 @@ while(user_input == -1):
 ```python
 cv2.destroyAllWindows()
 ```
+
+スクリプトを実行するとデバイスが取得した画像がウィンドウに表示されます。
+
+:::tip
+もしお使いのLinux デスクトップがGNOMEである場合、以下の警告が表示されることがありますが、プログラムのパフォーマンスや機能に影響を及ぼすものではありません。
+
+```bash
+Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+```
+
+or 
+
+```bash
+qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in "/home/<username>/.local/lib/python3.10/site-packages/cv2/qt/plugins"
+```
+:::
+
 :::tip カメラインスタンスが正確に解放されるのは
 カメラインスタンスの寿命はビルディングブロックインスタンスによって制限されています。つまり、プログラムが終了するとともに自動的に破棄されます。正確なタイミングを観察するには、ユーザーはWindowsコマンドラインでset ION_LOG_LEVEL=debug、またはUnixターミナルでexport ION_LOG_LEVEL=debugを設定します。ユーザーは、ターミナルで以下の行が表示された場合、aravis経由でカメラにアクセスできます：
 ```
