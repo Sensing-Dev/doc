@@ -1,51 +1,52 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
-# GenDCデータの解析
+# GenDC データの解析
 
-このチュートリアルでは、GenDCセパレーターライブラリの使用方法を学びます。
+このチュートリアルでは、GenDC セパレーターライブラリの使用方法を学びます。
+デバイスデータ形式がGenDC以外の場合（一般的なカメラで画像データを取得する場合）は、次のチュートリアルページ [非 GenDC バイナリデータの解析](./parse-image-bin.md) を参照してください。
 
 ## 前提条件
 
-* GenDCセパレータ（sensing-dev SDKとともにインストール済み）
+* GenDC セパレーター（sensing-dev SDK でインストール済み）
 
 ## チュートリアル
 
-[前のチュートリアル](save-gendc)では、GenDCデータをバイナリファイルに保存する方法を学びました。今度は、データを読み込み、コンテナを解析し、ディスクリプタからセンサに関する情報を取得します。
+[前のチュートリアル](save-gendc) では、GenDC データをバイナリファイルに保存する方法を学びました。今回は、データをロードし、コンテナを解析し、ディスクリプターからセンサーに関する情報を取得します。
 
 ### GenDC
 
-GenDC、ジェネリックデータコンテナは、EMVA（European Machine Vision Association）によって定義されています。その名前の通り、データ次元、メタデータ、または画像シーケンス/バーストに関係なく、カメラデバイスによって定義された任意の種類のデータを含むことができます。
+GenDC または Generic Data Container は、EMVA（European Machine Vision Association）によって定義されています。その名の通り、カメラデバイスで定義された任意のタイプのデータを含むことができ、データの次元、メタデータ、画像のシーケンス/バーストの有無にかかわらず、含めることができます。
 
-フォーマットルールは[公式ドキュメント](https://www.emva.org/wp-content/uploads/GenICam_GenDC_v1_1.pdf)で定義されていますが、GenDCセパレータを使用すると、コンテナ全体を簡単に解析できます。
+フォーマットの規則は [公式文書](https://www.emva.org/wp-content/uploads/GenICam_GenDC_v1_1.pdf) で定義されていますが、GenDC セパレーターはコンテナ全体を簡単にパースするのに役立ちます。
 
-### バイナリファイルを見つける
+### バイナリファイルの検索
 
-前のチュートリアルで保存したバイナリファイルを使用する場合、ディレクトリの名前は `tutorial_save_gendc_XXXXXXXXXXXXXX` で、バイナリファイルのプレフィックスは `gendc0-` にする必要があります。
+前のチュートリアルで保存したバイナリファイルを使用する場合、ディレクトリの名前は `tutorial_save_gendc_XXXXXXXXXXXXXX` で、バイナリファイルの接頭辞は `gendc0-` である必要があります。
 
 ```c++
 std::string directory_name = "tutorial_save_gendc_XXXXXXXXXXXXXX";
 std::string prefix = "gendc0-";
 ```
 
-次のスニペットは、指定されたプレフィックスで始まるすべてのバイナリファイルをディレクトリから取得し、すべてのバイナリを記録された順序に並べ替えます。
+次のスニペットでは、指定された接頭辞で始まるすべてのバイナリファイルをディレクトリから取得しようとします。その後、記録された順序に従ってバイナリをすべて再配置します。
 
 ```c++
 std::vector<std::string> bin_files;
-   for (const auto& entry : std::filesystem::directory_iterator(directory_name)) {
-       if (entry.path().filename().string().find(prefix) == 0 && entry.is_regular_file() && entry.path().extension() == ".bin") {
-           bin_files.push_back(entry.path().filename().string());
-       }
-   }
+for (const auto& entry : std::filesystem::directory_iterator(directory_name)) {
+if (entry.path().filename().string().find(prefix) == 0 && entry.is_regular_file() && entry.path().extension() == ".bin") {
+bin_files.push_back(entry.path().filename().string());
+}
+}
 
-   //見つかったバイナリを sensor0-0.bin、sensor0-1.bin、sensor0-2.bin... のように並べ替えます
-   std::sort(bin_files.begin(), bin_files.end(), [](const std::string& a, const std::string& b) {
-       return extractNumber(a) < extractNumber(b);
-   });
+// バイナリファイルを sensor0-0.bin、sensor0-1.bin、sensor0-2.bin... のように再配置します
+std::sort(bin_files.begin(), bin_files.end(), [](const std::string& a, const std::string& b) {
+return extractNumber(a) < extractNumber(b);
+});
 ```
 
-これで、`bin_files`内のすべての順序付けられたバイナリファイルをforループで処理することが可能です。
+これで、`bin_files` 内のすべての順序付けされたバイナリファイルを for ループで処理できます。
 
 ```c++
 for (const auto& filename : bin_files){
@@ -53,58 +54,61 @@ for (const auto& filename : bin_files){
 }
 ```
 
-### バイナリファイルを開き、内容を読み込む
+### バイナリファイルのオープンとロード
 
-前述のforループ内では対象の（単一の）バイナリファイルは `filename` で表されます。該当のバイナリファイルを `ifstream` で開きます。
+for ループ内で、対象の（単一の）バイナリファイルは `filename` です。このバイナリファイルを `ifstream` で開きます。
 
 ```c++
 std::filesystem::path jth_bin= std::filesystem::path(directory_name) / std::filesystem::path(filename);
 std::ifstream ifs(jth_bin, std::ios::binary);
 ```
 
-`ifstream`をファイルの末尾に設定し、現在の位置とファイルの先頭との間の距離を計算することで全体のバイナリファイルのサイズを取得できます。
+全体のバイナリファイルのサイズを取得するために、ifstream をファイルの末尾に移動して、現在位置とファイルの先頭との間の距離がファイルサイズと等しくなるようにします。
 
 ```c++
 ifs.seekg(0, std::ios::end);
 std::streampos filesize = ifs.tellg();
 ```
 
-`ifstream`をファイルの先頭に戻して、コンテンツを読み込む準備をします。
+ファイルの内容をロードするために、ifstream をファイルの先頭に戻すことを忘れないでください。
 
 ```c++
 ifs.seekg(0, std::ios::beg);
 char* filecontent = new char[filesize];
 ```
 
-### バイナリファイルを解析する
+### バイナリファイルの解析
 
-GenDCセパレータには `isGenDC` があり、データにGenDC署名があるかどうかをチェックします。データ全体を解析する前に、データが実際にGenDC形式で保存されているかどうかを確認することを推奨しています。
+GenDC セパレーターには、データに GenDC シグネチャがあるかどうかを確認する `isGenDC` があります。データを全体としてパースする前に、実際にデータが GenDC フォーマットで保存されていることを確認するのは常に良い考えです。
 
 ```c++
 isGenDC(filecontent)
 ```
 
-これが `true` を返す場合、データからGenDC `ContainerHeader` オブジェクトを作成できます。
+これが `true` を返す場合、データから GenDC `ContainerHeader` オブジェクトを作成できます。
+
 ```c++
 ContainerHeader gendc_descriptor = ContainerHeader(filecontent);
 ```
 
-このオブジェクトにはGenDCディスクリプターに書かれたすべての情報が含まれます。以下の例ではディスクリプターサイズとデータサイズを取得できます。
+このオブジェクトには、GenDC ディスクリプターに書かれたすべての情報が含まれています。ディスクリプターサイズとデータサイズを取得できます。
+
 ```c++
 int32_t descriptor_size = gendc_descriptor.getDescriptorSize();
 int64_t container_data_size = gendc_descriptor.getDataSize();
 ```
 
-コンテナ全体のサイズはこのディスクリプターサイズとデータサイズであり、次のコンテナ情報をロードする場合は、元のデータのオフセットに合計を追加するだけです。
+コンテナ全体のサイズは、この DescriptorSize と DataSize であり、元のデータのオフセットとして合計を追加するだけで次のコンテナ情報をロードできます。
+
 ```c++
 ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_size + data_size);
 ```
 
-このチュートリアルでは、最初に利用可能な画像データコンポーネントのデータを表示するために、コンテナデータからそのセンサーデータのみを抽出できるようにします。`getFirstComponentIndexByTypeID()`関数は、そのデータ型がパラメータと一致する最初の利用可能なデータコンポーネントのインデックスを返します。もし`-1`を返した場合は、センサー側に有効なデータが設定されていないことを意味します。
+このチュートリアルでは、最初に利用可能な画像データコンポーネントのデータを表示します。これにより、コンテナデータからそのセンサーデータだけを抽出できます。`getFirstComponentIndexByTypeID()` 関数は、そのデータタイプがパラメーターと一致する場合、最初に利用可能なデータコンポーネントのインデックスを返します。-1 を返すと、センサーサイドで有効なデータが設定されていないことを意味します。
 
-以下は、GenICamで定義されたいくつかのデータ型です。
+GenICam で定義されているいくつかのデータタイプは次のとおりです。
 
-| Datatype key | Datatype ID Value |
+| データタイプキー | データタイプ ID 値 |
 |--------------|-------------------|
 | Undefined    | 0                 |
 | Intensity    | 1                 |
@@ -114,80 +118,76 @@ ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_
 | ...          | ...               |
 | Metadata     | 0x8001            |
 
-[reference: 4.13ComponentIDValue on GenICam Standard Features Naming Convention](https://www.emva.org/wp-content/uploads/GenICam_SFNC_v2_7.pdf)
+[参照:4.13ComponentIDValue on GenICam Standard Features Naming Convention](https://www.emva.org/wp-content/uploads/GenICam_SFNC_v2_7.pdf)
 
-
-画像（つまりintensity）データを取得したいので、データ型ID値に`1`を使用します。
+画像（つまり、強度）データを取得したい場合は、Datatype ID 値として `1` を使用します。
 
 ```c++
-// 最初に利用可能な画像コンポーネントを取得します
+// 最初に利用可能な画像コンポーネントを取得
 int32_t image_component_index = gendc_descriptor.getFirstComponentIndexByTypeID(1);
 ```
 
-このコンポーネントインデックスを利用して画像データを含むコンポーネントのヘッダー情報にアクセスできます。
-
+これで、画像データを含むコンポーネントのヘッダ情報にアクセスできます。
 ```c++
 ComponentHeader image_component = gendc_descriptor.getComponentByIndex(image_component_index);
 ```
 
-コンポーネントは１つ以上のパートで構成されています。for loopを使ってそれぞれのPartのデータを取得してみましょう。
+コンポーネントには1つ以上のパートが含まれています。forループを使用してそれらをイテレートできます。
 ```c++
 for (int idx = 0; idx < part_count; idx++) {
     PartHeader part = image_component.getPartByIndex(idx);
     int part_data_size = part.getDataSize();
 ```
 
-画像データをコピーするには、データを格納するためのバッファーを作成する必要があります。
+画像データをコピーするには、各パートにデータを格納するためのバッファを作成する必要があります。
 ```c++
 uint8_t* imagedata;
 imagedata = new uint8_t [part_data_size];
 part.getData(reinterpret_cast<char *>(imagedata));
 ```
 
-現在、画像データは1次元配列形式の`imagedata`に格納されています。プレビュー画像を表示するために、次の情報を設定する必要があります。
-* 幅(Width)
-* 高さ(Height)
-* カラーチャネル(Color-channel)
-* バイト深度(Byte-depth)
+現在、画像データは1次元配列の形式で `imagedata` にあります。プレビュー画像を表示するためには、以下の情報を設定して形状を変更します。
+* 幅
+* 高さ
+* カラーチャンネル
+* バイトの深さ
 
-`getDimension()`は、幅と高さ情報を含むベクトルを返します。カラーチャンネルの数はコンポーネントに含まれるパートの数と同じです。
+`getDimension()` は、幅と高さを含むベクトルを返します。コンポーネントに複数のパートがある場合、複数のカラーチャンネルがあります。
 ```c++
-std::vector <int32_t> image_dimension = part.getDimension();
+std::vector<int32_t> image_dimension = part.getDimension();
 ```
 
-バイトの深さを決定するには、データの総サイズと上記で得られた次元の値から計算できます。
+バイトの深さを決定するには、データの合計サイズと上記で取得した次元値から計算できます。
 ```c++
 int32_t bd = part_data_size / WxH;
 ```
 
-これらの情報がそろったので`memcpy`を使用して、1次元配列`imagedata`から画像形式のcv::Matである`img`にデータをコピーし、表示することができます。
-
+これで、1次元配列の `imagedata` から画像形式の `cv::Mat img` にデータをコピーして表示できます。
 ```c++
 cv::Mat img(image_dimension[1], image_dimension[0], CV_8UC1);
 std::memcpy(img.ptr(), imagedata, datasize);
-cv::imshow("First available image component", img);
+cv::imshow("最初に利用可能な画像コンポーネント", img);
 
 cv::waitKeyEx(1);
 ```
 
 :::tip
 
-GenDCのTypeSpecificフィールドに保存されているデバイス固有のデータにアクセスしたい場合は、次のようにします。
+GenDC の TypeSpecific フィールドに格納されているデバイス固有データにアクセスしたい場合は次のようにします。
 
-たとえば、次のGenDCデータには、8バイトサイズであるTypeSpecific3のうち下位4バイトに `framecount` データがあります。注意するのは、Typespecificの番号がN=1,2,3...と1から始まるのに対し、インデックスは0,1,2...となることです。そのためTypespecific3のインデックスは2になります。
+たとえば、以下の GenDC データでは、TypeSpecific3 の下位4バイトに `framecount` データが含まれています。TypeSpecific は N = 1、2、3... となり、インデックスは 0、1、2... ですので、TypeSpecific3 のインデックスは 2 です。
 
 ```c++
 int64_t typespecific3 = part.getTypeSpecificByIndex(2);
 int32_t framecount = static_cast<int32_t>(typespecific3 & 0xFFFFFFFF);
-std::cout << "Framecount: " << framecount<< std::endl;           
+std::cout << "フレーム数: " << framecount << std::endl;          
 ```
 :::
 
-
 ## 完全なコード
 
-import {tutorial_version} from "@site/static/version_const/v240505.js"
+```import {tutorial_version} from "@site/static/version_const/v240505.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial5_parse_gendc_data" />
-
+```
