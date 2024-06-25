@@ -4,7 +4,7 @@ sidebar_position: 10
 
 # Parse GenDC data
 
-In this tutorial, we learn how to user GenDC separator library.
+In this tutorial, we learn how to parse image data in the format of binary.
 
 ## Prerequisite
  
@@ -99,7 +99,7 @@ with open(bin_file, mode='rb') as ifs:
 ### Parse binary file
 Finally, we parse each binary file.
 
-Since we know the size of framecount is -byte, which is the size of 32-bit integer. We copy the 4-byte data from filecontent to framecount.
+Since we know the size of framecount is 4-byte, which is the size of 32-bit integer. We copy the 4-byte data from filecontent to framecount.
 
 ```python
 cursor = 0

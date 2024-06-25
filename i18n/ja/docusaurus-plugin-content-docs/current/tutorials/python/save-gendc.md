@@ -21,10 +21,10 @@ pip3 install ion-python=={this_version.ion_python_version}<br />
 
 ## チュートリアル
 
-前のチュートリアルでは、パイプライン内でセンサーデータを取得するための単一のビルディングブロック（BB）を利用しました。今度は、バイナリセーバBBを組み込んで、1.データを取得し、2.パイプライン内でデータを保存という2段階のフローを有効にします。
+前のチュートリアルでは、パイプラインで単一のビルディングブロック（BB）を使用してセンサーデータを取得しました。今回は、binarysaver BBを組み込んで、データの取得と保存の2ステップフローを実現します。
 
 ![binarysaver-bb-after-data-acquisition-BB](../img/tutorial4-single-sensor.png)
-
+　　
 ### パイプラインを構築する
 
 パイプライン `Builder` の初期化プロセスは、以前のチュートリアルとまったく同じです。
@@ -36,14 +36,13 @@ builder.set_target('host')
 builder.with_bb_module('ion-bb')
 ```
 
-センサデータ取得BBの後続のビルディングブロック（BB）として、バイナリセーバーBBを接続して、1.データを取得してから、2.パイプライン内でデータを保存というフローを確立します。
+センサーデータ取得BBの後のビルディングブロック（BB）として、binarysaver BBを接続してフローを確立します。
 
 使用する具体的なビルディングブロック（BB）は、使用されているセンサーデータのタイプに依存します。このチュートリアルでは、GenDCデータを保存する方法を示す例を紹介します。
 
-|           | データ取得BB                                    | バイナリセーバーBB                               |
-|-----------|------------------------------------------------|--------------------------------------------------|
-| GenDC     | image_io_u3v_gendc                             | image_io_u3v_binary_gendc_saver                  |
-| 非GenDC   | image_io_u3v_cameraN_u&ltbyte-depth&gtx<dim&gt | image_io_binarysaver_u&ltbyte-depth&gtx&ltdim&gt |
+|           | データ取得BB                            | バイナリセーバーBB                                  |
+|-----------|----------------------------------------|--------------------------------------------------|
+| GenDC     | image_io_u3v_gendc                     | image_io_u3v_binary_gendc_saver                  |
 
 パイプライン `builder` に2つのBBを追加します。2番目のBBである `image_io_u3v_binary_gendc_saver` には、ポートにGenDCデータ、デバイス情報、およびペイロードサイズの3つの入力が必要です：
 
@@ -61,17 +60,6 @@ node_sensor0 = builder.add("image_io_binary_gendc_saver").set_iport([node.get_po
 
 GenDCデータとデバイス情報は、前のノードで取得された取得BBによって取得されます。ペイロードサイズは、コンソールで `arv-tool-0.8 -n <デバイス名> control PayloadSize` コマンドを使用して取得できるGenDCコンテナの全体サイズを表します。詳しい使用方法については、[arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
 :::tip
-
-### 非GenDCデータの場合
-
-BBがGenDC向けに設計されている場合、 `frame_count` の入出力はありませんが、非GenDC BBでは必須となります。詳細については、以下の表を参照してください。
-
-|           | データ取得BBの出力                            | バイナリセーバーBBの入力                       |
-|-----------|------------------------------------------------|--------------------------------------------------|
-| GenDC     | gendc; device_info                             | gendc; device_info; payloadsize                  |
-| non-GenDC | output; device_info; frame_count               | output; device_info; frame_count; width; height  |
-
-widthとheightは、上記の例でペイロードサイズを取得したのと同様に、[arv-tool-0.8](../../external/aravis/arv-tools) を使用して取得できます。
 
 ### 複数センサーデータの場合
 
@@ -102,11 +90,11 @@ for i in range(num_device):
 ```
 :::
 
-### 出力ポートを設定する
+### 出力ポートの設定
 
-バイナリファイルはバイナリセーバBBプロセス内に保存されますが、パイプラインからはスカラ出力が得られます。
+バイナリファイルはbinary saver BBプロセス内で保存されますが、パイプラインからスカラー出力を取得します。
 
-これは、BBがデータを正常に保存したかどうかを示す終端フラグであるため、値そのものを使うことはほとんどありません。しかし、この出力を受け取るためのバッファは必ず作成する必要があります。
+このスカラー出力は単にBBがデータを正常に保存したかどうかを示す終端フラグであり、具体的な値を使用するわけではありませんが、出力として受け取るための出力バッファを作成する必要があります。
 
 ```python
 # create halide buffer for output port

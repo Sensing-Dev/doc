@@ -2,13 +2,13 @@
 sidebar_position: 8
 ---
 
-# GenDCデータの解析
+# 画像バイナリデータの解析
 
-このチュートリアルでは、GenDCセパレーターライブラリの使用方法を学びます。
+このチュートリアルでは、保存した画像バイナリファイルの解析方法を学びます。
 
 ## Prerequisite
- 
-* GenDC Separator
+
+* json
 * OpenCV
 * numpy
 
