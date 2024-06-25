@@ -1,10 +1,11 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Parse GenDC data
 
-In this tutorial, we learn how to user GenDC separator library.
+In this tutorial, we learn how to use GenDC separator library.
+If your device data format is non-GenDC (general camera acquire images), see the next tutorial page [Parse non-GenDC binary data](./parse-image-bin.md).
 
 ## Prerequisite
  
@@ -97,6 +98,18 @@ next_gendc_container= gendc.Container(filecontent[cursor + descriptor_size + con
 ```
 
 In this tutorial, let's get the first available component data size and offset, so that you can get only that sensor data from the container data. `get_1st_component_idx_by_typeid` returns the component index of the first available specified type data. Let's set `0x0000000000000001` to look up Intencity i.e. image data. If this returns `-1`, no data is set as valid on the sensor side.
+
+| Datatype key | Datatype ID Value |
+|--------------|-------------------|
+| Undefined    | 0                 |
+| Intensity    | 1                 |
+| Infrared     | 2                 |
+| Ultraviolet  | 3                 |
+| Range        | 4                 |
+| ...          | ...               |
+| Metadata     | 0x8001            |
+
+[reference: 4.13ComponentIDValue on GenICam Standard Features Naming Convention](https://www.emva.org/wp-content/uploads/GenICam_SFNC_v2_7.pdf)
 
 ```python
 # get first available component

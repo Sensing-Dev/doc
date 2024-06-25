@@ -2,71 +2,62 @@
 sidebar_position: 7
 ---
 
-# センサーデータの保存
+# センサーデータを保存する (GenDC)
 
-このチュートリアルでは、センサから転送されたデータをバイナリファイルに保存する方法を学びます。
+このチュートリアルでは、センサーから転送されたGenDCデータをバイナリファイルに保存する方法を学びます。
+
+デバイスデータ形式がGenDC以外の場合（一般的なカメラで画像データを取得する場合）は、次のチュートリアルページ[センサーデータを保存する（非GenDC）](./save-image-bin.md)を参照してください。
 
 ## 前提条件
 
-* ion-kit（sensing-dev SDKとともにインストール済み）
+* ion-kit（sensing-dev SDKと一緒にインストールされます）
 
 ## チュートリアル
 
-前のチュートリアルでは、パイプライン内でセンサーデータを取得するための単一のビルディングブロック（BB）を利用しました。今度は、バイナリセーバBBを組み込んで、1.データを取得し、2.パイプライン内でデータを保存という2段階のフローを有効にします。
+前のチュートリアルでは、パイプラインで単一のビルディングブロック（BB）を使用してセンサーデータを取得しました。今回は、binarysaver BBを組み込んで、データの取得と保存の2ステップフローを実現します。
 
 ![binarysaver-bb-after-data-acquisition-BB](../img/tutorial4-single-sensor.png)
 
-### パイプラインを構築する
+### パイプラインの構築
 
-パイプライン `Builder` の初期化プロセスは、以前のチュートリアルとまったく同じです。
+パイプライン`Builder`の初期化プロセスは、前のチュートリアルとまったく同じです。
 
 ```c++
-// パイプラインのセットアップ
+// パイプライン設定
 Builder b;
 b.set_target(ion::get_host_target());
 b.with_bb_module("ion-bb");
 ```
 
-センサデータ取得BBの後続のビルディングブロック（BB）として、バイナリセーバーBBを接続して、1.データを取得してから、2.パイプライン内でデータを保存というフローを確立します。
+センサーデータ取得BBの後のビルディングブロック（BB）として、binarysaver BBを接続してフローを確立します。
 
-使用する具体的なビルディングブロック（BB）は、使用されているセンサーデータのタイプに依存します。このチュートリアルでは、GenDCデータを保存する方法を示す例を紹介します。
+使用する具体的なビルディングブロック（BB）は、使用されるセンサーデータの種類によって異なります。このチュートリアルでは、GenDCデータを保存する方法を例示します。デバイスデータ形式がGenDC以外の場合（一般的なカメラで画像データを取得する場合）は、次のチュートリアルページ[センサーデータを保存する（非GenDC）](./save-image-bin.md)を参照してください。
 
-|           | データ取得BB                                    | バイナリセーバーBB                               |
-|-----------|------------------------------------------------|--------------------------------------------------|
-| GenDC     | image_io_u3v_gendc                             | image_io_u3v_binary_gendc_saver                  |
-| 非GenDC   | image_io_u3v_cameraN_u&ltbyte-depth&gtx<dim&gt | image_io_binarysaver_u&ltbyte-depth&gtx&ltdim&gt |
+|           | データ取得BB                            | バイナリセーバーBB                                  |
+|-----------|----------------------------------------|--------------------------------------------------|
+| GenDC     | image_io_u3v_gendc                     | image_io_u3v_binary_gendc_saver                  |
 
-パイプライン `b` に2つのBBを追加します。2番目のBBである `image_io_u3v_binary_gendc_saver` には、ポートにGenDCデータ、デバイス情報、およびペイロードサイズの3つの入力が必要です：
+
+これで、パイプライン`b`に2つのBBを追加します。2つ目のBB、`image_io_u3v_binary_gendc_saver`は、ポートに3つの入力（GenDCデータ、デバイス情報、ペイロードサイズ）を必要とします。
 
 ```c++
-// データを取得するために最初のBBを追加します
+// データを取得する最初のBBを追加
 Node n = b.add("image_io_u3v_gendc")();
-// バイナリデータを保存するために2番目のBBを追加します
+// バイナリデータを保存する2つ目のBBを追加
 n = b.add("image_io_binary_gendc_saver")(n["gendc"], n["device_info"], &payloadsize);
 ```
 
-GenDCデータとデバイス情報は、前のノードで取得された取得BBによって取得されます。ペイロードサイズは、コンソールで `arv-tool-0.8 -n <デバイス名> control PayloadSize` コマンドを使用して取得できるGenDCコンテナの全体サイズを表します。詳しい使用方法については、[arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
+GenDCデータとデバイス情報は、前のノード`image_io_u3v_gendc`の取得BBによって取得されます。ペイロードサイズは、GenDCコンテナの全体サイズを表し、コンソールで`arv-tool-0.8 -n <デバイス名> control PayloadSize`コマンドを使用して取得できます。詳細な使用方法については、[arv-tool-0.8](../../external/aravis/arv-tools)を参照してください。
 
 :::tip
 
-### 非GenDCデータの場合
+### 複数センサの場合
 
-BBがGenDC向けに設計されている場合、 `frame_count` の入出力はありませんが、非GenDC BBでは必須となります。詳細については、以下の表を参照してください。
-
-|           | データ取得BBの出力                            | バイナリセーバーBBの入力                       |
-|-----------|----------------------------------------------|-----------------------------------------------|
-| GenDC     | gendc; device_info                           | gendc; device_info; payloadsize               |
-| 非GenDC   | output; device_info; frame_count             | output; device_info; frame_count; width; height|
-
-widthとheightは、上記の例でペイロードサイズを取得したのと同様に、[arv-tool-0.8](../../external/aravis/arv-tools) を使用して取得できます。
-
-### 複数センサーデータの場合
-
-最初のBBで `Param("num_devices", 2)` を使用して複数のセンサーからデータを取得する場合、個々のバイナリセーバBBを使用してそれらを個別に保存する必要があります。1つのセンサーからのデータが他のセンサーからのデータを上書きを防ぐために、必ず以下のようなパイプライン構成にしてください。
+`Param("num_devices", 2)`を使用して最初のBBで2つ以上のセンサーからデータを取得する場合、それぞれのバイナリセーバーBBを使用して個別に保存する必要があります。これを行わなかった場合、一方のセンサーのデータが他方のセンサーのデータを上書きしてしまいます。
 
 ![binarysaver-bb-after-data-acquisition-BB-multi-sensor](../img/tutorial4-multi-sensor.png)
 
-最初のBBから各センサの出力データにアクセスするには、次のようにインデックス `[]` を使用します。各バイナリセーバBBに `Param("prefix", "gendc0-")` と `Param("prefix", "gendc1-")` を設定して、お互いの内容を上書きしないように注意してください。
+最初のBBから各センサーの出力データにアクセスするには、次のようにインデックス`[]`を使用できます。それぞれのバイナリセーバーBBに`Param("prefix", "gendc0-")`と`Param("prefix", "gendc1-")`を設定して、互いの内容を上書きしないようにしてください。
 
 ```c++
 Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
@@ -90,9 +81,10 @@ n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &pa
 n["output"].bind(outputs[0]);
 ```
 
-複数のセンサのペイロードサイズがそれぞれ正しいことを確認してください。
+複数のデバイスがある場合、それぞれのペイロードサイズが一致していることを確認してください。
+
 ```C++
-# bind input values to the input port
+// bind input values to the input port
 std::vector<int32_t> payloadsize = {2074880, 2074880};
 int32_t payloadsize0 = payloadsize[0];
 ...
@@ -102,27 +94,26 @@ n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &pa
 
 :::
 
-### 出力ポートを設定する
+### 出力ポートの設定
 
-バイナリファイルはバイナリセーバBBプロセス内に保存されますが、パイプラインからはスカラ出力が得られます。
+バイナリファイルはbinary saver BBプロセス内で保存されますが、パイプラインからスカラー出力を取得します。
 
-これは、BBがデータを正常に保存したかどうかを示す終端フラグであるため、値そのものを使うことはほとんどありません。しかし、この出力を受け取るためのバッファは必ず作成する必要があります。
+このスカラー出力は単にBBがデータを正常に保存したかどうかを示す終端フラグであり、具体的な値を使用するわけではありませんが、出力として受け取るための出力バッファを作成する必要があります。
 
 ```c++
 Halide::Buffer<int> output = Halide::Buffer<int>::make_scalar();
 n["output"].bind(output);
 ```
 
-### パイプラインを実行する
+### パイプラインの実行
 
-通常通りに `builder.run()` を実行してパイプラインを終了します。
+`builder.run()`を実行して、パイプラインを通常どおり終了します。
 
-デフォルトでは、バイナリデータは次の形式で保存されます： `<output directory>/<prefix>0.bin`、`<output directory>/<prefix>1.bin`、`<output directory>/<prefix>2.bin` などです。デフォルトの出力ディレクトリはカレントディレクトリで、デフォルトのプレフィックスは `raw-` です。これらの値をカスタマイズするには、バイナリセーバBB内の `Param` を使用してください。
+デフォルトでは、バイナリデータは次の形式で保存されます：`<出力ディレクトリ>/<プレフィックス>0.bin`、`<出力ディレクトリ>/<プレフィックス>1.bin`、`<出力ディレクトリ>/<プレフィックス>2.bin`など。デフォルトの出力ディレクトリは現在のディレクトリであり、デフォルトのプレフィックスは`raw-`です。これらの値をカスタマイズするには、バイナリセーバーBB内の`Param`を利用してください。
 
 ## 完全なコード
 
 import {tutorial_version} from "@site/static/version_const/latest.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
-<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial4_save_data" />
-
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial4_save_gendc_data" />
