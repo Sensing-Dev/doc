@@ -1,10 +1,11 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # Parse GenDC data
 
-In this tutorial, we learn how to user GenDC separator library.
+In this tutorial, we learn how to use GenDC separator library.
+If your device data format is non-GenDC (general camera acquire images), see the next tutorial page [Parse non-GenDC binary data](./parse-image-bin.md).
 
 ## Prerequisite
  
