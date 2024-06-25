@@ -119,4 +119,4 @@ By default, the binary data will be saved in the following format: `<output dire
 import {tutorial_version} from "@site/static/version_const/latest.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
-<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial4_save_data" />
+<GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial4_save_image_bin_data" />

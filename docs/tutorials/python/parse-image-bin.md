@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# Parse GenDC data
+# Parse non-GenDC binary data
 
 In this tutorial, we learn how to parse image data in the format of binary.
 
