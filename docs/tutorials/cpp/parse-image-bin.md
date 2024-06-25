@@ -34,8 +34,7 @@ The value of width and height is in &ltprefix>-config.json with binary file save
 
 The byte-depth and the number of channel can be calculated from PixelFormat, which is also noted in &ltprefix>-config.json.
 
-Config file is saved with the binary files under `tutorial_save_image_bin_XXXXXXXXXXXXXXXXXX`.
-std::string prefix = "image0-";
+Config file is saved with the binary files under `tutorial_save_image_bin_XXXXXXXXXXXXXXXXXX` and prefix is `image0-`.
 
 ```c++
 std::string directory_name = "tutorial_save_image_bin_XXXXXXXXXXXXXXXXXX";

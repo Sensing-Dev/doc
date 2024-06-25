@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # Save Sensor Data (GenDC)
 
-"In this tutorial, we will learn how to save GenDC data transferred from a sensor into a binary file. 
+In this tutorial, we will learn how to save GenDC data transferred from a sensor into a binary file. 
 
 If your device data format is non-GenDC (general camera acquire images), see the next tutorial page [Save Sensor Data (non-GenDC)](./save-image-bin.md).
 

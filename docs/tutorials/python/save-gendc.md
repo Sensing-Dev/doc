@@ -2,9 +2,11 @@
 sidebar_position: 7
 ---
 
-# Save Sensor Data
+# Save Sensor Data (GenDC)
 
-"In this tutorial, we will learn how to save data transferred from a sensor into a binary file.
+In this tutorial, we will learn how to save data transferred from a sensor into a binary file.
+
+If your device data format is non-GenDC (general camera acquire images), see the next tutorial page [Save Sensor Data (non-GenDC)](./save-image-bin.md).
 
 ## Prerequisite
 
@@ -38,12 +40,11 @@ builder.with_bb_module('ion-bb')
 
 As the succeeding building block (BB) after the sensor data acquisition BB, we connect the binarysaver BB to establish the flow: 1. Acquire data, then 2. Save data in the pipeline.
 
-The specific building block (BB) utilized depends on the type of sensor data being used. In this tutorial, we present an example demonstrating how to save GenDC data.
+The specific building block (BB) utilized depends on the type of sensor data being used. In this tutorial, we present an example demonstrating how to save GenDC data. If your device data format is non-GenDC (general camera acquire images), see the next tutorial page [Save Sensor Data (non-GenDC)](./save-image-bin.md).
 
 |           | Data Acquisition BB                            | Binary saver BB                                  |
 |-----------|------------------------------------------------|--------------------------------------------------|
 | GenDC     | image_io_u3v_gendc                             | image_io_u3v_binary_gendc_saver                  |
-| non-GenDC | image_io_u3v_cameraN_u&ltbyte-depth&gtx<dim&gt | image_io_binarysaver_u&ltbyte-depth&gtx&ltdim&gt |
 
 We are now adding two BBs to our pipeline `builder`. The second BB, `image_io_u3v_binary_gendc_saver`, requires three inputs for its ports: GenDC data, Device Information, and PayloadSize.
 
@@ -62,17 +63,6 @@ node_sensor0 = builder.add("image_io_binary_gendc_saver").set_iport([node.get_po
 The GenDC data and Device Information are obtained by the acquisition BB in the previous node, `image_io_u3v_gendc`. The PayloadSize represents the entire size of the GenDC container, which can be retrieved using the command `arv-tool-0.8 -n <device name> control PayloadSize` in the console. For detailed usage instructions, please refer to [arv-tool-0.8](../../external/aravis/arv-tools).
 
 :::tip
-
-### For non-GenDC data
-
-When the BBs are designed for GenDC, they do not have inputs/outputs for `frame_count`, whereas non-GenDC BBs include it. For further details, please refer to the table below
-
-|           | Output of Data Acquisition BB                  | Input of Binary saver BB                         |
-|-----------|------------------------------------------------|--------------------------------------------------|
-| GenDC     | gendc; device_info                             | gendc; device_info; payloadsize                  |
-| non-GenDC | output; device_info; frame_count               | output; device_info; frame_count; width; height  |
-
-Width and height can also be obtained using [arv-tool-0.8](../../external/aravis/arv-tools), similar to how payload size was retrieved in the example above.
 
 ### For multi-sensor data
 
@@ -127,4 +117,4 @@ By default, the binary data will be saved in the following format: `<output dire
 import {tutorial_version} from "@site/static/version_const/latest.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
-<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial4_save_data" />
+<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial4_save_gendc_data" />
