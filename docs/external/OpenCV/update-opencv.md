@@ -2,7 +2,7 @@
 
 While Sensing-Dev SDK provides OpenCV library, you may want to use the specific version of OpenCV or the one you have already installed beforehand.
 
-However, this can be little trickly because OpenCV installed without the Sensing-Dev installer script may not be found by your application or tutorial code due to missing environment variables.
+However, this can be little tricky because OpenCV installed without the Sensing-Dev installer script may not be found by your application or tutorial code due to missing environment variables.
 
 This document provides tips on how to update OpenCV and set environment variable.
 
@@ -14,7 +14,7 @@ If you have already installed Sensing-Dev with OpenCV, to avoid version conflict
 
 1.1. Remove the directory `C:\Users\<username>\AppData\Local\sensing-dev\`
 
-1.2. Reinstall Sensing-Dev following the instructino in the [Windows Setup Guide](../../startup-guide/windows). Note that you should specify the version of SDK with `-version` option, and you should **NOT** add `-InstallOpenCV` option.
+1.2. Reinstall Sensing-Dev following the instruction in the [Windows Setup Guide](../../startup-guide/windows). Note that you should specify the version of SDK with `-version` option, and you should **NOT** add `-InstallOpenCV` option.
 
 1.3. Remove the following environment variable from System Property.
 
@@ -26,7 +26,7 @@ If you have already installed Sensing-Dev with OpenCV, to avoid version conflict
 
 1.1 Remove the directory `/opt/sensing-dev/`
 
-1.2. Install Sensing-Dev again with the instructino of [Linux Setup Guide](../../startup-guide/linux). Note that you should specify the version of SDK with `--version` option, and you should **NOT** add `---install-opencv` option.
+1.2. Install Sensing-Dev again with the instruction of [Linux Setup Guide](../../startup-guide/linux). Note that you should specify the version of SDK with `--version` option, and you should **NOT** add `---install-opencv` option.
 
 ## 2 Re-install OpenCV
 
