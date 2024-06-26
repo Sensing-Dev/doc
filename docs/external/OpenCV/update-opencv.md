@@ -90,8 +90,3 @@ g++ -I /usr/local/include/opencv4 \
 -L /usr/local/lib
 ...
 ```
-
-
-
-
-
