@@ -19,24 +19,24 @@ def check_md_file_content(filename, version_num):
                             return False
     return True
 
-def get_dir_content(relative_dir_path, version_num):
+def get_dir_content(abs_path, version_num):
 
-    if os.path.isdir(relative_dir_path):
-        # relative_dir = pathlib.Path(os.path.join(root_dir, relative_dir_path))
-        relative_dir = pathlib.Path(root_dir, relative_dir_path)
-        for item_in_dir in relative_dir.iterdir():
+    if os.path.isdir(abs_path):
+        # relative_dir = pathlib.Path(os.path.join(root_dir, abs_path)) 
+        for item_in_dir in pathlib.Path(root_dir, abs_path).iterdir():
             get_dir_content(item_in_dir, version_num)
-    elif os.path.isfile(relative_dir_path):
-        if not check_md_file_content(relative_dir_path.__str__(), version_num):
-            print(relative_dir_path.__str__() + ' does not exist')
+    elif os.path.isfile(abs_path):
+        if not check_md_file_content(abs_path.__str__(), version_num):
+            print(abs_path.__str__() + ' has wrong import module')
     else:
-        print(relative_dir_path + ' does not exist')
+        print(abs_path + ' does not exist')
 
 
 if __name__=='__main__':
 
-    # current = {'eng': 'docs', 'jpn': 'i18n\ja\docusaurus-plugin-content-docs\current'}
-    versioned_dirs = ['v23.11', 'v24.01', 'v24.05']
+    versioned_dirs = pathlib.Path(root_dir, 'versioned_docs')
+    versioned_dirs = [v.__str__().split('\\')[-1].split('version-')[-1] for v in versioned_dirs.iterdir()]
+    # This should return like: versioned_dirs = ['v23.11', 'v24.01', 'v24.05']
 
     for lng in current:
         get_dir_content(current[lng], 'latest')
