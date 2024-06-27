@@ -96,7 +96,7 @@ Aravis Python APIの代わりに、arv-toolも使用できます。詳細は[Ara
 
 ## 完全なコード
 
-import {tutorial_version} from "@site/static/version_const/v240104.js"
+import {tutorial_version} from "@site/static/version_const/v2401.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial0_set_device_info" />

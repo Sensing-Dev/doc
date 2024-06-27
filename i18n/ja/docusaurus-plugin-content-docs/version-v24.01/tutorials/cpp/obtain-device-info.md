@@ -108,7 +108,7 @@ Aravis APIの代わりに、arv-toolを使用することもできます。詳�
 
 ## 完全なコード
 
-import {tutorial_version} from "@site/static/version_const/v240104.js"
+import {tutorial_version} from "@site/static/version_const/v2401.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial0_get_device_info" />

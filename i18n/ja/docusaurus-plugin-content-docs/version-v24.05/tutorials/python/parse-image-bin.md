@@ -12,7 +12,7 @@ sidebar_position: 10
 * OpenCV
 * numpy
 
-import this_version from "@site/static/version_const/v240505.js"
+import this_version from "@site/static/version_const/v2405.js"
 
 <pre>
 <code class="language-bash">
@@ -132,7 +132,7 @@ cursor = cursor + 4 + framesize
 
 ## 完全なコード
 
-import {tutorial_version} from "@site/static/version_const/v240505.js"
+import {tutorial_version} from "@site/static/version_const/v2405.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial5_parse_image_bin_data" />

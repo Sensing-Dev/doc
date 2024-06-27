@@ -14,7 +14,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+      - name: Check version
+        run: |
+          python_output=$(python ${GITHUB_WORKSPACE}/.github/check_version.py)
+          echo "Python script output: $python_output"
+          if [ -n "$python_output" ]; then
+            echo "ERROR Version does not match in:"
+            echo "$python_output"
+            exit 1
+          fi
       - name: build
         run: |
           yarn install
           yarn build
+
