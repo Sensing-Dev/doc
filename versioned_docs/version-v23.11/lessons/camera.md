@@ -23,7 +23,7 @@ Camera interfaces could be defined and categorized from two aspects: hardware an
 As it is named after "Generic Interface", the interface allows to use the same API no matter the resister of the hardware is designed, and Camera Description File in the format of XML file enables the schema. For more detail, please visit [emva; GenICam page](https://www.emva.org/standards-technology/genicam/).
 
 :::tip
-To instantly see and access GenICam features on camera devices, learn and use **`arv-tool-0.8`** provided by Aravis. The tool is included in the Sensing-Dev software package and shortly introduced on [appendix page](/docs/external/aravis/arv-tools.md)
+To instantly see and access GenICam features on camera devices, learn and use **`arv-tool-0.8`** provided by Aravis. The tool is included in the Sensing-Dev software package and shortly introduced on [appendix page](../external/aravis/arv-tools)
 :::
 
 ## Payload type
