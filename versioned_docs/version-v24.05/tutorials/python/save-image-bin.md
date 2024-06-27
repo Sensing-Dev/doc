@@ -11,7 +11,7 @@ If your device data format is GenDC, and if you prefer to save a whole GenDC con
 
 * ion-python
 
-import this_version from "@site/static/version_const/v240505.js"
+import this_version from "@site/static/version_const/v2405.js"
 
 <pre>
 <code class="language-bash">
@@ -129,7 +129,7 @@ By default, the binary data will be saved in the following format: `<output dire
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/v240505.js"
+import {tutorial_version} from "@site/static/version_const/v2405.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial4_save_image_bin_data" />

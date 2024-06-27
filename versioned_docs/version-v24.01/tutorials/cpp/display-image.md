@@ -203,7 +203,7 @@ See the detail in [Debug Tips](../../lessons/ion-log).
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/v240104.js"
+import {tutorial_version} from "@site/static/version_const/v2401.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial1_display" />

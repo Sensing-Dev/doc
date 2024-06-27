@@ -12,7 +12,7 @@ sidebar_position: 6
 * numpy
 * OpenCV
 
-import this_version from "@site/static/version_const/v240505.js"
+import this_version from "@site/static/version_const/v2405.js"
 
 <pre>
 <code class="language-bash">
@@ -55,7 +55,7 @@ print(fcdatas[i][0], end=" ")
 
 ## 完全なコード
 
-import {tutorial_version} from "@site/static/version_const/v240505.js"
+import {tutorial_version} from "@site/static/version_const/v2405.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial3_getting_frame_count" />

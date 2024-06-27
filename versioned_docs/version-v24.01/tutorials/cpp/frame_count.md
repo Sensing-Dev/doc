@@ -39,7 +39,7 @@ std::cout << frame_counts[0](0) << std::endl;
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/v240104.js"
+import {tutorial_version} from "@site/static/version_const/v2401.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cpp" tag={tutorial_version} tutorialfile="tutorial3_getting_frame_count" />

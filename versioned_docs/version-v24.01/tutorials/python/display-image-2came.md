@@ -12,7 +12,7 @@ In this tutorial, we learn how to access 2 cameras and obtain their images via i
 * numpy
 * OpenCV
 
-import this_version from "@site/static/version_const/v240104.js"
+import this_version from "@site/static/version_const/v2401.js"
 
 <pre>
 <code class="language-bash">
@@ -95,7 +95,7 @@ cv2.destroyAllWindows()
 ```
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/v240104.js"
+import {tutorial_version} from "@site/static/version_const/v2401.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial1_display_2cam" />

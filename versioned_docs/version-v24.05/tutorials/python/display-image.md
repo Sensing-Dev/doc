@@ -13,7 +13,7 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 * numpy
 * OpenCV
 
-import this_version from "@site/static/version_const/v240505.js"
+import this_version from "@site/static/version_const/v2405.js"
 
 <pre>
 <code class="language-bash">
@@ -186,7 +186,7 @@ qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in "/home/<userna
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/v240505.js"
+import {tutorial_version} from "@site/static/version_const/v2405.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="tutorial1_display" />
