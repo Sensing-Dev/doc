@@ -18,3 +18,13 @@ jobs:
         run: |
           yarn install
           yarn build
+      - name: Check version
+        run: |
+          cd build
+          python_output=$(python ${GITHUB_WORKSPACE}/.github/check_version.py)
+          echo "Python script output: $python_output"
+          if [ -n "$python_output" ]; then
+            echo "ERROR Version does not match in:"
+            echo "$python_output"
+            exit 1
+          fi
