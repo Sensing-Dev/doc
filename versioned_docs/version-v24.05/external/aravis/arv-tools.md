@@ -10,7 +10,7 @@
 
 ## Control GenICam features
 
-`arv-tool-0.8` enables to access the device and read/write the values of the GenICam features. To learn about **GenICam Standard**, please check [this page](../../lessons/camera.md#genicam).
+`arv-tool-0.8` enables to access the device and read/write the values of the GenICam features. To learn about **GenICam Standard**, please check [this page](../../lessons/camera).
 
 ### List the U3V devices
 
