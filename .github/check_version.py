@@ -30,7 +30,7 @@ def get_dir_content(relative_dir_path, version_num):
         if not check_md_file_content(relative_dir_path.__str__(), version_num):
             print(relative_dir_path.__str__() + ' does not exist')
     else:
-        print(relative_dir_path + 'does ')
+        print(relative_dir_path + ' does not exist')
 
 
 if __name__=='__main__':
