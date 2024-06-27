@@ -6,17 +6,15 @@ id: home
 # Sensing-Dev
 
 import '/src/css/home.css';
-import this_version from "@site/static/version_const/v2311.js"
-import GenerateLink from '@site/static/generate_index_link.js';
 
 <div class="jsx-section highlight">
 <div class="board">
 
-<GenerateLink relative_path="/startup-guide/software-stack" full_version={this_version.latest_version} title="Installation"/>
+<a class="card on-board" href="./startup-guide/software-stack">Installation</a>
 
-<GenerateLink relative_path="/external/software-reference" full_version={this_version.latest_version} title="API"/>
+<a class="card on-board" href="./external/software-reference">API</a>
 
-<GenerateLink relative_path="/tutorials/intro" full_version={this_version.latest_version} title="Tutorials"/>
+<a class="card on-board" href="./tutorials/intro">Tutorials</a>
 
 </div></div>
 
