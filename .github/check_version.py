@@ -2,7 +2,7 @@ import os.path
 import pathlib
 
 root_dir = pathlib.Path(os.path.dirname(__file__)).parent.absolute()
-current = {'eng': 'docs', 'jpn': 'i18n\ja\docusaurus-plugin-content-docs\current'}
+current = {'eng': 'docs', 'jpn': os.path.join('i18n/ja/docusaurus-plugin-content-docs', 'current')}
 prefix = 'version-'
 
 def check_md_file_content(filename, version_num):
