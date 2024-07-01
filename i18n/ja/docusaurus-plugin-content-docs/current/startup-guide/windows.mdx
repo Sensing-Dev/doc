@@ -38,9 +38,13 @@ DLLライブラリがあるディレクトリを`PATH`環境変数に追加す�
 
 ページのトップにあるインストーラスクリプトをダウンロードするか、<a href={this_version.latest_installer_URL}>こちら</a>からダウンロードしてください。
 
-<AddMsiInstructionIfLatest islatest={this_version.is_latest} version={this_version.latest_version}/>
+PowerShellターミナルを開いてスクリプトのあるディレクトリに移動し、以下のコマンドを実行してください。OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
 
-OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
+<pre>
+<code class="language-powershell">
+installer.ps1 -user &lt;username&gt; {this_version.windows_version_option}
+</code>
+</pre>
 
 デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
 
