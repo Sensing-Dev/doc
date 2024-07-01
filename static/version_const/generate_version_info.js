@@ -13,6 +13,7 @@ const GenerateVersionInfo = ({is_latest, latest_version, latest_winUSB_URL}) => 
   const one_line_powershell = "Invoke-WebRequest -Uri https://github.com/Sensing-Dev/WinUSB-installer-generator/releases/download/"+latest_winUSB_URL+"/generate_and_apply_WinUSB.ps1 -OutFile generate_and_apply_WinUSB.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./generate_and_apply_WinUSB.ps1"
   
   const linux_version = (is_latest) ? "" : "--version " + latest_version;
+  const windows_version_option = (is_latest) ? "" : "-version " + latest_version;
 
   return {
     latest_installer_URL: latest_installer_URL,
@@ -20,6 +21,7 @@ const GenerateVersionInfo = ({is_latest, latest_version, latest_winUSB_URL}) => 
     one_line_install: one_line_install,
     tutorial_version: tutorial_version,
     latest_setup_URL: latest_setup_URL,
+    windows_version_option: windows_version_option,
     linux_version: linux_version
   }
 }

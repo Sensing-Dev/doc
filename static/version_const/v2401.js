@@ -12,6 +12,9 @@ const {
     one_line_powershell,
     one_line_install,
     tutorial_version,
+    latest_setup_URL,
+    windows_version_option,
+    linux_version
 } = GenerateVersionInfo({is_latest, latest_version, latest_winUSB_URL})
 
 module.exports = {
@@ -21,6 +24,9 @@ module.exports = {
     one_line_powershell,
     one_line_install,
     tutorial_version,
+    latest_setup_URL,
     ion_python_version,
-    gendc_python_version
+    gendc_python_version,
+    windows_version_option,
+    linux_version
 };
