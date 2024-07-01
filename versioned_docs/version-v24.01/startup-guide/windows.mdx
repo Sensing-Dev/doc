@@ -39,9 +39,15 @@ Do not forget to add the directory containing the DLL library to the `PATH` envi
 
 Please DL the installer script at the top of the page or <a href={this_version.latest_installer_URL}>here</a>.
 
-<AddMsiInstructionIfLatest islatest={this_version.is_latest} version={this_version.latest_version}/>
+Open the powershell terminal and move to the directory where you have the installer script downloaded in the previous step.
 
-If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+Then type the following command. If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+
+<pre>
+<code class="language-powershell">
+installer.ps1 -user &lt;username&gt; {this_version.windows_version_option}
+</code>
+</pre>
 
 The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
 
