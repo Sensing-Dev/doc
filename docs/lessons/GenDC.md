@@ -44,7 +44,7 @@ Therefore, we introduce [**GenDC Separator**](https://github.com/Sensing-Dev/Gen
 
 Without using the GenDC Separator, we need to know the size and offset of the target property in the *Descriptor*. Here is an example to get *component1_part1_dimension*, which is "the first component's data dimension". The values 56, 48, and 40 are the offsets of the target property in each Header. We also need to check if the data is 1D or 2D.
 
-```C++
+```cpp
 
 int64_t component1_offset = *(reinterpret_cast<int64_t*>(gendc_binary_data + 56));
 int64_t component1_part1_offset = *(reinterpret_cast<int64_t*>(gendc_binary_data + component1_offset + 48));
@@ -65,7 +65,7 @@ if ((component1_part1_headertype & 0xFF00) == 0x4100){
 
 By using the GenDC Separator API, you can intuitively and easily access information within Containers, Components, and Parts without needing to know the structure of GenDC.
 
-```C++
+```cpp
 #include "gendc_separator/ContainerHeader.h"
 
 ContainerHeader gendc_descriptor = ContainerHeader(binary_data);
@@ -76,4 +76,397 @@ std::vector<int32_t> component1_part1_dimension = component1_part1.getDimension(
 
 To learn this with the actual code, please check **Tutorial 5 Parse GenDC data** ([C++](./../tutorials/cpp/parse-gendc) and [Python](./../tutorials/python/parse-gendc)).
 
-In the tutorial, we provide the [sample GenDC data](https://github.com/Sensing-Dev/GenDC/tree/main/test/generated_stub) acquired from U3V camera device whose data format is GenDC.
+If your device is not in GenDC format, you can use the sample data we provide below in the tutorial.
+
+<!-- import '/src/css/home.css'; -->
+
+<div class="jsx-section">
+<div class="board">
+<a class="card" href={"https://github.com/Sensing-Dev/GenDC/tree/main/test/generated_stub"}>sample GenDC data</a>
+</div></div>
+
+To quickly parse information of the whole container, you can load the binary file and use `displayHeaderInfo()`. In the **Tutorial 5 Parse GenDC data** ([C++](./../tutorials/cpp/parse-gendc) and [Python](./../tutorials/python/parse-gendc)), we learn how to get each property and to use. For Python, we also introduce how to visualize the data as 2D and 3D graphs with matplotlib.
+
+#### Sample code
+
+```cpp
+#include "gendc_separator/ContainerHeader.h"
+#include "gendc_separator/tools.h"
+
+...
+
+// open the sample binary file
+std::ifstream ifs("output.bin", std::ios::binary);
+// check the size of file
+ifs.seekg(0, std::ios::end);
+std::streampos filesize = ifs.tellg();
+ifs.seekg(0, std::ios::beg);
+// prepare the pointer to copy the data
+char* filecontent = new char[filesize];
+// copy the data from opened file to the pointer
+ifs.read(filecontent, filesize);
+
+// get Container information
+ContainerHeader gendc_descriptor = ContainerHeader(filecontent);
+// display Container information
+gendc_descriptor.displayHeaderInfo();
+
+for (int ith_comp_idx = 0; ith_comp_idx < gendc_descriptor.getComponentCount(); ith_comp_idx++){
+    // get Component information
+    ComponentHeader ith_component = gendc_descriptor.getComponentByIndex(ith_comp_idx);
+    // display Component information
+    ith_component.displayHeaderInfo();
+
+    for (int jth_part_idx = 0; jth_part_idx < ith_component.getPartCount(); jth_part_idx++){
+        // get Part information
+        PartHeader jth_part = ith_component.getPartByIndex(jth_part_idx);
+        // display Part information
+        jth_part.displayHeaderInfo();
+    }
+}
+```
+
+#### Output
+
+```bash
+CONTAINER HEADER
+              Signature_   (4):        0x43444e47
+                Version_   (1):        0x1
+                           (1):        0x0
+                           (1):        0x0
+               Reserved_   (1):         0
+             HeaderType_   (2):        0x1000
+                  Flags_   (2):        0x2
+             HeaderSize_   (4):       128
+                     Id_   (8):         1
+         VariableFields_   (8):        0x0
+               DataSize_   (8):   2077344
+             DataOffset_   (8):      1280
+         DescriptorSize_   (4):      1280
+         ComponentCount_   (4):         9
+        ComponentOffset_   (8):       128
+                           (8):       256
+                           (8):       384
+                           (8):       512
+                           (8):       640
+                           (8):       768
+                           (8):       896
+                           (8):      1024
+                           (8):      1152
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x0
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x1001
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054959330
+                         TypeId_   (8):        0x1
+                         Format_   (4):        0x1080001
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       184
+
+PART HEADER
+                             HeaderType_   (2):        0x4200
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1080001
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):   2073600
+                             DataOffset_   (8):      1280
+                              Dimension_   (4):      1920
+                                           (4):      1080
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       232
+                                           (8):         0
+                                           (8):     11520
+                                           (8):         0
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x0
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x2001
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054959450
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x120011a
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       312
+
+PART HEADER
+                             HeaderType_   (2):        0x41f1
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x120011a
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):      3200
+                             DataOffset_   (8):   2074880
+                              Dimension_   (4):       800
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       360
+                                           (8):         0
+                                           (8):     11520
+                                           (8):17179869441
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x0
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x3001
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054959570
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x1100118
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       440
+
+PART HEADER
+                             HeaderType_   (2):        0x41f0
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1100118
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):        32
+                             DataOffset_   (8):   2078144
+                              Dimension_   (4):        16
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       488
+                                           (8):         0
+                                           (8):     11520
+                                           (8):    256001
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x0
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x3002
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054959690
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x1100118
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       568
+
+PART HEADER
+                             HeaderType_   (2):        0x41f0
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1100118
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):        32
+                             DataOffset_   (8):   2078240
+                              Dimension_   (4):        16
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       616
+                                           (8):         0
+                                           (8):     11520
+                                           (8):    256001
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x0
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x3003
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054959810
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x1100118
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       696
+
+PART HEADER
+                             HeaderType_   (2):        0x41f0
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1100118
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):        32
+                             DataOffset_   (8):   2078336
+                              Dimension_   (4):        16
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       744
+                                           (8):         0
+                                           (8):     11520
+                                           (8):    256001
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x0
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x4001
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054959930
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x140011d
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       824
+
+PART HEADER
+                             HeaderType_   (2):        0x41f2
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x140011d
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):       128
+                             DataOffset_   (8):   2078432
+                              Dimension_   (4):        16
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       872
+                                           (8):         0
+                                           (8):     11520
+                                           (8):    256002
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x1
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x1
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054960050
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x1080116
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):       952
+
+PART HEADER
+                             HeaderType_   (2):        0x40f0
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1080116
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):         0
+                             DataOffset_   (8):   2078624
+                              Dimension_   (4):         0
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):      1000
+                                           (8):         0
+                                           (8):     11520
+                                           (8):         0
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x1
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x5001
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054960170
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x1080116
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):      1080
+
+PART HEADER
+                             HeaderType_   (2):        0x40f1
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1080116
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):         0
+                             DataOffset_   (8):   2078624
+                              Dimension_   (4):         0
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):      1128
+                                           (8):         0
+                                           (8):     11520
+                                           (8):         0
+
+COMPONENT HEADER
+                     HeaderType_   (2):        0x2000
+                          Flags_   (2):        0x1
+                     HeaderSize_   (4):        56
+                       Reserved_   (2):        0x0
+                        GroupId_   (2):        0x0
+                       SourceId_   (2):        0x6001
+                       RegionId_   (2):        0x0
+                  RegionOffsetX_   (4):         0
+                  RegionOffsetY_   (4):         0
+                      Timestamp_   (8):195054960290
+                         TypeId_   (8):        0x8001
+                         Format_   (4):        0x1080116
+                      Reserved2_   (2):        0x0
+                      PartCount_   (2):         1
+                     PartOffset_   (8):      1208
+
+PART HEADER
+                             HeaderType_   (2):        0x40f2
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1080116
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):         0
+                             DataOffset_   (8):   2078624
+                              Dimension_   (4):         0
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):      1256
+                                           (8):         0
+                                           (8):     11520
+                                           (8):         0
+```

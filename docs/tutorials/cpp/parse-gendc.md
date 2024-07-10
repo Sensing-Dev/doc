@@ -7,9 +7,19 @@ sidebar_position: 9
 In this tutorial, we learn how to use GenDC separator library.
 If your device data format is non-GenDC (general camera acquire images), see the next tutorial page [Parse non-GenDC binary data](./parse-image-bin.md).
 
+If your device is not in GenDC format but you would like to learn about, you can Download sample GenDC which has 6 valid components out of 9 components with 4 different sensor data.
+
+import links from "@site/static/external_link/links.js"
+
+<div class="jsx-section">
+<div class="board">
+<a class="card" href={links.gendc_sample_data}>sample GenDC data</a>
+</div></div>
+
 ## Prerequisite
  
 * GenDC Separator (installed with sensing-dev SDK) 
+* GenDC Data (obtained in the previous tutorial or Download sample from <a href={links.gendc_sample_data}>this page</a>.
 
 ## Tutorial
 
@@ -21,6 +31,7 @@ GenDC, or Generic Data Container, is defined by the EMVA (European Machine Visio
 
 While the format rule is defined in [the official document](https://www.emva.org/wp-content/uploads/GenICam_GenDC_v1_1.pdf), GenDC Separator helps you with easily parsing the whole container.
 
+If you would like to learn the overview of GenDC, please check [this page](../../lessons/GenDC) that gives you the concept and rough structure of GenDC.
 
 ### Find Binary file.   
 
@@ -30,6 +41,14 @@ If you use the binary file saved in the previous tutorial, the name of the direc
 std::string directory_name = "tutorial_save_gendc_XXXXXXXXXXXXXX";
 std::string prefix = "gendc0-";
 ```
+
+:::info
+The complete code provided at the end of this tutorial gives you the command line option.
+
+If you set `-d tutorial_save_gendc_XXXXXXXXXXXXXX` or `--directory tutorial_save_gendc_XXXXXXXXXXXXXX` option when you execute the tutorial program, `directory_name` will be automatically set.
+
+Also, if you are using sample data `output.bin` provided at the top of this tutorial page, you can simply add `-u` or `--use-dummy-data` option so that the program look for downloaded `output.bin`. 
+:::
 
 The following snippet attempts to retrieve all binary files starting with a specified prefix from a directory. It then reorders all the found binaries according to their recorded order.
 
@@ -172,6 +191,13 @@ cv::imshow("First available image component", img);
 
 cv::waitKeyEx(1);
 ```
+
+### Example with Sample Data
+
+In the previous section, we learned general idea of parsing GenDC data with GenDC Separator API. Now, we can use sample data provided at the top of this page (or <a href={links.gendc_sample_data}>here</a>)) to handle some non-image data.
+
+
+
 
 :::tip
 
