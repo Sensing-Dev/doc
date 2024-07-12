@@ -24,11 +24,11 @@ The official document is [here](https://www.emva.org/wp-content/uploads/GenICam_
 
 As mentioned in previous sections, GenDC consists of 2 different submodules: *Descriptor* and *Data*. *Descriptor* describes all the details about the contained data.
 
-![The outline of Software Stack](./img/gendc_descriptor_and_data.png)
+![GenDC Descriptor and Data](./img/gendc_descriptor_and_data.png)
 
 Meanwhile, GenDC has a hierarchical structure to organize multiple data by setting the 3 different levels: *Container*, *Component*, and *Part*. The *Container* represents the whole GenDC, which has one or more *Components*, and each *Component* contains one or more *Parts*. The *Descriptor* at each level is called *Header*, and each *Part* handles the actual data in GenDC.
 
-![The outline of Software Stack](./img/gendc_structure.png)
+![GenDC Container Component and Part](./img/gendc_structure.png)
 
 For example, if you want to store a single 2D monochrome image in GenDC, your *Container* would have one *Component*, and that *Component* would have one *Part*.
 
@@ -85,6 +85,14 @@ If your device is not in GenDC format, you can use the sample data we provide be
 <a class="card" href={"https://github.com/Sensing-Dev/GenDC/tree/main/test/generated_stub"}>sample GenDC data</a>
 </div></div>
 
+This GenDC contains data of an image sensor, an audio sensor, three analog sensors, a PMOD sensor. Also, three extra *Components* for extra space that are **disabled** for this time.
+
+![Sample Data structure](./img/sample_data_structure.png)
+
+:::info
+With the device setting, GenDC may have **valid** *Components* and **invalid** *Components*. i.e. The device can keep its *Component* while not storing data when it is **invalid**.
+:::
+
 To quickly parse information of the whole container, you can load the binary file and use `displayHeaderInfo()`. In the **Tutorial 5 Parse GenDC data** ([C++](./../tutorials/cpp/parse-gendc) and [Python](./../tutorials/python/parse-gendc)), we learn how to get each property and to use. For Python, we also introduce how to visualize the data as 2D and 3D graphs with matplotlib.
 
 #### Sample code
@@ -140,19 +148,19 @@ CONTAINER HEADER
              HeaderSize_   (4):       128
                      Id_   (8):         1
          VariableFields_   (8):        0x0
-               DataSize_   (8):   2077344
-             DataOffset_   (8):      1280
-         DescriptorSize_   (4):      1280
+               DataSize_   (8):   2076992
+             DataOffset_   (8):      1520
+         DescriptorSize_   (4):      1520
          ComponentCount_   (4):         9
         ComponentOffset_   (8):       128
                            (8):       256
-                           (8):       384
-                           (8):       512
-                           (8):       640
-                           (8):       768
-                           (8):       896
-                           (8):      1024
-                           (8):      1152
+                           (8):       464
+                           (8):       592
+                           (8):       720
+                           (8):       848
+                           (8):      1136
+                           (8):      1264
+                           (8):      1392
 
 COMPONENT HEADER
                      HeaderType_   (2):        0x2000
@@ -180,7 +188,7 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):   2073600
-                             DataOffset_   (8):      1280
+                             DataOffset_   (8):      1520
                               Dimension_   (4):      1920
                                            (4):      1080
                                 Padding_   (4):         0
@@ -193,7 +201,7 @@ PART HEADER
 COMPONENT HEADER
                      HeaderType_   (2):        0x2000
                           Flags_   (2):        0x0
-                     HeaderSize_   (4):        56
+                     HeaderSize_   (4):        64
                        Reserved_   (2):        0x0
                         GroupId_   (2):        0x0
                        SourceId_   (2):        0x2001
@@ -202,25 +210,44 @@ COMPONENT HEADER
                   RegionOffsetY_   (4):         0
                       Timestamp_   (8):195054959450
                          TypeId_   (8):        0x8001
-                         Format_   (4):        0x120011a
+                         Format_   (4):        0x1100118
                       Reserved2_   (2):        0x0
-                      PartCount_   (2):         1
-                     PartOffset_   (8):       312
+                      PartCount_   (2):         2
+                     PartOffset_   (8):       320
+                                   (8):       392
 
 PART HEADER
                              HeaderType_   (2):        0x41f1
                                   Flags_   (2):        0x0
                              HeaderSize_   (4):        72
-                                 Format_   (4):        0x120011a
+                                 Format_   (4):        0x1100118
                                Reserved_   (2):        0x0
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
-                               DataSize_   (8):      3200
-                             DataOffset_   (8):   2074880
+                               DataSize_   (8):      1600
+                             DataOffset_   (8):   2075120
                               Dimension_   (4):       800
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):       360
+                           TypeSpecific_   (8):       368
+                                           (8):         0
+                                           (8):     11520
+                                           (8):17179869441
+
+PART HEADER
+                             HeaderType_   (2):        0x41f1
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1100118
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):      1600
+                             DataOffset_   (8):   2076720
+                              Dimension_   (4):       800
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):       440
                                            (8):         0
                                            (8):     11520
                                            (8):17179869441
@@ -240,7 +267,7 @@ COMPONENT HEADER
                          Format_   (4):        0x1100118
                       Reserved2_   (2):        0x0
                       PartCount_   (2):         1
-                     PartOffset_   (8):       440
+                     PartOffset_   (8):       520
 
 PART HEADER
                              HeaderType_   (2):        0x41f0
@@ -251,11 +278,11 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):        32
-                             DataOffset_   (8):   2078144
+                             DataOffset_   (8):   2078320
                               Dimension_   (4):        16
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):       488
+                           TypeSpecific_   (8):       568
                                            (8):         0
                                            (8):     11520
                                            (8):    256001
@@ -275,7 +302,7 @@ COMPONENT HEADER
                          Format_   (4):        0x1100118
                       Reserved2_   (2):        0x0
                       PartCount_   (2):         1
-                     PartOffset_   (8):       568
+                     PartOffset_   (8):       648
 
 PART HEADER
                              HeaderType_   (2):        0x41f0
@@ -286,11 +313,11 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):        32
-                             DataOffset_   (8):   2078240
+                             DataOffset_   (8):   2078352
                               Dimension_   (4):        16
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):       616
+                           TypeSpecific_   (8):       696
                                            (8):         0
                                            (8):     11520
                                            (8):    256001
@@ -310,7 +337,7 @@ COMPONENT HEADER
                          Format_   (4):        0x1100118
                       Reserved2_   (2):        0x0
                       PartCount_   (2):         1
-                     PartOffset_   (8):       696
+                     PartOffset_   (8):       776
 
 PART HEADER
                              HeaderType_   (2):        0x41f0
@@ -321,11 +348,11 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):        32
-                             DataOffset_   (8):   2078336
+                             DataOffset_   (8):   2078384
                               Dimension_   (4):        16
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):       744
+                           TypeSpecific_   (8):       824
                                            (8):         0
                                            (8):     11520
                                            (8):    256001
@@ -333,7 +360,7 @@ PART HEADER
 COMPONENT HEADER
                      HeaderType_   (2):        0x2000
                           Flags_   (2):        0x0
-                     HeaderSize_   (4):        56
+                     HeaderSize_   (4):        72
                        Reserved_   (2):        0x0
                         GroupId_   (2):        0x0
                        SourceId_   (2):        0x4001
@@ -342,25 +369,63 @@ COMPONENT HEADER
                   RegionOffsetY_   (4):         0
                       Timestamp_   (8):195054959930
                          TypeId_   (8):        0x8001
-                         Format_   (4):        0x140011d
+                         Format_   (4):        0x1100118
                       Reserved2_   (2):        0x0
-                      PartCount_   (2):         1
-                     PartOffset_   (8):       824
+                      PartCount_   (2):         3
+                     PartOffset_   (8):       920
+                                   (8):       992
+                                   (8):      1064
 
 PART HEADER
-                             HeaderType_   (2):        0x41f2
+                             HeaderType_   (2):        0x41f0
                                   Flags_   (2):        0x0
                              HeaderSize_   (4):        72
-                                 Format_   (4):        0x140011d
+                                 Format_   (4):        0x1100118
                                Reserved_   (2):        0x0
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
-                               DataSize_   (8):       128
-                             DataOffset_   (8):   2078432
+                               DataSize_   (8):        32
+                             DataOffset_   (8):   2078416
                               Dimension_   (4):        16
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):       872
+                           TypeSpecific_   (8):       968
+                                           (8):         0
+                                           (8):     11520
+                                           (8):    256002
+
+PART HEADER
+                             HeaderType_   (2):        0x41f0
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1100118
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):        32
+                             DataOffset_   (8):   2078448
+                              Dimension_   (4):        16
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):      1040
+                                           (8):         0
+                                           (8):     11520
+                                           (8):    256002
+
+PART HEADER
+                             HeaderType_   (2):        0x41f0
+                                  Flags_   (2):        0x0
+                             HeaderSize_   (4):        72
+                                 Format_   (4):        0x1100118
+                               Reserved_   (2):        0x0
+                                 FlowId_   (2):         0
+                             FlowOffset_   (8):         0
+                               DataSize_   (8):        32
+                             DataOffset_   (8):   2078480
+                              Dimension_   (4):        16
+                                Padding_   (4):         0
+                           InfoReserved_   (4):         0
+                           TypeSpecific_   (8):      1112
                                            (8):         0
                                            (8):     11520
                                            (8):    256002
@@ -380,10 +445,10 @@ COMPONENT HEADER
                          Format_   (4):        0x1080116
                       Reserved2_   (2):        0x0
                       PartCount_   (2):         1
-                     PartOffset_   (8):       952
+                     PartOffset_   (8):      1192
 
 PART HEADER
-                             HeaderType_   (2):        0x40f0
+                             HeaderType_   (2):        0x41f0
                                   Flags_   (2):        0x0
                              HeaderSize_   (4):        72
                                  Format_   (4):        0x1080116
@@ -391,11 +456,11 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):         0
-                             DataOffset_   (8):   2078624
+                             DataOffset_   (8):   2078512
                               Dimension_   (4):         0
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):      1000
+                           TypeSpecific_   (8):      1240
                                            (8):         0
                                            (8):     11520
                                            (8):         0
@@ -415,10 +480,10 @@ COMPONENT HEADER
                          Format_   (4):        0x1080116
                       Reserved2_   (2):        0x0
                       PartCount_   (2):         1
-                     PartOffset_   (8):      1080
+                     PartOffset_   (8):      1320
 
 PART HEADER
-                             HeaderType_   (2):        0x40f1
+                             HeaderType_   (2):        0x41f0
                                   Flags_   (2):        0x0
                              HeaderSize_   (4):        72
                                  Format_   (4):        0x1080116
@@ -426,11 +491,11 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):         0
-                             DataOffset_   (8):   2078624
+                             DataOffset_   (8):   2078512
                               Dimension_   (4):         0
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):      1128
+                           TypeSpecific_   (8):      1368
                                            (8):         0
                                            (8):     11520
                                            (8):         0
@@ -450,10 +515,10 @@ COMPONENT HEADER
                          Format_   (4):        0x1080116
                       Reserved2_   (2):        0x0
                       PartCount_   (2):         1
-                     PartOffset_   (8):      1208
+                     PartOffset_   (8):      1448
 
 PART HEADER
-                             HeaderType_   (2):        0x40f2
+                             HeaderType_   (2):        0x41f0
                                   Flags_   (2):        0x0
                              HeaderSize_   (4):        72
                                  Format_   (4):        0x1080116
@@ -461,11 +526,11 @@ PART HEADER
                                  FlowId_   (2):         0
                              FlowOffset_   (8):         0
                                DataSize_   (8):         0
-                             DataOffset_   (8):   2078624
+                             DataOffset_   (8):   2078512
                               Dimension_   (4):         0
                                 Padding_   (4):         0
                            InfoReserved_   (4):         0
-                           TypeSpecific_   (8):      1256
+                           TypeSpecific_   (8):      1496
                                            (8):         0
                                            (8):     11520
                                            (8):         0
