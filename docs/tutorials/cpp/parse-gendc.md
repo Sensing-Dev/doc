@@ -243,6 +243,11 @@ This *Container* has 2 Parts and they have **Left** and **Right channel** of aud
 int audio_part_count = audio_component.getPartCount();
 ```
 
+:::info
+Some of audio sensor uses interleaved audio, which store Lch and Rch in the same *Part* in turns.
+In this case, `audio_component.getPartCount()` returns 1, but you need to re-shape the data into 2-dim to use it.
+:::
+
 As we did for image *Component*, we check the data size and dimension of each *Part*.
 
 ```cpp
@@ -298,13 +303,18 @@ If you visualize this data with [Python tutorial code](./python/visualize-gendc)
 
 #### Obtain PMOD data
 
-This GenDC data has 1 PMOD sensor, which is connected to accelerometer recording the x, y, and z coordinate information. Therefore, the number of *Parts* is 3.
+This GenDC data has 1 PMOD accelerometer sensor, which is connected to accelerometer recording the x, y, and z coordinate information. Therefore, the number of *Parts* is 3.
 
 ```cpp
 int pmod_component_index = gendc_descriptor.getFirstComponentIndexBySourceId(0x4001);
 ComponentHeader pmod_component = gendc_descriptor.getComponentByIndex(pmod_component_index);
 int pmod_part_count = pmod_component.getPartCount();
 ```
+
+:::info
+Some of accelerometer sensor uses interleaved structure, which store X, Y, and Z coordinate in the same *Part* in turns.
+In this case, `pmod_component.getPartCount()` returns 1, but you need to re-shape the data into 3-dim (or 4-dim with 1 dummy channel) to use it.
+:::
 
 You can get *Part* to know data size, dimension (number of samples), and byte-depth as well.
 
