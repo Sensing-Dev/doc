@@ -203,7 +203,7 @@ In the previous section, we learned general idea of parsing GenDC data with GenD
 
 ![Sample Data structure](../../lessons/img/sample_data_structure.png).
 
-As we have done for image sensor data, we can get 1. how many channels 2. Dimension of data, and 3. Byte-depth of data. We also provide visualize tutorial code for Python version [Visualize GenDC data](../visualize-gendc).
+As we have done for image sensor data, we can get 1. how many channels 2. Dimension of data, and 3. Byte-depth of data. We also provide visualize tutorial code for Python version [Visualize GenDC data](./visualize-gendc).
 
 Since all non-image data's Datatype is Metadata, we need another information to access each component. So, finding the target *Component* by TypeId may not be a good idea.
 
