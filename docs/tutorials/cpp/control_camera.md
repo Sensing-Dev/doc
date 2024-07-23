@@ -52,7 +52,7 @@ Node n = b.add(bb_name)(&gain0, &exposuretime0)
     .set_param(
         Param("num_devices", num_device),
         Param("frame_sync", true),
-        Param("realtime_diaplay_mode", false),
+        Param("realtime_display_mode", false),
         Param("enable_control", true),
         Param("gain_key", "Gain"),
         Param("exposure_key", "ExposureTime")

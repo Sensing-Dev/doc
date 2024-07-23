@@ -81,22 +81,22 @@ BBに設定するために静的な入力値を設定するには、次のよう
 ```python
 # パラメータの設定
 num_devices = Param('num_devices', str(num_device))
-frame_sync = Param('frame_sync', 'false')
-realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
+frame_sync = Param('frame_sync', 'true')
+realtime_display_mode = Param('realtime_display_mode', 'true')
 ```
 
 | Paramのキー | 値のタイプ | 説明 |
 | --------   | ------- | ------- |
 | `num_devices` | Integer | プログラムで使用するデバイスの数 |
 | `frame_sync` | Boolean | デバイスの数が1より多い場合、デバイス間のフレームカウントを同期します |
-| `realtime_diaplay_mode` | Boolean | フレームドロップを許可しますが、遅延はありません |
+| `realtime_display_mode` | Boolean | フレームドロップを許可しますが、遅延はありません |
 
 これで、ノードにポートとパラメータを持つBBをパイプラインに追加できます。
 
 ```python
 # パイプラインにノードを追加
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
+    .set_param([num_devices, frame_sync, realtime_display_mode, ])
 output_p = node.get_port('output')
 ```
 

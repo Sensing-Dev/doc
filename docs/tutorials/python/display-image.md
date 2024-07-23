@@ -83,7 +83,7 @@ To set static input values to set on BB, you need to define `Param` as follows.
 # set params
 num_devices = Param('num_devices', str(num_device))
 frame_sync = Param('frame_sync', 'false')
-realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
+realtime_display_mode = Param('realtime_display_mode', 'true')
 ```
 
 
@@ -91,14 +91,14 @@ realtime_diaplay_mode = Param('realtime_diaplay_mode', 'true')
 | --------   | ------- | ------- |
 | `num_devices` | Integer | The number of devices to use in the program |
 | `frame_sync` | Boolean | If number of device is more than 1, sync the framecounts between devices |
-| `realtime_diaplay_mode` | Boolean | Allows framedrop, but no delay |
+| `realtime_display_mode` | Boolean | Allows framedrop, but no delay |
 
 Now, you add BB to your pipeline as node with ports and params.
 
 ```python
 # add a node to pipeline
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
+    .set_param([num_devices, frame_sync, realtime_display_mode, ])
 output_p = node.get_port('output')
 ```
 
