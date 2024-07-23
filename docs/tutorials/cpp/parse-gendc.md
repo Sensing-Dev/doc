@@ -19,7 +19,7 @@ import links from "@site/static/external_link/links.js"
 ## Prerequisite
  
 * GenDC Separator (installed with sensing-dev SDK) 
-* GenDC Data (obtained in the previous tutorial or Download sample from <a href={links.gendc_sample_data}>this page</a>.
+* GenDC Data (obtained in the previous tutorial or Download sample from <a href={links.gendc_sample_data}>this page</a>).
 
 ## Tutorial
 
@@ -160,6 +160,7 @@ ComponentHeader image_component = gendc_descriptor.getComponentByIndex(image_com
 The *Component* has one or more *Parts*. We can iterate through them using a for loop. The number of *Parts* for image *Components* are usually the number of color channel. e.g. 1 for Monochrome-space image and 3 for general color-pixel-format such as RGB.
 
 ```cpp
+int part_count = image_component.getPartCount();
 for (int idx = 0; idx < part_count; idx++) {
     PartHeader part = image_component.getPartByIndex(idx);
     int part_data_size = part.getDataSize();
@@ -211,7 +212,7 @@ In the previous section, we learned general idea of parsing GenDC data with GenD
 
 ![Sample Data structure](../../lessons/img/sample_data_structure.png).
 
-As we have done for image sensor data, we can get 1. how many channels 2. Dimension of data, and 3. Byte-depth of data. We also provide visualize tutorial code for Python version [Visualize GenDC data](../python/visualize-gendc).
+As we have done for image sensor data, we can get 1. how many channels 2. Dimension of data, and 3. Byte-depth of data. We also provide visualize tutorial code for Python version [Visualize GenDC data](.../python/visualize-gendc).
 
 Since all non-image data's Datatype is Metadata, we need another information to access each component. So, finding the target *Component* by TypeId may not be a good idea.
 
@@ -267,7 +268,7 @@ int32_t bd = part_data_size / 800;
 
 Since `part_data_size` is 1600, we now know the byte-depth is `2`, so the data-type is `int16_t`. 
 
-If you visualize this data with [Python tutorial code](./python/visualize-gendc), you may see the following plot:
+If you visualize this data with [Python tutorial code](../python/visualize-gendc), you may see the following plot:
 
 ![sample image](../img/tutorial5-audio.png).
 
@@ -281,7 +282,7 @@ int analog_component_index = gendc_descriptor.getFirstComponentIndexBySourceId(0
 ComponentHeader analog_component = gendc_descriptor.getComponentByIndex(analog_component_index);
 ```
 
-Each analog sensor's Component has a single Part, which can be confirmed with `getPartCount()`.
+Each analog sensor's * * has a single *Part*, which can be confirmed with `getPartCount()`.
 
 ```cpp
 int analog_part_count = analog_component.getPartCount();
@@ -297,7 +298,7 @@ for (int idx = 0; idx < analog_part_count; idx++) {
 }
 ```
 
-If you visualize this data with [Python tutorial code](./python/visualize-gendc), you may see the following plot:
+If you visualize this data with [Python tutorial code](../python/visualize-gendc), you may see the following plot:
 
 ![sample image](../img/tutorial5-analog.png).
 
@@ -326,7 +327,7 @@ for (int idx = 0; idx < pmod_part_count; idx++) {
     ...
 ```
 
-Since each *Part* have x, y, and z data respectively, with [Python tutorial code](./python/visualize-gendc), you may see the following plot:
+Since each *Part* have x, y, and z data respectively, with [Python tutorial code](../python/visualize-gendc), you may see the following plot:
 
 ![sample image](../img/tutorial5-pmod.png).
 
@@ -336,7 +337,7 @@ If you want to access some device-specific data stored in `TypeSpecific` field o
 
 For example, the sample GenDC data has `framecount` data at the lower 4 bytes of the 8-byte TypeSpecific3, which represents the device-generated unique id for each frame.
 
- Note that TypeSpecific starts from N = 1, 2, 3... and index is 0, 1, 2... so the index of TypeSpecific3 is 2.
+Note that TypeSpecific starts from N = 1, 2, 3... and index is 0, 1, 2... so the index of TypeSpecific3 is 2.
 
 ```cpp
 int64_t typespecific3 = part.getTypeSpecificByIndex(2);
