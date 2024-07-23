@@ -7,7 +7,7 @@ sidebar_position: 9
 このチュートリアルでは、GenDCセパレータライブラリの使い方を学びます。
 デバイスのデータ形式がGenDC以外の場合（一般的なカメラが画像を取得する場合）、次のチュートリアルページ[非GenDCバイナリデータの解析](./parse-image-bin.md)を参照してください。
 
-デバイスがGenDC形式でないが、学びたい場合は、9つのうち6つが有効なコンポーネントかつ、4つの異なるセンサーデータを含むサンプルGenDCをダウンロードできます。
+デバイスがGenDC形式でない場合は、9つのうち6つが有効なコンポーネントかつ、4つの異なるセンサーデータを含むサンプルGenDCをダウンロードし、本チュートリアルで利用することができます。
 
 import links from "@site/static/external_link/links.js"
 
@@ -47,7 +47,7 @@ std::string prefix = "gendc0-";
 ```
 
 :::info
-このチュートリアルの最後に提供される完全なコードは、コマンドラインオプションを提供します。
+このチュートリアルの最後に提供される完全なコードは、コマンドラインオプションがついています。
 
 `-d tutorial_save_gendc_XXXXXXXXXXXXXX`または`--directory tutorial_save_gendc_XXXXXXXXXXXXXX`オプションを設定してチュートリアルプログラムを実行すると、`directory_name`が自動的に設定されます。
 
@@ -143,7 +143,7 @@ ContainerHeader next_gendc_descriptor= ContainerHeader(filecontent + descriptor_
 
 [参照: GenICam標準機能命名規約の4.13ComponentIDValue](https://www.emva.org/wp-content/uploads/GenICam_SFNC_v2_7.pdf)
 
-画像（すなわち強度）データを取得するために、データタイプID値として`1`を使用します。
+画像（すなわち輝度）データを取得するために、データタイプID値として`1`を使用します。
 
 ```cpp
 // 最初の有効な画像コンポーネントを取得
@@ -171,7 +171,7 @@ imagedata = new uint8_t [part_data_size];
 part.getData(reinterpret_cast<char *>(imagedata));
 ```
 
-現在、画像データは1D配列形式の`imagedata`にあります。プレビュー画像を表示するために、次の情報を設定してそれを再構築します：
+現在、画像データは1D配列形式の`imagedata`にあります。プレビュー画像を表示するためは2Dにしなければならないので、次の情報を確認する作業が必要です。
 * 幅
 * 高さ
 * カラーチャンネル
@@ -187,7 +187,7 @@ std::vector <int32_t> image_dimension = part.getDimension();
 int32_t bd = part_data_size / WxH;
 ```
 
-現在、データを1D配列`imagedata`から画像形式のcv::Mat`img`に`memcpy`でコピーして表示します：
+これで、データを1D配列`imagedata`から画像形式のcv::Mat`img`に`memcpy`でコピーして表示することができます。
 ```cpp
 cv::Mat img(image_dimension[1], image_dimension[0], CV_8UC1);
 std::memcpy(img.ptr(), imagedata, datasize);
@@ -208,7 +208,7 @@ CvMatの型システムは、バイト深度とカラーチャンネルによっ
 
 ![サンプルデータ構造](../../lessons/img/sample_data_structure.png)。
 
-画像センサデータで行ったように、1. チャンネル数 2. データの次元 3. データのバイト深度を取得することでユーザアプリケーションで使用可能になります。Pythonのチュートリアルでは視覚化のためのコードも提供しています [Visualize GenDC data](.../python/visualize-gendc)。
+画像センサデータで行ったように、1. チャンネル数 2. データの次元 3. データのバイト深度を取得することでユーザアプリケーションで使用可能になります。Pythonのチュートリアルでは視覚化のためのコードも提供しています [Visualize GenDC data](../python/visualize-gendc)。
 
 サンプルデータに入っているすべての非画像データのデータタイプはメタデータであるため、TypeIdで目的の*Component*を見つけることはできません。各コンポーネントにアクセスするためには別の情報が必要です。
 
@@ -263,7 +263,7 @@ for (int idx = 0; idx < audio_part_count; idx++) {
 int32_t bd = part_data_size / 800;
 ```
 
-`part_data_size`が1600であるため、バイト深度は`2`であり、型は`int16_t`です。
+`part_data_size`が1600であるため、バイト深度は`2`であり、型は`int16_t`となります。
 
 このデータを[前述のPythonチュートリアルコード](../python/visualize-gendc)で視覚化すると、以下のプロットが確認できます。
 
