@@ -49,7 +49,7 @@ We need to set `Param` of BB `image_io_u3v_cameraN_u<bit-depth>x<dimension>` cal
 num_device = 2
 num_devices = Param('num_devices', str(num_device))
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
+    .set_param([num_devices, frame_sync, realtime_display_mode, ])
 ```
 
 Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, and we name is `output_p`.

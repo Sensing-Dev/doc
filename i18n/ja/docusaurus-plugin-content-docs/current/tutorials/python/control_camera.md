@@ -69,10 +69,10 @@ for i in range(num_device):
 # add enable_control
 node = builder.add(bb_name)\
         .set_iport([gain_ps[0], exposure_ps[0]])\
-        .set_param([num_devices, frame_sync, realtime_diaplay_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
+        .set_param([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
         else builder.add(bb_name)\
             .set_iport([gain_ps[0], exposure_ps[0], gain_ps[1], exposure_ps[1]])\
-            .set_param([num_devices, frame_sync, realtime_diaplay_mode, enable_control, gain_key, exposure_key])
+            .set_param([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key])
 ```
 
 その後、入力値をポートにバインドします。これは出力ポートと出力バッファをバインドするのと類似しています。

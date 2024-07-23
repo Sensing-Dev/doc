@@ -49,7 +49,7 @@ BB `image_io_u3v_cameraN_u<bit-depth>x<dimension>` の `num_devices` と呼ば�
 num_device = 2
 num_devices = Param('num_devices', str(num_device))
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_diaplay_mode, ])
+    .set_param([num_devices, frame_sync, realtime_display_mode, ])
 ```
 
 これがパイプライン内の唯一のBBであるため、ノードの出力ポートはパイプラインの出力ポートになり、その名前は `output_p` です。

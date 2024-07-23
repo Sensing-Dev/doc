@@ -70,14 +70,14 @@ BBに設定するための静的な入力値を設定するには、次のよう
 // パラメータの設定
 Param num_devices("num_devices", num_device),
 Param frame_sync("frame_sync", true),
-Param realtime_diaplay_mode("realtime_diaplay_mode", false)
+Param realtime_display_mode("realtime_display_mode", false)
 ```
 
 | Paramのキー | 値のタイプ | 説明 |
 | --------   | ------- | ------- |
 | `num_devices` | Integer | プログラムで使用するデバイスの数 |
 | `frame_sync` | Boolean | デバイスの数が1以上の場合、デバイス間でフレームカウントを同期させる |
-| `realtime_diaplay_mode` | Boolean | フレームドロップを許可しますが、遅延はありません |
+| `realtime_display_mode` | Boolean | フレームドロップを許可しますが、遅延はありません |
 
 これで、ノードとポート、およびパラメータを持つBBをパイプラインに追加できます。
 
@@ -87,7 +87,7 @@ Node n = b.add(bb_name)()
     .set_param(
         Param("num_devices", num_device),
         Param("frame_sync", true),
-        Param("realtime_diaplay_mode", false)
+        Param("realtime_display_mode", true)
     );
 ```
 
