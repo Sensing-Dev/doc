@@ -12,7 +12,7 @@ In this tutorial, we learn how to visualize sample GenDC Data parsed in [the pre
 * matplotlib
 * numpy
 
-import this_version from "@site/static/version_const/latest.js"
+import this_version from "@site/static/version_const/v2405.js"
 
 <pre>
 <code class="language-bash">

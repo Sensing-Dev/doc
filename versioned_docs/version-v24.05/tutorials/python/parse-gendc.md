@@ -22,7 +22,7 @@ import links from "@site/static/external_link/links.js"
 * OpenCV
 * numpy
 
-import this_version from "@site/static/version_const/latest.js"
+import this_version from "@site/static/version_const/v2405.js"
 
 <pre>
 <code class="language-bash">
