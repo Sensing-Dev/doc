@@ -3,3 +3,17 @@
 This page is for the users updating Sensing-Dev SDK from v24.05.07 to the latest.
 
 This page will be updated with each new release.
+
+## Version v24.08 Changes
+
+### Ion-kit Dependency Update
+Starting from v24.08, the `ion-kit` dependency `Halide` has been updated from version 16.0.0 to 17.0.1.
+
+### API Changes
+
+The following functions have been modified:
+- `set_iport(const std::vector<Port>& ports)` is deprecated and replaced by `set_iports(const std::vector<Port>& ports)`
+ have been removed.
+- `set_param(const std::vector<Params>& params)` is deprecated and replaced by `set_params(const std::vector<Params>& params)`.
+
+Please make sure to update your code accordingly to accommodate these changes.

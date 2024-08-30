@@ -8,33 +8,44 @@ In this tutorial, we learn how to get device information with aravis API.
 
 ## Prerequisite
 
-* Aravis Python (included in SDK package)
-* PyGObject (included in SDK package)
+* python3.10 or 3.11
+* PyGObject 
+* aravis-python
+
+:::info 
+Python user don't need to install sensing-dev sdk.
+:::
+
 
 ## Tutorial
 
 ### Load required modules
 
-First of all, to load the PyGObject to use Aravis module, we need to add `$SENSING_DEV_ROOT/bin` (where you installed Sensing-Dev SDK).
+#### Windows
+First of all, download from here to install PyGObject
 
-```python
-import os
-os.add_dll_directory(os.path.join(os.environ["SENSING_DEV_ROOT"], "bin"))
 ```
+.\pygobject_installer
+```
+Then install aravis-python
+```python
+pip install aravis-python
+```
+
+#### Linux
+
+Install the build dependencies and GTK to build and install Pycairo nad PyGObject
+
+```
+sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0
+pip3 install pycairo
+pip3 install PyGObject
+``` 
 
 Now you import the module of Aravis with PyGObject.
-
 ```python
-import gi
-gi.require_version("Aravis", "0.8")
-from gi.repository import Aravis
+from aravis import Aravis
 ```
-
-:::caution why it does not work
-When you see `ImportError: DLL load failed while importing _gi: The specified module could not be found.`
-* Environment variable `SENSING_DEV_ROOT` is not set appropriately.
-* Python version is not 3.11.
-:::
 
 ### Access to devices
 

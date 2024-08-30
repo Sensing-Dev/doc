@@ -10,14 +10,14 @@ If your device data format is non-GenDC (general camera acquire images), see the
 
 ## Prerequisite
 
-* ion-python
+* ionpy
 
 import this_version from "@site/static/version_const/latest.js"
 
 <pre>
 <code class="language-bash">
 pip3 install -U pip<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 

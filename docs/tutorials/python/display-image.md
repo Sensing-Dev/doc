@@ -9,9 +9,13 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 
 ## Prerequisite
 
-* ionpy 
+* ion-contrib-python 
 * numpy
 * OpenCV
+
+:::note
+ion-contrib-python contains prebuilt aravis library.
+:::
 
 import this_version from "@site/static/version_const/latest.js"
 
@@ -20,7 +24,7 @@ import this_version from "@site/static/version_const/latest.js"
 pip3 install -U pip<br />
 pip3 install opencv-python<br />
 pip3 install numpy<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -81,9 +85,9 @@ To set static input values to set on BB, you need to define `Param` as follows.
 
 ```python
 # set params
-num_devices = Param('num_devices', str(num_device))
-frame_sync = Param('frame_sync', 'false')
-realtime_display_mode = Param('realtime_display_mode', 'true')
+num_devices = Param('num_devices', num_device)
+frame_sync = Param('frame_sync', True)
+realtime_display_mode = Param('realtime_display_mode', True)
 ```
 
 
