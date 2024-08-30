@@ -14,69 +14,7 @@ import this_version from "@site/static/version_const/latest.js"
 <a class="card" href={this_version.latest_installer_URL}>DL Windows 64-bit Package</a>
 </div></div>
 
-## Expected environment
-
-In this document, the following environment is assumed.
-
-* OS: Windows 10/11, 64 bit version
-* Development environment (One of them)
-    * Python 3.11 (with VS Code)
-    * C++: Visual Studio 2019/2022 (17.09 or earlier)
-* Hardware:
-    * USB3.0 compatible USB port x2
-
-:::info
-If you are using MSVC 2022 (17.10 or later), install OpenCV 4.10.0 or later from [the officieal website](https://opencv.org/).
-Do not forget to add the directory containing the DLL library to the `PATH` environment variable. See the detail in [Update OpenCV](../external/OpenCV/update-opencv).
-:::
-
-## Prerequisite
-
-* Python 3.11
-
-## Sensing-dev Software Packages
-
-Please DL the installer script at the top of the page or <a href={this_version.latest_installer_URL}>here</a>.
-
-Open the powershell terminal and move to the directory where you have the installer script downloaded in the previous step.
-
-Then type the following command. If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
-
-<pre>
-<code class="language-powershell">
-installer.ps1 -user &lt;username&gt; {this_version.windows_version_option}
-</code>
-</pre>
-
-The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
-
-:::caution why it does not work
-When you get 
-
-> installer.ps1 cannot be loaded because running scripts is disabled on this system
-
-your powershell does not allow to run the script. If so, please add `-ExecutionPolicy Bypass` option as the following example:
-
-<pre>
-<code class="language-powershell">
-{this_version.one_line_install}
-</code>
-</pre>
-
-:::
-
-If you with to use python-binding (ionpy), please install with pip.
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
-pip3 install gendc-python=={this_version.gendc_python_version}<br />
-</code>
-</pre>
-
-
-## Install WinUSB driver on U3V device.
+### Install WinUSB driver on U3V device.
 
 This step is only required the first time a U3V camera device is connected to a host machine.
 1. To apply WinUSB to the target USB device, you need to know Vendor ID and Product ID of the device.
@@ -124,8 +62,51 @@ In the example below, they are `2676` and `BA03` respectively.
 If your device is displaying as an unknown device, congratulations! The WinUSB driver has been successfully uninstalled!
 :::
 
+## C++ User
 
-## Set environment variables.
+### Prerequisite
+* OS: Windows 10/11, 64 bit version
+* Development environment 
+    * C++: Visual Studio 2019/2022 (17.09 or earlier)
+* Hardware:
+    * USB3.0 compatible USB port x2
+
+:::info
+If you are using MSVC 2022 (17.10 or later), install OpenCV 4.10.0 or later from [the officieal website](https://opencv.org/).
+Do not forget to add the directory containing the DLL library to the `PATH` environment variable. See the detail in [Update OpenCV](../external/OpenCV/update-opencv).
+:::
+
+### Sensing-dev Software Packages
+
+Please DL the installer script at the top of the page or <a href={this_version.latest_installer_URL}>here</a>.
+
+Open the powershell terminal and move to the directory where you have the installer script downloaded in the previous step.
+
+Then type the following command. If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+
+<pre>
+<code class="language-powershell">
+installer.ps1 -user &lt;username&gt; {this_version.windows_version_option}
+</code>
+</pre>
+
+The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
+
+:::caution why it does not work
+When you get 
+
+> installer.ps1 cannot be loaded because running scripts is disabled on this system
+
+your powershell does not allow to run the script. If so, please add `-ExecutionPolicy Bypass` option as the following example:
+
+<pre>
+<code class="language-powershell">
+{this_version.one_line_install}
+</code>
+</pre>
+:::
+
+### Set environment variables
 
 Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.
 
@@ -151,3 +132,34 @@ However, if you change the default path or move the package location, it require
 :::info Confirmation
 Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools.md) to know the procedure.
 :::
+
+
+## Python User
+
+### Prerequisite
+
+* OS: Windows 10/11, 64 bit version
+* Development environment (One of them)
+    * Python >=3.10 
+* Hardware:
+    * USB3.0 compatible USB port x2
+
+#### Install dependency
+
+First of all, download from here to install PyGObject
+
+```shell
+.\pygobject_installer
+```
+#### Install Python Modules
+
+Then install aravis-python and gendc-python and ion-contrib-python to fully utilize
+
+<pre>
+<code class="language-bash">
+pip3 install -U pip<br />
+pip3 instal aravis-python
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
+pip3 install gendc-python=={this_version.gendc_python_version}<br />
+</code>
+</pre>

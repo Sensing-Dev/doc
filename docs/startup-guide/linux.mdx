@@ -9,24 +9,19 @@ import this_version from "@site/static/version_const/latest.js"
 
 This document describes the steps to install the software development environment for U3V camera on Linux.
 
-## Expected environment
+## C++ User
 
-In this document, the following environment is assumed.
-
+### Prerequisite
 * OS: ubuntu 22.04 **with sudo privilege**
 * Development environment (One of them)
-    * Python 3.10
+    * C++
 * Hardware:
     * USB3.0 compatible USB port x2
 
 
-## Prerequisite
+### Sensing-dev Software Packages
 
-* Python 3.10
-
-## Sensing-dev Software Packages
-
-### Download the setup script
+#### Download the setup script
 
 <pre>
 <code class="language-bash">
@@ -34,7 +29,7 @@ wget -O setup.sh {this_version.latest_setup_URL}
 </code>
 </pre>
 
-### Install and setup SDK
+#### Install and setup SDK
 
 Note that `--install-opencv` is optional.
 
@@ -55,16 +50,38 @@ export GI_TYPELIB_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/girepository-1.0:$G
 </code>
 </pre>
 
-If you with to use python-binding (ion-python), please install with pip.
 
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
-pip3 install gendc-python=={this_version.gendc_python_version}<br />
-</code>
-</pre>
 
 :::info Confirmation
 Using `/opt/sensing-dev/bin/arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools) to know the procedure.
 :::
+
+## Python User
+### Prerequisite
+* OS: ubuntu 22.04 **with sudo privilege**
+* Development environment (One of them)
+    * Python >=3.10
+* Hardware:
+    * USB3.0 compatible USB port x2
+
+### Install dependency
+<pre>
+<code class="language-bash">
+sudo apt install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0<br />
+pip3 install -U pip<br />
+pip3 install pycairo<br />
+</code>
+</pre>
+
+### Install Python Modules
+
+Install aravis-python and gendc-python and ion-contrib-python to fully utilize
+
+<pre>
+<code class="language-bash">
+pip3 install PyGObject<br />
+pip3 instal aravis-python
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
+pip3 install gendc-python=={this_version.gendc_python_version}<br />
+</code>
+</pre>
