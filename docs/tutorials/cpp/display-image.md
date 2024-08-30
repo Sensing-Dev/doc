@@ -83,7 +83,7 @@ Now, you add BB to your pipeline as node with ports and params.
 
 ```c++
 Node n = b.add(bb_name)()
-    .set_param(
+    .set_params(
         Param("num_devices", num_device),
         Param("frame_sync", true),
         Param("realtime_display_mode", false)

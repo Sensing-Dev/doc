@@ -9,7 +9,7 @@ In this tutorial, we learn how to get image data from device with ion-kit, and d
 
 ## Prerequisite
 
-* ion-contrib-python 
+* ionpy 
 * numpy
 * OpenCV
 
@@ -102,7 +102,7 @@ Now, you add BB to your pipeline as node with ports and params.
 ```python
 # add a node to pipeline
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_display_mode, ])
+    .set_params([num_devices, frame_sync, realtime_display_mode, ])
 output_p = node.get_port('output')
 ```
 

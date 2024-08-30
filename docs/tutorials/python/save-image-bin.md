@@ -61,7 +61,7 @@ height_p.bind(height)
 # add the first BB to acquire data
 node = builder.add("image_io_u3v_cameraN_u16x2")
 # add the second BB to save binary data 
-node_sensor0 = builder.add("image_io_binarysaver_u16x2").set_iport([node.get_port('output')[0], node.get_port('device_info')[0], node.get_port('frame_count')[i], width_p, height_p ])
+node_sensor0 = builder.add("image_io_binarysaver_u16x2").set_iports([node.get_port('output')[0], node.get_port('device_info')[0], node.get_port('frame_count')[i], width_p, height_p ])
 ```
 
 Image data, Device Information, and framecount are obtained by the acquisition BB in the previous node, `image_io_u3v_cameraN_u16x2`. The width and height can be retrieved using the command `arv-tool-0.8 -n <device name> control Width Height` in the console. For detailed usage instructions, please refer to [arv-tool-0.8](../../external/aravis/arv-tools).
@@ -89,8 +89,8 @@ for i in range(num_device):
 
 if num_device ==2 :
     t_node1 = builder.add("image_io_binarysaver_u16x2") \
-        .set_iport([node.get_port('output')[1], node.get_port('device_info')[1], node.get_port('frame_count')[i], width_ps[1], height_ps[1]])
-        .set_param([output_directory,
+        .set_iports([node.get_port('output')[1], node.get_port('device_info')[1], node.get_port('frame_count')[i], width_ps[1], height_ps[1]])
+        .set_params([output_directory,
                     Param('prefix', 'image1-')])
     # create halide buffer for output port
     terminator1 = t_node1.get_port('output')
