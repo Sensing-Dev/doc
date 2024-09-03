@@ -9,11 +9,16 @@ import this_version from "@site/static/version_const/latest.js"
 
 This document describes the steps to install the software development environment for U3V camera on Linux.
 
-## C++ User
+## Content
+* SDK Installation
+  * [C++ User](#cpp)
+  * [Python User](#python)
+
+## C++ User　<a id="cpp"/>
 
 ### Prerequisite
 * OS: ubuntu 22.04 **with sudo privilege**
-* Development environment (One of them)
+* Development environment
     * C++
 * Hardware:
     * USB3.0 compatible USB port x2
@@ -45,21 +50,18 @@ sudo bash setup.sh --install-opencv {this_version.linux_version}
 
 <pre>
 <code class="language-bash">
-export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH<br />
-export GI_TYPELIB_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/girepository-1.0:$GI_TYPELIB_PATH
+export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 </code>
 </pre>
-
-
 
 :::info Confirmation
 Using `/opt/sensing-dev/bin/arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools) to know the procedure.
 :::
 
-## Python User
+## Python User <a id="python"/>
 ### Prerequisite
 * OS: ubuntu 22.04 **with sudo privilege**
-* Development environment (One of them)
+* Development environment
     * Python >=3.10
 * Hardware:
     * USB3.0 compatible USB port x2
