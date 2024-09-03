@@ -1,6 +1,6 @@
 //THIS IS WHERE YOU UPDATE
 const is_latest = true;
-const latest_version = 'v24.08.00';
+const latest_version = 'v24.08.00-test';
 const latest_winUSB_URL = "v24.02.02"
 const ion_python_version = '3.1.1'
 const gendc_python_version = '0.2.8'
@@ -17,6 +17,9 @@ const {
     linux_version
 } = GenerateVersionInfo({is_latest, latest_version, latest_winUSB_URL})
 
+const windows_uninstaller_url = "https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/" + latest_version + "/uninstaller.ps1";
+const windows_pygobject_url = "https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/" + latest_version + "/pygobject_installer.ps1"
+
 module.exports = {
     is_latest, 
     latest_version,
@@ -28,5 +31,7 @@ module.exports = {
     ion_python_version,
     gendc_python_version,
     windows_version_option,
-    linux_version
+    linux_version,
+    windows_uninstaller_url,
+    windows_pygobject_url
 };
