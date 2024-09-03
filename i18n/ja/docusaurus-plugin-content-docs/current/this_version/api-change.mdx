@@ -1,5 +1,23 @@
+import this_version from "@site/static/version_const/latest.js"
+
 # APIアップデート: 新機能とヒント
 
-このページは、v24.05.07から最新版のSensing-Dev SDKにアップデートするユーザー向けです。
+このページは、v24.05から最新版のSensing-Dev SDKにアップデートするユーザー向けです。
 
 新たなリリースがあるたびに、このページは更新されます。
+
+<h2> バージョン {this_version.latest_version} での変更点 </h2>
+
+### Ion-kit 依存ライブラリの更新
+
+<p>{this_version.latest_version}より、<code>ion-kit</code> の使用する <code>Halide</code> が 16.0.0 から 17.0.1 に更新されました。</p>
+
+
+## APIの変更点
+
+以下のAPIについて名称の変更があります。
+
+- `set_iport(const std::vector<Port>& ports)` は廃止され、 `set_iports(const std::vector<Port>& ports)`へ置き換えられました。
+- `set_param(const std::vector<Params>& params)` は廃止され、 `set_params(const std::vector<Params>& params)`へ置き換えられました。
+
+SDKの更新に合わせて、ユーザアプリケーションやチュートリアルの更新を行ってください。
