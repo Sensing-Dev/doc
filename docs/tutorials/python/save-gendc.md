@@ -10,7 +10,7 @@ If your device data format is non-GenDC (general camera acquire images), see the
 
 ## Prerequisite
 
-* ionpy
+* ion-contrib-python
 
 import this_version from "@site/static/version_const/latest.js"
 

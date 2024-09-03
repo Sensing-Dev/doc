@@ -9,7 +9,7 @@ If your device data format is GenDC, and if you prefer to save a whole GenDC con
 
 ## Prerequisite
 
-* ionpy
+* ion-contrib-python
 
 import this_version from "@site/static/version_const/latest.js"
 

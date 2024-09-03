@@ -60,12 +60,12 @@ GenDCデータとデバイス情報は、前のノード`image_io_u3v_gendc`の�
 最初のBBから各センサーの出力データにアクセスするには、次のようにインデックス`[]`を使用できます。それぞれのバイナリセーバーBBに`Param("prefix", "gendc0-")`と`Param("prefix", "gendc1-")`を設定して、互いの内容を上書きしないようにしてください。
 
 ```c++
-Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
+Node n = b.add("image_io_u3v_gendc")().set_params(Param("num_devices", 2),);
 
 if (num_device == 2){
     int32_t payloadsize1 = payloadsize[1];
     Node n1 = b.add("image_io_binary_gendc_saver")(n["gendc"][1], n["device_info"][1], &payloadsize1)
-   .set_param(
+   .set_params(
        Param("prefix", "gendc1-"),
        Param("output_directory", saving_diretctory)
    );
@@ -74,7 +74,7 @@ if (num_device == 2){
 
 int32_t payloadsize0 = payloadsize[0];
 n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &payloadsize0)
-   .set_param(
+   .set_params(
        Param("prefix", "gendc0-"),
        Param("output_directory", saving_diretctory)
    );

@@ -63,12 +63,12 @@ n = b.add("image_io_binarysaver_u16x2")(n["output"], n["device_info"], n["frame_
 最初のBBから各センサーの出力データにアクセスするには、次のようにインデックス`[]`を使用できます。それぞれのバイナリセーバーBBに`Param("prefix", "image0-")`と`Param("prefix", "image1-")`を設定して、互いの内容を上書きしないようにしてください。
 
 ```c++
-Node n = b.add("image_io_u3v_cameraN_u16x2")().set_param(Param("num_devices", 2),);
+Node n = b.add("image_io_u3v_cameraN_u16x2")().set_params(Param("num_devices", 2),);
 
 if (num_device == 2){
     int32_t payloadsize1 = payloadsize[1];
     Node n1 = b.add("image_io_binarysaver_u16x2")(n["output"][1], n["device_info"][1], n["frame_count"][i], &w, &h);
-   .set_param(
+   .set_params(
        Param("prefix", "image1-"),
        Param("output_directory", saving_diretctory)
    );
@@ -77,7 +77,7 @@ if (num_device == 2){
 
 int32_t payloadsize0 = payloadsize[0];
 n = b.add("image_io_binarysaver_u16x2")(n["output"][0], n["device_info"][0], n["frame_count"][i], &w, &h);
-   .set_param(
+   .set_params(
        Param("prefix", "image0-"),
        Param("output_directory", saving_diretctory)
    );

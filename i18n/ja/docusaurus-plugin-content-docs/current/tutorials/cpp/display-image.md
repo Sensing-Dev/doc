@@ -84,7 +84,7 @@ Param realtime_display_mode("realtime_display_mode", false)
 ```c++
 // パイプラインにノードを追加
 Node n = b.add(bb_name)()
-    .set_param(
+    .set_params(
         Param("num_devices", num_device),
         Param("frame_sync", true),
         Param("realtime_display_mode", true)

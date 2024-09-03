@@ -19,28 +19,42 @@ Python user don't need to install sensing-dev sdk.
 
 ## Tutorial
 
-### Load required modules
+### Pre-requisite
 
 #### Windows
 First of all, download from here to install PyGObject
 
-```
-.\pygobject_installer
-```
-Then install aravis-python
-```python
-pip install aravis-python
-```
+<pre>
+<code class="language-powershell">
+Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_installer.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./pygobject_installer.ps1
+</code>
+</pre>
+
+Then we can use Aravis python
+
+<pre>
+<code class="language-powershell">
+pip3 instal aravis-python
+</code>
+</pre>
 
 #### Linux
 
-Install the build dependencies and GTK to build and install Pycairo nad PyGObject
+Install the build dependencies and GTK to build and install Pycairo and PyGObject
 
 ```
 sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0
 pip3 install pycairo
 pip3 install PyGObject
 ``` 
+
+<pre>
+<code class="language-powershell">
+pip3 instal aravis-python
+</code>
+</pre>
+
+### Load required modules
 
 Now you import the module of Aravis with PyGObject.
 ```python
