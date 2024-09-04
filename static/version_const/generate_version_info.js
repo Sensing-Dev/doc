@@ -1,6 +1,20 @@
+function isVersionGreaterThan(version, targetVersion) {
+  const [major, minor] = version.replace('v', '').split('.').map(Number);
+  const [targetMajor, targetMinor] = targetVersion.replace('v', '').split('.').map(Number);
+
+  if (major > targetMajor) {
+      return true;
+  }
+  if (major === targetMajor && minor > targetMinor) {
+      return true;
+  }
+
+  return false;
+}
+
 
 const GenerateVersionInfo = ({is_latest, latest_version, latest_winUSB_URL}) => {
-  const one_line_install_default = "powershell.exe -ExecutionPolicy Bypass -File installer.ps1 -user <username>";
+  const one_line_install_default = (isVersionGreaterThan(latest_version, "v24.08")) ? "powershell.exe -ExecutionPolicy Bypass -File installer.ps1" : "powershell.exe -ExecutionPolicy Bypass -File installer.ps1 -user <username>";
 
   const latest_URL = 'https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/' + latest_version;
   const latest_installer_URL = latest_URL + '/installer.ps1';
