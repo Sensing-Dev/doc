@@ -22,7 +22,7 @@ import this_version from "@site/static/version_const/latest.js"
 pip3 install -U pip<br />
 pip3 install opencv-python<br />
 pip3 install numpy<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -36,7 +36,7 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 * 高さ
 * ピクセルフォーマット
 
-[前回のチュートリアル](obtain-device-info.md)または [arv-tool-0.8](../../external/aravis/arv-tools.md) がこれらの値を取得するのに役立ちます。
+[前回のチュートリアル](./obtain-device-info.md)または [arv-tool-0.8](../../external/aravis/arv-tools.md) がこれらの値を取得するのに役立ちます。
 
 ### パイプラインの構築
 
@@ -68,11 +68,11 @@ for i in range(num_device):
 
 # add enable_control
 node = builder.add(bb_name)\
-        .set_iport([gain_ps[0], exposure_ps[0]])\
-        .set_param([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
+        .set_iports([gain_ps[0], exposure_ps[0]])\
+        .set_params([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
         else builder.add(bb_name)\
-            .set_iport([gain_ps[0], exposure_ps[0], gain_ps[1], exposure_ps[1]])\
-            .set_param([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key])
+            .set_iports([gain_ps[0], exposure_ps[0], gain_ps[1], exposure_ps[1]])\
+            .set_params([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key])
 ```
 
 その後、入力値をポートにバインドします。これは出力ポートと出力バッファをバインドするのと類似しています。
@@ -84,11 +84,7 @@ for i in range(num_device):
     exposure_ps[i].bind(exposure_values[i])
 ```
 
-これで、`Gain`および`ExposureTime`が正常に設定されました！
-
-:::tip v23.11.01 からの変更点
-* `set_port`が `set_iport`に名称変更されました。
-:::
+これで、`Gain`および`ExposureTime`が正常に設定されました。
 
 ::::caution
 `Gain` および `ExposureTime` はデバイスのゲインと露光時間を制御するためのGenICamのフィーチャキーです。通常、これらはemvaによる**SFNC（Standard Features Naming Convention）**で設定されていますが、一部のデバイスには異なるキーがあるかもしれません。

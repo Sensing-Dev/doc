@@ -8,8 +8,13 @@ In this tutorial, we learn how to set device information with Aravis API.
 
 ## Prerequisite
 
-* Aravis Python (included in SDK package)
-* PyGObject (included in SDK package)
+* python3.10 or 3.11
+* PyGObject 
+* aravis-python
+
+:::info 
+Python user don't need to install sensing-dev sdk.
+:::
 
 ## Tutorial
 

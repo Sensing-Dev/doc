@@ -2,41 +2,70 @@
 sidebar_position: 1
 ---
 
+import this_version from "@site/static/version_const/latest.js"
+
 # デバイス情報へのアクセスと表示
 
 このチュートリアルでは、Aravis APIを使用してデバイス情報を取得する方法について学びます。       
 
 ## 前提条件
 
-* Aravis Python（SDKパッケージに含まれています）
-* PyGObject（SDKパッケージに含まれています）
+* python3.10 or 3.11
+* PyGObject 
+* aravis-python
+
+:::info 
+v24.09.00以降、installer.ps1を使わずにAravis-pythonの使用が可能になりました。
+:::
+
 
 ## チュートリアル
 
+### 依存ライブラリのインストール
+
+#### Windows
+
+Sensing-Devから提供されるAravis Pythonモジュールを使用するのにPyGObjectが必要となります。
+
+<pre>
+<code class="language-powershell">
+Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_installer.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./pygobject_installer.ps1
+</code>
+</pre>
+
+上記の実行により、下記でインストールするAravis Pythonが使用可能になります。
+
+<pre>
+<code class="language-powershell">
+pip3 instal aravis-python
+</code>
+</pre>
+
+#### Linux
+
+Sensing-Devから提供されるAravis Pythonモジュールを使用するのにPycairoとPyGObjectが必要となります。
+
+```
+sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0
+pip3 install pycairo
+pip3 install PyGObject
+``` 
+
+上記の実行により、下記でインストールするAravis Pythonが使用可能になります。
+
+<pre>
+<code class="language-powershell">
+pip3 instal aravis-python
+</code>
+</pre>
+
 ### 必要なモジュールをロード
 
-Aravisモジュールを使用するために、まず`$SENSING_DEV_ROOT/bin`（Sensing-Dev SDKをインストールし 
-た場所）を追加する必要があります。
+上記の依存ライブラリが正しくインストールされている場合、以下の方法でAravisのモジュールが読み込み可能です。
 
 ```python
-import os
-os.add_dll_directory(os.path.join(os.environ["SENSING_DEV_ROOT"], "bin"))
+from aravis import Aravis
 ```
-
-これで、PyGObjectを使用してAravisモジュールをインポートします。
-
-```python
-import gi
-gi.require_version("Aravis", "0.8")
-from gi.repository import Aravis
-```
-
-::::caution
-`ImportError: DLL load failed while importing _gi: The specified module could not be found.`が 
-表示される場合
-* 環境変数 `SENSING_DEV_ROOT` が適切に設定されていません。
-* Pythonのバージョンが3.11ではありません。
-::::
 
 ### デバイスへのアクセス
 

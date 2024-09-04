@@ -22,7 +22,7 @@ import this_version from "@site/static/version_const/latest.js"
 pip3 install -U pip<br />
 pip3 install opencv-python<br />
 pip3 install numpy<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -69,11 +69,11 @@ for i in range(num_device):
 
 # add enable_control
 node = builder.add(bb_name)\
-        .set_iport([gain_ps[0], exposure_ps[0]])\
-        .set_param([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
+        .set_iports([gain_ps[0], exposure_ps[0]])\
+        .set_params([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key]) if num_device == 1 \
         else builder.add(bb_name)\
-            .set_iport([gain_ps[0], exposure_ps[0], gain_ps[1], exposure_ps[1]])\
-            .set_param([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key])
+            .set_iports([gain_ps[0], exposure_ps[0], gain_ps[1], exposure_ps[1]])\
+            .set_params([num_devices, frame_sync, realtime_display_mode, enable_control, gain_key, exposure_key])
 ```
 Then, bind the input values to ports. This is similar to bind the output ports and output buffers.
 ```python

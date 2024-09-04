@@ -13,6 +13,16 @@ import this_version from "@site/static/version_const/latest.js"
 <a class="card" href={this_version.latest_installer_URL}>Windows 64ビットパッケージをダウンロード</a>
 </div></div>
 
+## 目次
+* SDKインストール
+  * [C++ ユーザ](#cpp)
+    * インストール手順
+    * アンインストール手順
+  * [Python ユーザ](#python)
+* [WinUSB インストール（初回のみ）](#winusb)
+
+## C++ ユーザ <a id="cpp"/>
+
 ## 期待される環境
 
 このドキュメントでは、以下の環境を前提としています。
@@ -61,18 +71,77 @@ PowerShellはスクリプトの実行を許可していない可能性があり�
 </pre>
 :::
 
+## 環境変数の設定
+
+installer.ps1スクリプトを実行すると、SDKが必要とする環境変数`%PATH%`と`%SENSING_DEV_ROOT%`を**自動的に設定**しますので、このステップをスキップできます。
+
+ただし、デフォルトのパスを変更したり、パッケージの場所を移動した場合は、次の手順で手動で設定する必要があります。
+
+1. Windowsキー **&#8862;** を押すか、タスクバーの角にある **&#8862;** をクリックしてスタートメニューを使用します。
+
+2. **Environment variable** と入力して、**アカウントの環境変数を編集** を探して、**環境変数** ウィンドウを開きます。
+
+![Start-menu](./img/start-menu.png)
+
+3. ウィンドウの上部および下部にはユーザーとシステム用の環境変数があり、ユーザー変数を編集します。
+
+![Start-menu](./img/environment-variables.png)
+
+4. `新規` および `編集` を使用して、次の環境変数を設定します。
+
+| 変数名 | 値 | 新規/編集（追加） |
+| --------   | ------- | ------- |
+| SENSING_DEV_ROOT | `<SDKをインストールした場所>` | 新規 |
+| PATH | `<SDKをインストールした場所>/bin` | 編集（追加） |
+
+:::info 確認
+`arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
+:::
+
+### アンインストール手順
+
+次のコマンドを実行することで、installer.ps1によってインストールしたSDKのすべての構成物と設定された環境変数が削除されます。
+
+<pre>
+<code class="language-powershell">
+Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstaller.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./uninstaller.ps1
+</code>
+</pre>
+
+## Python ユーザ <a id="python"/>
+
+### 必要なもの
+
+* OS: Windows 10/11, 64 bit version
+* Development environment (One of them)
+    * Python >=3.10 
+* Hardware:
+    * USB3.0 compatible USB port x2
+
+#### 依存モジュール
+
+Sensing-Devから提供されるPythonモジュールを使用するのにPyGObjectが必要となります。
+
+<pre>
+<code class="language-powershell">
+Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_installer.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./pygobject_installer.ps1
+</code>
+</pre>
+
+#### インストール手順
+
 Pythonで開発を進めたい場合、pipでionpyをインストールしてください。
 
 <pre>
 <code class="language-bash">
 pip3 install -U pip<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 instal aravis-python
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
 </code>
 </pre>
 
-
-## U3VデバイスにWinUSBドライバをインストール
+## U3VデバイスにWinUSBドライバをインストール <a id="winusb"/>
 
 U3Vカメラデバイスがホストマシンに初めて接続される場合にのみ、この手順が必要です。
 
@@ -117,32 +186,4 @@ U3Vカメラデバイスをダブルクリックし、ポップアップウィ�
 <img src={require("./img/winusb-uninstall-hardware.png").default} width="80%" alt="hardware"/>
 
 もしデバイスが未知のデバイスとして表示されているなら、成功です！WinUSBドライバーは正常にアンインストールされました！
-:::
-
-
-## 環境変数の設定
-
-installer.ps1スクリプトを実行すると、SDKが必要とする環境変数`%PATH%`と`%SENSING_DEV_ROOT%`を**自動的に設定**しますので、このステップをスキップできます。
-
-ただし、デフォルトのパスを変更したり、パッケージの場所を移動した場合は、次の手順で手動で設定する必要があります。
-
-1. Windowsキー **&#8862;** を押すか、タスクバーの角にある **&#8862;** をクリックしてスタートメニューを使用します。
-
-2. **Environment variable** と入力して、**アカウントの環境変数を編集** を探して、**環境変数** ウィンドウを開きます。
-
-![Start-menu](./img/start-menu.png)
-
-3. ウィンドウの上部および下部にはユーザーとシステム用の環境変数があり、ユーザー変数を編集します。
-
-![Start-menu](./img/environment-variables.png)
-
-4. `新規` および `編集` を使用して、次の環境変数を設定します。
-
-| 変数名 | 値 | 新規/編集（追加） |
-| --------   | ------- | ------- |
-| SENSING_DEV_ROOT | `<SDKをインストールした場所>` | 新規 |
-| PATH | `<SDKをインストールした場所>/bin` | 編集（追加） |
-
-:::info 確認
-`arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
 :::

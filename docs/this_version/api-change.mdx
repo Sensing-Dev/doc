@@ -1,5 +1,21 @@
+import this_version from "@site/static/version_const/latest.js"
+
 # API Update: What's New & Tips
 
-This page is for the users updating Sensing-Dev SDK from v24.05.07 to the latest.
+This page is for the users updating Sensing-Dev SDK from v24.05 to the latest.
 
 This page will be updated with each new release.
+
+<h2> Version {this_version.latest_version} Changes </h2>
+
+### Ion-kit Dependency Update
+
+<p>Starting from {this_version.latest_version}, the <code>ion-kit</code> dependency <code>Halide</code> has been updated from version 16.0.0 to 17.0.1.</p>
+
+### API Changes
+
+The following functions have been modified:
+- `set_iport(const std::vector<Port>& ports)` is replaced by `set_iports(const std::vector<Port>& ports)`
+- `set_param(const std::vector<Params>& params)` is replaced by `set_params(const std::vector<Params>& params)`.
+
+Please make sure to update your code accordingly to accommodate these changes.

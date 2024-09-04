@@ -60,12 +60,12 @@ If you acquire data from more than one sensor in the first BB using `Param("num_
 To access the output data from each sensor in the first BB, you can use indexing `[]` as follows. Ensure that you set `Param("prefix", "gendc0-")` and `Param("prefix", "gendc1-")` for each binary saver BB to prevent them from overwriting each other's content.
 
 ```c++
-Node n = b.add("image_io_u3v_gendc")().set_param(Param("num_devices", 2),);
+Node n = b.add("image_io_u3v_gendc")().set_params(Param("num_devices", 2),);
 
 if (num_device == 2){
     int32_t payloadsize1 = payloadsize[1];
     Node n1 = b.add("image_io_binary_gendc_saver")(n["gendc"][1], n["device_info"][1], &payloadsize1)
-   .set_param(
+   .set_params(
        Param("prefix", "gendc1-"),
        Param("output_directory", saving_diretctory)
    );
@@ -74,7 +74,7 @@ if (num_device == 2){
 
 int32_t payloadsize0 = payloadsize[0];
 n = b.add("image_io_binary_gendc_saver")(n["gendc"][0], n["device_info"][0], &payloadsize0)
-   .set_param(
+   .set_params(
        Param("prefix", "gendc0-"),
        Param("output_directory", saving_diretctory)
    );

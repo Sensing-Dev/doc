@@ -19,7 +19,7 @@ import this_version from "@site/static/version_const/latest.js"
 pip3 install -U pip<br />
 pip3 install opencv-python<br />
 pip3 install numpy<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -49,7 +49,7 @@ We need to set `Param` of BB `image_io_u3v_cameraN_u<bit-depth>x<dimension>` cal
 num_device = 2
 num_devices = Param('num_devices', str(num_device))
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_display_mode, ])
+    .set_params([num_devices, frame_sync, realtime_display_mode, ])
 ```
 
 Since this is the only one BB in our pipeline, output port of the node can be the output port of the pipeline, and we name is `output_p`.

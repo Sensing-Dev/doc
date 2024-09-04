@@ -8,14 +8,14 @@ sidebar_position: 7
 
 ## 前提条件
 
-* ion-python
+* ion-contrib-python
 
 import this_version from "@site/static/version_const/latest.js"
 
 <pre>
 <code class="language-bash">
 pip3 install -U pip<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -55,7 +55,7 @@ payloadsize_p.bind(payloadsize)
 # add the first BB to acquire data
 node = builder.add("image_io_u3v_gendc")
 # add the second BB to save binary data 
-node_sensor0 = builder.add("image_io_binary_gendc_saver").set_iport([node.get_port('gendc')[0], node.get_port('device_info')[0], payloadsize_p, ])
+node_sensor0 = builder.add("image_io_binary_gendc_saver").set_iports([node.get_port('gendc')[0], node.get_port('device_info')[0], payloadsize_p, ])
 ```
 
 GenDCデータとデバイス情報は、前のノードで取得された取得BBによって取得されます。ペイロードサイズは、コンソールで `arv-tool-0.8 -n <デバイス名> control PayloadSize` コマンドを使用して取得できるGenDCコンテナの全体サイズを表します。詳しい使用方法については、[arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
@@ -72,8 +72,8 @@ GenDCデータとデバイス情報は、前のノードで取得された取得
 ```python
 if num_device ==2 :
     t_node1 = builder.add("image_io_binary_gendc_saver") \
-        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_ps[1], ]) \
-        .set_param([output_directory,
+        .set_iports([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_ps[1], ]) \
+        .set_params([output_directory,
                     Param('prefix', 'gendc1-')])
     # create halide buffer for output port
     terminator1 = t_node1.get_port('output')

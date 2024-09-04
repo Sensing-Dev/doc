@@ -10,14 +10,14 @@ If your device data format is non-GenDC (general camera acquire images), see the
 
 ## Prerequisite
 
-* ion-python
+* ion-contrib-python
 
 import this_version from "@site/static/version_const/latest.js"
 
 <pre>
 <code class="language-bash">
 pip3 install -U pip<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -57,7 +57,7 @@ payloadsize_p.bind(payloadsize)
 # add the first BB to acquire data
 node = builder.add("image_io_u3v_gendc")
 # add the second BB to save binary data 
-node_sensor0 = builder.add("image_io_binary_gendc_saver").set_iport([node.get_port('gendc')[0], node.get_port('device_info')[0], payloadsize_p, ])
+node_sensor0 = builder.add("image_io_binary_gendc_saver").set_iports([node.get_port('gendc')[0], node.get_port('device_info')[0], payloadsize_p, ])
 ```
 
 The GenDC data and Device Information are obtained by the acquisition BB in the previous node, `image_io_u3v_gendc`. The PayloadSize represents the entire size of the GenDC container, which can be retrieved using the command `arv-tool-0.8 -n <device name> control PayloadSize` in the console. For detailed usage instructions, please refer to [arv-tool-0.8](../../external/aravis/arv-tools).
@@ -75,8 +75,8 @@ To access the output data from each sensor in the first BB, you can use indexing
 ```python
 if num_device ==2 :
     t_node1 = builder.add("image_io_binary_gendc_saver") \
-        .set_iport([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_ps[1], ]) \
-        .set_param([output_directory,
+        .set_iports([node.get_port('gendc')[1], node.get_port('device_info')[1], payloadsize_ps[1], ]) \
+        .set_params([output_directory,
                     Param('prefix', 'gendc1-')])
     # create halide buffer for output port
     terminator1 = t_node1.get_port('output')

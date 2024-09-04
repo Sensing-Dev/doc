@@ -12,6 +12,11 @@ sidebar_position: 3
 * numpy
 * OpenCV
 
+:::note
+Aravisはion-contrib-pythonのモジュール内に含まれています。別途インストールする必要はありません。また、すでにAravisモジュールがインストールされている場合でも、ion-contrib-pythonを問題なく使用可能です。.
+:::
+
+
 import this_version from "@site/static/version_const/latest.js"
 
 <pre>
@@ -19,7 +24,7 @@ import this_version from "@site/static/version_const/latest.js"
 pip3 install -U pip<br />
 pip3 install opencv-python<br />
 pip3 install numpy<br />
-pip3 install ion-python=={this_version.ion_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 </code>
 </pre>
 
@@ -33,7 +38,7 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 * 高さ
 * PixelFormat
 
-[前回のチュートリアル](obtain-device-info.md)または[arv-tool-0.8](../../external/aravis/arv-tools.md)がこれらの値を取得するのに役立ちます。
+[前回のチュートリアル](./obtain-device-info.md)または[arv-tool-0.8](../../external/aravis/arv-tools.md)がこれらの値を取得するのに役立ちます。
 
 ### パイプラインの構築
 
@@ -80,9 +85,9 @@ BBに設定するために静的な入力値を設定するには、次のよう
 
 ```python
 # パラメータの設定
-num_devices = Param('num_devices', str(num_device))
-frame_sync = Param('frame_sync', 'true')
-realtime_display_mode = Param('realtime_display_mode', 'true')
+num_devices = Param('num_devices', num_device)
+frame_sync = Param('frame_sync', True)
+realtime_display_mode = Param('realtime_display_mode', True)
 ```
 
 | Paramのキー | 値のタイプ | 説明 |
@@ -96,7 +101,7 @@ realtime_display_mode = Param('realtime_display_mode', 'true')
 ```python
 # パイプラインにノードを追加
 node = builder.add(bb_name)\
-    .set_param([num_devices, frame_sync, realtime_display_mode, ])
+    .set_params([num_devices, frame_sync, realtime_display_mode, ])
 output_p = node.get_port('output')
 ```
 
