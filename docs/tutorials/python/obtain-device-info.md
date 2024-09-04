@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import this_version from "@site/static/version_const/latest.js"
+
 # Access and Display Device Info
 
 In this tutorial, we learn how to get device information with aravis API.

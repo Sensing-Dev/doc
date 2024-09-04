@@ -33,7 +33,7 @@ ionpyを使用して画像を表示するには、デバイスの以下の情報
 * 高さ
 * ピクセルフォーマット
 
-[前回のチュートリアル](obtain-device-info.md)または [arv-tool-0.8](../../external/aravis/arv-tools.md) がこれらの値を取得するのに役立ちます。
+[前回のチュートリアル](./obtain-device-info.md)または [arv-tool-0.8](../../external/aravis/arv-tools.md) がこれらの値を取得するのに役立ちます。
 
 ### パイプラインの構築
 

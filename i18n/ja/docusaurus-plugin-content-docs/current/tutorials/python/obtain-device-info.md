@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import this_version from "@site/static/version_const/latest.js"
+
 # デバイス情報へのアクセスと表示
 
 このチュートリアルでは、Aravis APIを使用してデバイス情報を取得する方法について学びます。       
