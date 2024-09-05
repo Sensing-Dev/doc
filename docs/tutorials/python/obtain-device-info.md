@@ -36,7 +36,7 @@ Then we can use Aravis python
 
 <pre>
 <code class="language-powershell">
-pip3 instal aravis-python
+pip3 install aravis-python
 </code>
 </pre>
 
@@ -52,7 +52,7 @@ pip3 install PyGObject
 
 <pre>
 <code class="language-powershell">
-pip3 instal aravis-python
+pip3 install aravis-python
 </code>
 </pre>
 
