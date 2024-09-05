@@ -37,7 +37,7 @@ Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_
 
 <pre>
 <code class="language-powershell">
-pip3 instal aravis-python
+pip3 install aravis-python
 </code>
 </pre>
 
@@ -55,7 +55,7 @@ pip3 install PyGObject
 
 <pre>
 <code class="language-powershell">
-pip3 instal aravis-python
+pip3 install aravis-python
 </code>
 </pre>
 
