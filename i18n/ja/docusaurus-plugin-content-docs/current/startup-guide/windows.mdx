@@ -8,12 +8,7 @@ sidebar_position: 2
 import '/src/css/home.css';
 import this_version from "@site/static/version_const/latest.js"
 
-<div class="jsx-section">
-<div class="board">
-<a class="card" href={this_version.latest_installer_URL}>Windows 64ビットパッケージをダウンロード</a>
-</div></div>
-
-## 目次
+## 目次（クリックで各項目へ）
 * SDKインストール
   * [C++ ユーザ](#cpp)
     * インストール手順
@@ -29,7 +24,6 @@ import this_version from "@site/static/version_const/latest.js"
 
 * OS: Windows 10/11、64ビット版
 * 開発環境（いずれか）
-    * Python 3.11（VS Codeとともに）
     * C++: Visual Studio 2019/2022 (17.09 or earlier)
 * ハードウェア:
     * USB3.0互換USBポート x2
@@ -39,13 +33,14 @@ MSVC 2022（17.10以降）を使用している場合は、OpenCV 4.10.0以降�
 DLLライブラリがあるディレクトリを`PATH`環境変数に追加するのを忘れないでください。詳細は[OpenCVのアップデート](../external/OpenCV/update-opencv)を参照してください。
 :::
 
-## 必要なもの
-
-* Python 3.11
+<div class="jsx-section">
+<div class="board">
+<a class="card" href={this_version.latest_installer_URL}>Windows C++版パッケージスクリプトをダウンロード</a>
+</div></div>
 
 ## Sensing-devソフトウェアパッケージ
 
-ページのトップにあるインストーラスクリプトをダウンロードするか、<a href={this_version.latest_installer_URL}>こちら</a>からダウンロードしてください。
+上記の**Windows C++版パッケージスクリプト**をダウンロードするか、<a href={this_version.latest_installer_URL}>こちら</a>からダウンロードしてください。
 
 PowerShellターミナルを開いてスクリプトのあるディレクトリに移動し、以下のコマンドを実行してください。OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
 
