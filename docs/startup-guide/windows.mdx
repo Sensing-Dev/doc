@@ -9,12 +9,7 @@ This document describes the steps to install the software development environmen
 import '/src/css/home.css';
 import this_version from "@site/static/version_const/latest.js"
 
-<div class="jsx-section">
-<div class="board">
-<a class="card" href={this_version.latest_installer_URL}>DL Windows 64-bit Package</a>
-</div></div>
-
-## Content
+## Content (Click to jump)
 * SDK Installation
   * [C++ User](#cpp)
     * Install procedure
@@ -37,9 +32,14 @@ If you are using MSVC 2022 (17.10 or later), install OpenCV 4.10.0 or later from
 Do not forget to add the directory containing the DLL library to the `PATH` environment variable. See the detail in [Update OpenCV](../external/OpenCV/update-opencv).
 :::
 
+<div class="jsx-section">
+<div class="board">
+<a class="card" href={this_version.latest_installer_URL}>DL C++ Windows Package script</a>
+</div></div>
+
 ### Sensing-dev Software Packages
 
-Please DL the installer script at the top of the page or <a href={this_version.latest_installer_URL}>here</a>.
+Please DL the installer script above or <a href={this_version.latest_installer_URL}>here</a>.
 
 Open the powershell terminal and move to the directory where you have the installer script downloaded in the previous step.
 
@@ -114,6 +114,14 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
     * Python >=3.10 
 * Hardware:
     * USB3.0 compatible USB port x2
+
+If you used Sensing-Dev python version v24.05 or eariler, run the following command to remove the old-version dependencies.
+
+<pre>
+<code class="language-powershell">
+Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstaller.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./uninstaller.ps1
+</code>
+</pre>
 
 #### Install dependency
 
