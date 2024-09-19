@@ -113,6 +113,14 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 * Hardware:
     * USB3.0 compatible USB port x2
 
+もし以前Sensing-Dev v24.05、またはそれよりも前のバージョンで紹介されていたpythonモジュールをお使いの場合、以下のコマンドを実行して古いバージョンの依存ライブラリを削除してください。
+
+<pre>
+<code class="language-powershell">
+Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstaller.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./uninstaller.ps1
+</code>
+</pre>
+
 #### 依存モジュール
 
 Sensing-Devから提供されるPythonモジュールを使用するのにPyGObjectが必要となります。
