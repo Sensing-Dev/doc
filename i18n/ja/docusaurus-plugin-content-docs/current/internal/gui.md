@@ -55,8 +55,6 @@ Command-Line Arguments
 
 * U3Vデバイスで使われているGenICamのゲインや露光時間を設定するキーがそれぞれ`Gain`や`ExposureTime`でない場合は`--gain-key-name` と`--exposuretime-key-name`オプションで設定してください。
 
-If your U3V devices have unique feature key. If the keys for Gain and Exposure Time keys are not `Gain` and `ExposureTime` respectively, set them with `--gain-key-name` and `--exposuretime-key-name`
-
 * カラープレビューウィンドウにモノクロ画像がで表示される場合、PixelFormatが誤って設定されている可能性があります。PixelFormatをBayerに変更してください。対応しているPixelFormatは以下の通りです。
   * Mono8
   * Mono12
@@ -84,4 +82,4 @@ If your U3V devices have unique feature key. If the keys for Gain and Exposure T
 
 jpgやpngなどは保存終了の後に変換に時間がかかることをご了承ください。
 
-また、binで保存する場合、GenDC対応のU3Vデバイスを使っているときに、GenDC modeに設定するt事によって、画像以外の全てのコンテナデータを保存することができます。
+また、binで保存する場合、GenDC対応のU3Vデバイスを使っているときに、GenDC modeに設定することによって、画像以外の全てのコンテナデータを保存することができます。
