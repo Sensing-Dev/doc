@@ -92,6 +92,8 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 * Hardware:
     * USB3.0 compatible USB port x2
 
+
+:::info 以前のバージョンをお使いの方へ
 もし以前Sensing-Dev v24.05、またはそれよりも前のバージョンで紹介されていたpythonモジュールをお使いの場合、以下のコマンドを実行して古いバージョンの依存ライブラリを削除してください。
 
 <pre>
@@ -99,6 +101,15 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstaller.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./uninstaller.ps1
 </code>
 </pre>
+
+また、v24.09以降はion-pythonの代わりにion-contrib-pythonを使用しています。次のコマンドを使って、ion-pythonをアンインストールしてください。
+
+<pre>
+<code class="language-powershell">
+pip uninstall ion-python -y
+</code>
+</pre>
+:::
 
 #### 依存モジュール
 

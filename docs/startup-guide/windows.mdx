@@ -94,13 +94,23 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 * Hardware:
     * USB3.0 compatible USB port x2
 
-If you used Sensing-Dev python version v24.05 or eariler, run the following command to remove the old-version dependencies.
+:::info For users of previous versions
+If you used Sensing-Dev python version **v24.05 or eariler**, run the following command to remove the old-version dependencies.
 
 <pre>
 <code class="language-powershell">
 Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstaller.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./uninstaller.ps1
 </code>
 </pre>
+
+Also, v24.09 uses ion-contrib-python instead of ion-python. Therefore, please uninstall ion-python with the following command.
+
+<pre>
+<code class="language-powershell">
+pip uninstall ion-python -y
+</code>
+</pre>
+:::
 
 #### Install dependency
 
