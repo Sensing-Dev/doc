@@ -8,18 +8,12 @@ In this tutorial, we learn how to visualize sample GenDC Data parsed in [the pre
 
 ## Prerequisite
 
-* GenDC Separator
-* matplotlib
-* numpy
-
-import this_version from "@site/static/version_const/latest.js"
+In this tutorial, we are using `matplotlib` to visualize the data we parse. Please install the module by the following command.
 
 <pre>
 <code class="language-bash">
 pip3 install -U pip<br />
-pip3 install matplotlib<br />
-pip3 install numpy<br />
-pip3 install gendc-python=={this_version.gendc_python_version}<br />
+pip3 install matplotlib
 </code>
 </pre>
 

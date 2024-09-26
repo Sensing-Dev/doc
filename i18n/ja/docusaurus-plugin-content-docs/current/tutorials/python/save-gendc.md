@@ -6,19 +6,6 @@ sidebar_position: 7
 
 このチュートリアルでは、センサから転送されたデータをバイナリファイルに保存する方法を学びます。
 
-## 前提条件
-
-* ion-contrib-python
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
-
 ## チュートリアル
 
 前のチュートリアルでは、パイプラインで単一のビルディングブロック（BB）を使用してセンサーデータを取得しました。今回は、binarysaver BBを組み込んで、データの取得と保存の2ステップフローを実現します。

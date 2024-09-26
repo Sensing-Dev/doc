@@ -16,22 +16,7 @@ import links from "@site/static/external_link/links.js"
 <a class="card" href={links.gendc_sample_data}>サンプルGenDCデータ</a>
 </div></div>
 
-## Prerequisite
- 
-* GenDC Separator
-* OpenCV
-* numpy
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install gendc-python=={this_version.gendc_python_version}<br />
-</code>
-</pre>
+## 前提条件
 
 * GenDCデータ（前のチュートリアルで取得したもの、または<a href={links.gendc_sample_data}>このページ</a>からダウンロードしたサンプル）
 

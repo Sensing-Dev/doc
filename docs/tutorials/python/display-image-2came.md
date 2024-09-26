@@ -6,23 +6,6 @@ sidebar_position: 4
 
 In this tutorial, we learn how to access 2 cameras and obtain their images via ion-kit based on the [previous tutorial](display-image)
 
-## Prerequisite
-
-* ionpy 
-* numpy
-* OpenCV
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
-
 ## Tutorial
 
 ### Get Device Information

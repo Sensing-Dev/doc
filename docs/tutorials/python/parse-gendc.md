@@ -17,21 +17,6 @@ import links from "@site/static/external_link/links.js"
 </div></div>
 
 ## Prerequisite
- 
-* GenDC Separator
-* OpenCV
-* numpy
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install gendc-python=={this_version.gendc_python_version}<br />
-</code>
-</pre>
 
 * GenDC Data (obtained in the previous tutorial or Download sample from <a href={links.gendc_sample_data}>this page</a>).
 

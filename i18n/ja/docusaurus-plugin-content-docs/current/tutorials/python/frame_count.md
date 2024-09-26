@@ -2,26 +2,13 @@
 sidebar_position: 6
 ---
 
-# フレーム数の取得
+# フレームカウントの取得
 
 このチュートリアルでは、ion-kitを使用してカメラからフレーム数を取得する方法を学びます。
 
 ## 前提条件
 
-* ionpy 
-* numpy
-* OpenCV
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
+お使いのU3Vデバイスが`framecount`機能を持っている必要があります。
 
 ## チュートリアル
 

@@ -6,28 +6,6 @@ sidebar_position: 3
 
 In this tutorial, we learn how to get image data from device with ion-kit, and display with OpenCV.
 
-
-## Prerequisite
-
-* ionpy 
-* numpy
-* OpenCV
-
-:::note
-ion-contrib-python contains prebuilt aravis library.
-:::
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
-
 ## Tutorial
 
 ### Get Device Information
