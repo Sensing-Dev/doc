@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# GUI: Previewing and Saving
+# GUIアプリ: プレビューと保存
 
 Sensing-Devは、USB 3 Visionカメラユーザーが開発環境を設定する際にサポートするSDKとチュートリアルを提供しています。
 
@@ -20,7 +20,7 @@ Sensing-Devは、USB 3 Visionカメラユーザーが開発環境を設定する
 
 Windowsユーザの方は、[こちら](./../startup-guide/windows)の手順に従ってモジュールをインストールしてください。Linuxユーザの方は、[こちら](./../startup-guide/linux)の手順をご覧ください。
 
-#### GUI requirement
+#### GUI 必要モジュール
 
 このGUIアプリケーションには、Sensing-Dev SDKで紹介されているものに加えて、いくつかのPythonモジュールが必要です。
 
@@ -30,7 +30,7 @@ Windowsユーザの方は、[こちら](./../startup-guide/windows)の手順に�
 python3 -m pip install -r requirements.txt
 ```
 
-### Usage
+### 使い方
 
 以下のコマンドを実行することでアプリケーションを立ち上げることができます。
 
@@ -68,15 +68,15 @@ Command-Line Arguments
 :::
 
 
-## Control Panel
+## コントロールパネル
 
-### Previewing images
+### プレビュー
 
 コマンドを実行してアプリを起動すると、コントロールパネルとプレビューウィンドウが開きます。
 
 このアプリ上ではプレビューウィンドウを見ながらカメラのゲイン、露光時間、ホワイトバランスを調整可能です。また、各フォーマットでのデータ保存も可能です。
 
-### Saving images
+### 保存
 
 保存の際はスタートボタン・ストップボタンを押す方法と、時間を指定してスタートボタンを押す方法の２種類があります。
 
