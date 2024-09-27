@@ -15,6 +15,8 @@ import this_version from "@site/static/version_const/latest.js"
     * Install procedure
     * Uninstall procedure
   * [Python User](#python)
+    * Install procedure
+    * Uninstall procedure
 * [WinUSB installation](#winusb)
 
 
@@ -112,7 +114,7 @@ pip uninstall ion-python -y
 </pre>
 :::
 
-#### Install dependency
+### Install dependency
 
 First of all, download from here to install PyGObject
 
@@ -122,7 +124,7 @@ Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_
 </code>
 </pre>
 
-#### Install Python Modules
+### Install Python Modules
 
 Then install aravis-python and gendc-python and ion-contrib-python to fully utilize
 
@@ -134,6 +136,17 @@ pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
 </code>
 </pre>
+
+### Uninstall Python Modules
+
+When you want to uninstall the modules introduced by Sensing-Dev, please execute the following command
+
+<pre>
+<code class="language-bash">
+pip3 install aravis-python ion-contrib-python gendc-python PyGObject -y
+</code>
+</pre>
+
 
 ## Install WinUSB driver on U3V device. <a id="winusb"/>
 

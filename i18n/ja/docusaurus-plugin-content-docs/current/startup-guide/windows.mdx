@@ -14,6 +14,8 @@ import this_version from "@site/static/version_const/latest.js"
     * インストール手順
     * アンインストール手順
   * [Python ユーザ](#python)
+    * インストール手順
+    * アンインストール手順
 * [WinUSB インストール（初回のみ）](#winusb)
 
 ## C++ ユーザ <a id="cpp"/>
@@ -111,7 +113,7 @@ pip uninstall ion-python -y
 </pre>
 :::
 
-#### 依存モジュール
+### 依存モジュール
 
 Sensing-Devから提供されるPythonモジュールを使用するのにPyGObjectが必要となります。
 
@@ -121,9 +123,10 @@ Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_
 </code>
 </pre>
 
-#### インストール手順
+### インストール手順
 
-Pythonで開発を進めたい場合、pipでionpyをインストールしてください。
+
+aravis-python、gendc-python、ion-contrib-pythonをインストールすることでSensing-Devの提供するチュートリアルやツールがご利用いただけます。
 
 <pre>
 <code class="language-bash">
@@ -131,6 +134,16 @@ pip3 install -U pip<br />
 pip3 install aravis-python=={this_version.aravis_python_version}<br />
 pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
+</code>
+</pre>
+
+### アンインストール手順
+
+上記の手順でインストールしたPythonモジュールをアンインストールしたい場合は以下のコマンドを実行してください。
+
+<pre>
+<code class="language-bash">
+pip3 install aravis-python ion-contrib-python gendc-python PyGObject -y
 </code>
 </pre>
 
