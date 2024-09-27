@@ -6,21 +6,9 @@ sidebar_position: 10
 
 このチュートリアルでは、バイナリ形式の画像データを解析する方法について学びます。
 
-## 前提条件
- 
-* json
-* OpenCV
-* numpy
+## Prerequisite
 
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-</code>
-</pre>
+* 画像のバイナリデータ ([前のチュートリアル](./save-image-bin)で保存したもの)
 
 ## チュートリアル
 

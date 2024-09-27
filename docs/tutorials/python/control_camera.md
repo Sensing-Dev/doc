@@ -9,23 +9,6 @@ In this tutorial, we learn how to set Gain and Exposure time manually on ion-kit
 
 To control Gain and ExposureTime without BB, you may want to see [Access and Set Device Info](./set-device-info) or [arv-tool-0.8](../../external/aravis/arv-tools).
 
-## Prerequisite
-
-* ionpy 
-* numpy
-* OpenCV
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
-
 ## Tutorial
 
 ### Get Device Information

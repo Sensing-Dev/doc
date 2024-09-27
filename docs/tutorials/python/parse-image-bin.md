@@ -7,20 +7,8 @@ sidebar_position: 10
 In this tutorial, we learn how to parse image data in the format of binary.
 
 ## Prerequisite
- 
-* json
-* OpenCV
-* numpy
 
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-</code>
-</pre>
+* Image binary Data (obtained in [the previous tutorial](./save-image-bin)).
 
 ## Tutorial
 

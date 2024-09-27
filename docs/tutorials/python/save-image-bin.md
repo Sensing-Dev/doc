@@ -7,19 +7,6 @@ sidebar_position: 8
 In this tutorial, we will learn how to save GenDC data transferred from a sensor into a binary file.
 If your device data format is GenDC, and if you prefer to save a whole GenDC container instead of only image data, see the previous tutorial page [Save Sensor Data (GenDC)](./save-gendc.md).
 
-## Prerequisite
-
-* ion-contrib-python
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
-
 ## Tutorial
 
 In previous tutorials, we utilized a single building block (BB) in a pipeline to acquire sensor data. Now, we're incorporating the binarysaver BB to enable a two-step flow: 1. Acquiring data, and 2. Saving data within the pipeline.

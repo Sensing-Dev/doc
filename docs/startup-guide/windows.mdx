@@ -13,8 +13,11 @@ import this_version from "@site/static/version_const/latest.js"
 * SDK Installation
   * [C++ User](#cpp)
     * Install procedure
+    * Set environment variables
     * Uninstall procedure
   * [Python User](#python)
+    * Install procedure
+    * Uninstall procedure
 * [WinUSB installation](#winusb)
 
 
@@ -71,28 +74,7 @@ your powershell does not allow to run the script. If so, please add `-ExecutionP
 
 Running the installer.ps1 script would **automatically set** the environment variable `%PATH%` and `%SENSING_DEV_ROOT%` which SDK requires, so you may skip this step.
 
-However, if you change the default path or move the package location, it requires to set them manually with the following precedure:
-
-1. Hit Windows key **&#8862;** or click **&#8862;** at the corner of task bar to use start-menu.
-
-2. Type **Environment variable** to find **Edit environment variables got your account** to open the window of **Environment Variables**.
-
-![Start-menu](./img/start-menu.png)
-
-3. There's environment variables for user and system at the top and bottom of the window respectively, and we edit user variables.
-
-![Start-menu](./img/environment-variables.png)
-
-4. With `New` and `Edit`, set the following environment variables.
-
-| Name of variable | Value | New/Edit(append) |
-| --------   | ------- | ------- |
-| SENSING_DEV_ROOT | `<where you installed SKD>` | NEW |
-| PATH | `<where you installed SKD>/bin` | Edit(append) |
-
-:::info Confirmation
-Using `arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools.md) to know the procedure.
-:::
+However, if you change the default path or move the package location, it requires to set them manually with [the procedure](environment-variables).
 
 ### Uninstall procedure
 
@@ -115,7 +97,8 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 * Hardware:
     * USB3.0 compatible USB port x2
 
-If you used Sensing-Dev python version v24.05 or eariler, run the following command to remove the old-version dependencies.
+:::info For users of previous versions
+If you used Sensing-Dev python version **v24.05 or eariler**, run the following command to remove the old-version dependencies.
 
 <pre>
 <code class="language-powershell">
@@ -123,7 +106,16 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 </code>
 </pre>
 
-#### Install dependency
+Also, v24.09 uses ion-contrib-python instead of ion-python. Therefore, please uninstall ion-python with the following command.
+
+<pre>
+<code class="language-powershell">
+pip uninstall ion-python -y
+</code>
+</pre>
+:::
+
+### Install dependency
 
 First of all, download from here to install PyGObject
 
@@ -133,9 +125,9 @@ Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_
 </code>
 </pre>
 
-#### Install Python Modules
+### Install Python Modules
 
-Then install aravis-python and gendc-python and ion-contrib-python to fully utilize
+Then install aravis-python and gendc-python and ion-contrib-python to fully utilize. It is optional to install opencv-python, which is required for some of tutorials.
 
 <pre>
 <code class="language-bash">
@@ -143,8 +135,20 @@ pip3 install -U pip<br />
 pip3 install aravis-python=={this_version.aravis_python_version}<br />
 pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
+pip3 install opencv-python<br />
 </code>
 </pre>
+
+### Uninstall Python Modules
+
+When you want to uninstall the modules introduced by Sensing-Dev, please execute the following command.
+
+<pre>
+<code class="language-bash">
+pip3 install aravis-python ion-contrib-python gendc-python PyGObject  -y
+</code>
+</pre>
+
 
 ## Install WinUSB driver on U3V device. <a id="winusb"/>
 

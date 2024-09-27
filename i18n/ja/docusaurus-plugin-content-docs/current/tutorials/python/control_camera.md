@@ -8,24 +8,6 @@ sidebar_position: 5
 
 BBを用いずにGainやExposureTimeなどのカメラ情報を変更するためには、[デバイス情報へのアクセスと設定](./set-device-info) や [arv-tool-0.8](../../external/aravis/arv-tools) を参照してください。
 
-
-## 前提条件
-
-* ionpy 
-* numpy
-* OpenCV
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
-
 ## チュートリアル
 
 ### デバイス情報の取得

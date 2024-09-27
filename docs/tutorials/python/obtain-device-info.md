@@ -8,53 +8,7 @@ import this_version from "@site/static/version_const/latest.js"
 
 In this tutorial, we learn how to get device information with aravis API.
 
-## Prerequisite
-
-* python3.10 or 3.11
-* PyGObject 
-* aravis-python
-
-:::info 
-Python user don't need to install sensing-dev sdk.
-:::
-
-
 ## Tutorial
-
-### Pre-requisite
-
-#### Windows
-First of all, download from here to install PyGObject
-
-<pre>
-<code class="language-powershell">
-Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_installer.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./pygobject_installer.ps1
-</code>
-</pre>
-
-Then we can use Aravis python
-
-<pre>
-<code class="language-powershell">
-pip3 install aravis-python
-</code>
-</pre>
-
-#### Linux
-
-Install the build dependencies and GTK to build and install Pycairo and PyGObject
-
-```
-sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0
-pip3 install pycairo
-pip3 install PyGObject
-``` 
-
-<pre>
-<code class="language-powershell">
-pip3 install aravis-python
-</code>
-</pre>
 
 ### Load required modules
 

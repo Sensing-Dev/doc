@@ -6,16 +6,6 @@ sidebar_position: 2
 
 このチュートリアルでは、Aravis APIを使用してデバイス情報を設定する方法を学びます。
 
-## 前提条件
-
-* python3.10 or 3.11
-* PyGObject 
-* aravis-python
-
-:::info 
-v24.09.00以降、installer.ps1を使わずにAravis-pythonの使用が可能になりました。
-:::
-
 ## チュートリアル
 
 前回のチュートリアルで、Aravis APIを使用してデバイス情報を取得する方法を学びました（[前回のチュートリアル](./obtain-device-info)）。

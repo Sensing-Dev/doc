@@ -8,20 +8,7 @@ In this tutorial, we learn how to get frame count from camera with ion-kit.
 
 ## Prerequisite
 
-* ionpy 
-* numpy
-* OpenCV
-
-import this_version from "@site/static/version_const/latest.js"
-
-<pre>
-<code class="language-bash">
-pip3 install -U pip<br />
-pip3 install opencv-python<br />
-pip3 install numpy<br />
-pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
-</code>
-</pre>
+U3V device must have `framecount` feature.
 
 ## Tutorial
 
