@@ -12,7 +12,12 @@ import this_version from "@site/static/version_const/latest.js"
 ## 目次（クリックで各項目へ）
 * SDKインストール
   * [C++ ユーザ](#cpp)
+    * インストール手順
+    * 環境変数の設定
+    * アンインストール手順
   * [Python ユーザ](#python)
+    * インストール手順
+    * アンインストール手順
 
 ## C++ ユーザ <a id="cpp"/>
 
@@ -27,9 +32,7 @@ import this_version from "@site/static/version_const/latest.js"
 * ハードウェア：
     * USB3.0対応のUSBポート x2
 
-### Sensing-devソフトウェアパッケージ
-
-#### セットアップスクリプトのダウンロード
+### セットアップスクリプトのダウンロード
 
 <pre>
 <code class="language-bash">
@@ -61,6 +64,16 @@ export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gn
 `/opt/sensing-dev/bin/arv-tool-0.8`を使用することで、ソフトウェアパッケージが適切にインストールされているか確認できます。手順については、[このページ](../external/aravis/arv-tools.md)を確認してください。
 :::
 
+### SDKのアンインストール
+
+上記の手順でインストールしたSDKをアンインストールしたい場合は以下のコマンドを実行してください。
+
+<pre>
+<code class="language-bash">
+sudo rm -r /opt/sensing-dev
+</code>
+</pre>
+
 ## Python ユーザ <a id="python"/>
 
 ### 期待される環境
@@ -85,7 +98,7 @@ pip3 install pycairo<br />
 
 ### Pythonモジュールのインストール
 
-本ウェブサイトで紹介するチュートリアルやソフトウェアはaravis-python、 gendc-python、そして ion-contrib-pythonをインストールすることで実行可能です。
+本ウェブサイトで紹介するチュートリアルやソフトウェアはaravis-python、 gendc-python、そして ion-contrib-pythonをインストールすることで実行可能です。opencv-pythonのインストールは任意ですが、一部のチュートリアルで必要になります。
 
 <pre>
 <code class="language-bash">
@@ -93,7 +106,16 @@ pip3 install PyGObject<br />
 pip3 install aravis-python=={this_version.aravis_python_version}<br />
 pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
+pip3 install opencv-python<br />
 </code>
 </pre>
 
+### Pythonモジュールのアンインストール
 
+上記の手順でインストールしたPythonモジュールをアンインストールしたい場合は以下のコマンドを実行してください。
+
+<pre>
+<code class="language-bash">
+pip3 install aravis-python ion-contrib-python gendc-python PyGObject -y
+</code>
+</pre>

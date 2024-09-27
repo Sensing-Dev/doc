@@ -12,7 +12,12 @@ This document describes the steps to install the software development environmen
 ## Content (Click to jump)
 * SDK Installation
   * [C++ User](#cpp)
+    * Install procedure
+    * Set environment variables
+    * Uninstall procedure
   * [Python User](#python)
+    * Install procedure
+    * Uninstall procedure
 
 ## C++ User　<a id="cpp"/>
 
@@ -23,10 +28,7 @@ This document describes the steps to install the software development environmen
 * Hardware:
     * USB3.0 compatible USB port x2
 
-
-### Sensing-dev Software Packages
-
-#### Download the setup script
+### Download the setup script
 
 <pre>
 <code class="language-bash">
@@ -34,7 +36,7 @@ wget -O setup.sh {this_version.latest_setup_URL}
 </code>
 </pre>
 
-#### Install and setup SDK
+### Install and setup SDK
 
 Note that `--install-opencv` is optional.
 
@@ -58,6 +60,16 @@ export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gn
 Using `/opt/sensing-dev/bin/arv-tool-0.8` may help to check if the software package is appropriately installed. Please check [this page](../external/aravis/arv-tools) to know the procedure.
 :::
 
+### Uninstall SDK
+
+When you want to uninstall the package introduced by Sensing-Dev, please execute the following command.
+
+<pre>
+<code class="language-bash">
+sudo rm -r /opt/sensing-dev
+</code>
+</pre>
+
 ## Python User <a id="python"/>
 ### Prerequisite
 * OS: ubuntu 22.04 **with sudo privilege**
@@ -77,7 +89,7 @@ pip3 install pycairo<br />
 
 ### Install Python Modules
 
-Install aravis-python and gendc-python and ion-contrib-python to fully utilize
+Install aravis-python and gendc-python and ion-contrib-python to fully utilize. It is optional to install opencv-python, which is required for some of tutorials.
 
 <pre>
 <code class="language-bash">
@@ -85,5 +97,16 @@ pip3 install PyGObject<br />
 pip3 install aravis-python=={this_version.aravis_python_version}<br />
 pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
+pip3 install opencv-python<br />
+</code>
+</pre>
+
+### Uninstall Python Modules
+
+When you want to uninstall the modules introduced by Sensing-Dev, please execute the following command.
+
+<pre>
+<code class="language-bash">
+pip3 install aravis-python ion-contrib-python gendc-python PyGObject  -y
 </code>
 </pre>

@@ -13,6 +13,7 @@ import this_version from "@site/static/version_const/latest.js"
 * SDK Installation
   * [C++ User](#cpp)
     * Install procedure
+    * Set environment variables
     * Uninstall procedure
   * [Python User](#python)
     * Install procedure
@@ -126,7 +127,7 @@ Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_
 
 ### Install Python Modules
 
-Then install aravis-python and gendc-python and ion-contrib-python to fully utilize
+Then install aravis-python and gendc-python and ion-contrib-python to fully utilize. It is optional to install opencv-python, which is required for some of tutorials.
 
 <pre>
 <code class="language-bash">
@@ -134,16 +135,17 @@ pip3 install -U pip<br />
 pip3 install aravis-python=={this_version.aravis_python_version}<br />
 pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
 pip3 install gendc-python=={this_version.gendc_python_version}<br />
+pip3 install opencv-python<br />
 </code>
 </pre>
 
 ### Uninstall Python Modules
 
-When you want to uninstall the modules introduced by Sensing-Dev, please execute the following command
+When you want to uninstall the modules introduced by Sensing-Dev, please execute the following command.
 
 <pre>
 <code class="language-bash">
-pip3 install aravis-python ion-contrib-python gendc-python PyGObject -y
+pip3 install aravis-python ion-contrib-python gendc-python PyGObject  -y
 </code>
 </pre>
 
