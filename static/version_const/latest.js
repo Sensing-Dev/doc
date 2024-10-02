@@ -1,8 +1,8 @@
 //THIS IS WHERE YOU UPDATE
 const is_latest = true;
-const latest_version = 'v24.09.02';
+const latest_version = 'v24.09.03';
 const latest_winUSB_URL = "v24.02.02"
-const ion_python_version = '3.2.0'
+const ion_python_version = '3.2.1'
 const gendc_python_version = '0.3.3'
 const aravis_python_version = '0.8.31'
 
