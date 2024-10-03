@@ -11,44 +11,6 @@ import this_version from "@site/static/version_const/latest.js"
 
 ## チュートリアル
 
-### 依存ライブラリのインストール
-
-#### Windows
-
-Sensing-Devから提供されるAravis Pythonモジュールを使用するのにPyGObjectが必要となります。
-
-<pre>
-<code class="language-powershell">
-Invoke-WebRequest -Uri {this_version.windows_pygobject_url}  -OutFile pygobject_installer.ps1 -Verbose; powershell.exe -ExecutionPolicy Bypass -File ./pygobject_installer.ps1
-</code>
-</pre>
-
-上記の実行により、下記でインストールするAravis Pythonが使用可能になります。
-
-<pre>
-<code class="language-powershell">
-pip3 install aravis-python
-</code>
-</pre>
-
-#### Linux
-
-Sensing-Devから提供されるAravis Pythonモジュールを使用するのにPycairoとPyGObjectが必要となります。
-
-```
-sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0
-pip3 install pycairo
-pip3 install PyGObject
-``` 
-
-上記の実行により、下記でインストールするAravis Pythonが使用可能になります。
-
-<pre>
-<code class="language-powershell">
-pip3 install aravis-python
-</code>
-</pre>
-
 ### 必要なモジュールをロード
 
 上記の依存ライブラリが正しくインストールされている場合、以下の方法でAravisのモジュールが読み込み可能です。
