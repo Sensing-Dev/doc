@@ -25,6 +25,14 @@ npm run start -- --locale ja
 npm build
 ```
 
+## Static build for local
+
+```
+npm run build && npm run local-postbuild
+```
+
+This runs the local-postbuild to replace the absolute path to relative path
+
 ## New Release
 
 When we have the latest release, update `static\version_const\latest.js`.
