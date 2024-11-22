@@ -2,7 +2,7 @@
 const is_latest = true;
 const latest_version = 'v24.09.08';
 const latest_winUSB_URL = "v24.02.02"
-const ion_python_version = '3.2.5'
+const ion_python_version = '3.2.6'
 const gendc_python_version = '0.3.5'
 const aravis_python_version = '0.8.31.post1'
 
