@@ -10,7 +10,7 @@ Additionally, we offer a simple Python application with features for previewing 
 
 ## GUI 
 
-Download the package from [here](https://github.com/Sensing-Dev/viewer/releases/tag/v0.1.0) and extract it.
+Download the package from [here](https://github.com/Sensing-Dev/viewer/releases/tag/v0.1.3) and extract it.
 
 ### Install required module
 
