@@ -9,7 +9,7 @@
 
 ## How to get the tools
 
-Run installer with an option `-InstallGstTools` for Windows and `--install-gst-tools` for Linux to install these tools with the other components of Sensing-Dev SDK.
+Run installer with an option `-InstallGstTools` for Windows and `--install-gst-tools` for Linux to install these tools with the other components of Sensing-Dev SDK. See the [setup guide](../../startup-guide/software-stack.mdx) for the detail.
 
 ## List available plugins (gst-inspect-1.0)
 
@@ -65,3 +65,17 @@ Element Properties:
 
 ...
 ```
+
+## Run a pipeline (gst-launch-1.0)
+
+In most cases, we use the GStreamer API to build and run a pipeline, but `gst-launch-1.0` allows us to run a pipeline as a string, where each element is concatenated with `!`. See the detail in [gstreamer tutorial](./gst-launch.md).
+
+
+The following example obtains sensor data from `aravissrc` (the source element of the Aravis GStreamer plugin) and saves the data into `output%d.bin` using `multifilesink` (the sink element of the multifile plugin).
+
+
+```
+gst-launch-1.0 aravissrc camera-name=<camera name> ! multifilesink location=output%d.bin
+```
+
+![gst-launch-1.0 example](./img/gst-launch-example.png)
