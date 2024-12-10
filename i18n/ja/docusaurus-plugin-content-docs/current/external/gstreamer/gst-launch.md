@@ -1,19 +1,21 @@
-# Tools from Gstreamer
+# Gstreamerのツールについて
 
-**Gstreamer**, the multimedia process framework, has some simple tools to use its feature without using API.
+**GStreamer** は、マルチメディア処理のフレームワークとしてAPIを提供しています。サンプルツールをインストールすると、簡易的にいくつかの機能を使用することができます。。
 
 | Name | Description |
 | --------   | ------- |
-| gst-inspect-1.0 | Print out information of Gstreamer plugins |
-| gst-launch-1.0 | Run Gstreamer pipeline built in string format |
+| gst-inspect-1.0 | GStreamer プラグインの情報を表示します |
+| gst-launch-1.0 | 文字列形式で構築した GStreamer パイプラインを実行します |
 
-## How to get the tools
+## ツールのインストール方法
 
-Run installer with an option `-InstallGstTools` for Windows and `--install-gst-tools` for Linux to install these tools with the other components of Sensing-Dev SDK.
+Windows ではオプション `-InstallGstTools`、Linux では `--install-gst-tools` を指定してインストーラーを実行すると、これらのツールが Sensing-Dev SDK の他のコンポーネントと共にインストールされます。詳細については [セットアップガイド](../../startup-guide/software-stack.mdx) を参照してください。
 
-## List available plugins (gst-inspect-1.0)
+## 利用可能なプラグインの一覧を確認する (gst-inspect-1.0)
 
-`gst-inspect-1.0` displays the list of all available plugins on your machine. If you install Sensing-Dev with installer script (and set up the environment varialble) by following [setup guide](../../startup-guide/software-stack.mdx), you see `aravissrc` and `gendcseparator` which are gst-plugins of Aravis and GenDC respectively. 
+`gst-inspect-1.0` を使用すると、マシンにインストールされているすべてのプラグインの一覧を表示できます。インストールスクリプトを使用して Sensing-Dev をインストールし、環境変数を設定していれば（[セットアップガイド](../../startup-guide/software-stack.mdx) を参照）、Aravis の `aravissrc` や GenDC の `gendcseparator` といった GStreamer プラグインが表示されます。
+
+
 
 ```bash
 aravis:  aravissrc: Aravis Video Source
@@ -22,15 +24,18 @@ staticelements:  bin: Generic bin
 staticelements:  pipeline: Pipeline object
 ```
 
-:::caution why it does not work
-If you don't see the expected plugins on the list or see WARNING "Failed to load plugin", it might be...
-* Some SDK components have version conflict by installing different installer.
-* Environment variables are not set.
+:::caution なぜ動作しないのか
+ 期待するプラグインがリストに表示されない、または「WARNING 'Failed to load plugin'」が表示される場合、以下が原因として考えられます。
+* 別のインストーラーで異なるバージョンの SDK コンポーネントをインストールしたためにバージョンの競合が発生している。
+* 環境変数が正しく設定されていない（特にLinuxは手動で設定する必要があります）。
+  * `GST_PLUGIN_PATH`
+  * `PATH`: Windows
+  * `LD_LIBRARY_PATH`: Linux 
 :::
 
-## Display information of a plugins (gst-inspect-1.0)
+## プラグイン・エレメントの情報を表示する (gst-inspect-1.0)
 
-`gst-inspect-1.0 <name of element or plugin>` displays information of a particular Gstreamer plugins or a particular element. The following example shows the partial information about `gendcseparator`. You can see Factory Details, Plugin Details, and Pad Templates and Element Properties/Signals which help building pipeline.
+`gst-inspect-1.0` <要素またはプラグインの名前> を実行すると、特定の GStreamer `プラグインまたは要素に関する情報を表示します。以下は、gendcseparator` の一部情報を表示した例です。Factory Details、Plugin Details、Pad Templates、Element Properties/Signals などの情報が表示され、パイプラインの構築に役立ちます。
 
 ```bash
 $ gst-inspect-1.0.exe gendcseparator
@@ -65,3 +70,15 @@ Element Properties:
 
 ...
 ```
+
+## パイプラインを実行する (gst-launch-1.0)
+
+通常、GStreamer API を使用してパイプラインを構築・実行しますが、`gst-launch-1.0` を使うと、各要素を `!` で連結した文字列形式でパイプラインを簡易的にビルドし、実行できます。詳細は [GStreamer チュートリアル](./gst-launch.md) を参照してください。
+
+以下の例では、`aravissrc`（Aravis GStreamer プラグインのソース要素）からセンサーデータを取得し、そのデータを `multifilesink`（multifile プラグインのシンク要素）を使って `output%d.bin` に保存します。
+
+```
+gst-launch-1.0 aravissrc camera-name=<camera name> ! multifilesink location=output%d.bin
+```
+
+![gst-launch-1.0 example](./img/gst-launch-example.png)

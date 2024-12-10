@@ -25,10 +25,13 @@ staticelements:  pipeline: Pipeline object
 :::caution why it does not work
 If you don't see the expected plugins on the list or see WARNING "Failed to load plugin", it might be...
 * Some SDK components have version conflict by installing different installer.
-* Environment variables are not set.
+* Environment variables are not set (Particularly for Linux).
+  * `GST_PLUGIN_PATH`
+  * `PATH`: Windows
+  * `LD_LIBRARY_PATH`: Linux 
 :::
 
-## Display information of a plugins (gst-inspect-1.0)
+## Display information of a plugins/elements (gst-inspect-1.0)
 
 `gst-inspect-1.0 <name of element or plugin>` displays information of a particular Gstreamer plugins or a particular element. The following example shows the partial information about `gendcseparator`. You can see Factory Details, Plugin Details, and Pad Templates and Element Properties/Signals which help building pipeline.
 
