@@ -17,7 +17,7 @@ const GenerateTutorialLink = ({language, tag, tutorialfile}) => {
   }else if (language == 'cpp'){
     url = prefix + "/" + tag + "/" + cpp + "/" + tutorialfile + '.cpp';
   }else {
-    throw new Error("language " + language + " is not supported.");
+    url = prefix + "/" + tag + "/" + tutorialfile + 'py';
   }
 
   if (i18n.currentLocale == 'en'){
