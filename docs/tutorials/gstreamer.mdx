@@ -75,10 +75,9 @@ aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,for
 The line `cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)` connects OpenCV to the GStreamer Pipeline and tells OpenCV to use the pipeline to capture video frames.
 
 
-
-# note
+:::note
 currently this tutorial does not support BayerBG10 and BayerBG12, since for gstreamer 1.20.3, bayer2rgb only support 8 bits.
-
+:::
 
 ### Display with OpenCV
 

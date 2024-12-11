@@ -1,0 +1,106 @@
+---
+sidebar_position: 4
+---
+
+
+# OpenCV-PythonでGStreamerパイプラインを構築する方法
+
+このチュートリアルでは、OpenCVとGStreamerを使用してカメラからの映像を取得する方法を説明します。さまざまなカメラ設定、ピクセルフォーマット、フレームサイズに対応しています。
+
+## チュートリアル
+
+
+### 前提条件
+1. opencv-python with gstreamer backend
+3. **windows**:  
+    Install the C++ version of sensing-dev. make sure GST_PLUGIN_PATH is set.
+3. **linux**:  
+   Set the GST_PLUGIN_PATH environment variable and sensing-dev library_path:
+   ```bash
+   export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
+   export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+   ```
+
+
+### 設定
+カメラ名、ピクセルフォーマット、幅、高さ、フレームレートを要件に応じて調整してください。
+   ```python
+  camera_name = 'replace-by-your-camera-name'
+  pixelformat = 'Mono8'
+    # pixelformat = 'BayerBG8'
+  width = 1920
+  height = 1080
+  framerate = 60
+   ```
+
+### パイプラインの構築
+パイプラインはaravissrcから始まり、カメラに接続します。camera-nameパラメータで使用するカメラを指定します。
+
+#### フレーム処理:
+
+
+##### Bayerフォーマットのカラー画像:
+1. Bayerフォーマットを`bayer2rgb`でRGBに変換します。
+2. 互換性を確保するために`videoconvert`で画像フォーマットを調整します。
+
+##### グレースケール画像:
+1. `GRAY8`（8ビット）や`GRAY16_LE`（16ビット）などの生フォーマットをサポートします。
+2. 画像フォーマットを`videoconvert`で調整します。
+
+#### OpenCVへの出力:
+
+最終ステージでは、appsinkを使用してOpenCVが処理済みのビデオフレームにアクセスできるようにします。
+
+##### パイプライン例:
+1. カラー（Bayer）(8ビット):
+
+```
+aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! appsink
+```
+
+2. グレースケール(8ビット):
+
+
+```
+aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
+```
+
+3. グレースケール(16ビット):
+
+```
+aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY16_LE,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
+```
+
+The line `cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)` connects OpenCV to the GStreamer Pipeline and tells OpenCV to use the pipeline to capture video frames.
+
+
+:::note
+現在、このチュートリアルはBayerBG10およびBayerBG12をサポートしていません。GStreamer 1.20.3では、bayer2rgbは8ビットのみに対応しています。
+:::
+
+
+### OpenCVでの表示
+outputsは2つのバッファを持つListです。各バッファはnumpy配列に格納され、インデックスでアクセスできます（例: output_datas[i]）。
+```python
+while (user_input == -1):
+    ret, frame = cap.read()
+    if not ret:
+        print("Can't receive frame")
+        break
+    cv2.imshow('opencv with gstreamer test', frame)
+    user_input = cv2.waitKeyEx(1)
+
+```
+`for`ループ後にウィンドウを破棄し、カメラを解放することを忘れないでください。
+
+```python
+cv2.destroyAllWindows()
+cap.release()
+```
+
+## 完全なコード
+
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="gstreamer/tutorial1_display" />
