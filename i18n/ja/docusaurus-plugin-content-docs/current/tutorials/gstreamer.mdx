@@ -9,16 +9,15 @@ sidebar_position: 4
 ## チュートリアル
 
 ### 前提条件
-1. opencv-python with gstreamer backend
-3. **windows**:  
-    Install the C++ version of sensing-dev. make sure GST_PLUGIN_PATH is set.
+1. GStreamerバックエンドを使用したopencv-python
+2. **windows**:  
+   sensing-devのC++版を`-InstallGstPlugins`オプション付きでインストールしてください。GST_PLUGIN_PATHが設定されていることを確認してください。
 3. **linux**:  
-   Set the GST_PLUGIN_PATH environment variable and sensing-dev library_path:
-   ```bash
-   export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
-   export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-   ```
-
+   sensing-devのC++版を--install-gst-toolsオプション付きでインストールしてください。GST_PLUGIN_PATH環境変数とsensing-devのライブラリパスを設定してください：
+```bash
+export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
+export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+```
 ### 設定
 カメラ名、ピクセルフォーマット、幅、高さ、フレームレートを要件に応じて調整してください。
    ```python

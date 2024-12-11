@@ -10,25 +10,25 @@ This tutorial demonstrates how to use OpenCV with GStreamer to capture video fro
 
 ### Prerequisites
 1. opencv-python with gstreamer backend
-3. **windows**:  
-    Install the C++ version of sensing-dev. make sure GST_PLUGIN_PATH is set.
+2. **windows**:  
+  Install the C++ version of sensing-dev with `-InstallGstPlugins`. Make sure GST_PLUGIN_PATH is set.
 3. **linux**:  
-   Set the GST_PLUGIN_PATH environment variable and sensing-dev library_path:
-   ```bash
-   export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
-   export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-   ```
+  Install the C++ version of sensing-dev with `--install-gst-tools`. Set the GST_PLUGIN_PATH environment variable and sensing-dev library_path:
+  ```bash
+  export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
+  export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+  ```
 
 ### Configuration
 Please adjust the camera_name, pixelformat, width, height, framerate based on your requirements
-   ```python
+```python
   camera_name = 'replace-by-your-camera-name'
   pixelformat = 'Mono8'
     # pixelformat = 'BayerBG8'
   width = 1920
   height = 1080
   framerate = 60
-   ```
+```
 
 ### Build a pipeline
 
