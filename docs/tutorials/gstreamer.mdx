@@ -3,8 +3,9 @@ sidebar_position: 4
 ---
 
 # Build GStreamer pipeline with opencv-python 
-
-This tutorial demonstrates how to use OpenCV with GStreamer to capture video from cameras. It supports different camera configurations, pixel formats, and frame size.
+このチュートリアルでは、OpenCVとGStreamerを使用する方法を紹介します。特に、`appsink`エレメントを活用してビデオストリームをキャプチャおよび処理する手法に焦点を当てています。
+GStreamer APIを使用すると、ビデオキャプチャおよび処理用のパイプラインを構築して実行できますが、`appsink`エレメントをOpenCVと組み合わせることで、GStreamerパイプラインの出力を直接OpenCVに取り込んでさらに操作を行うことが可能になります。
+この方法は、さまざまなカメラ構成、ピクセルフォーマット、フレームサイズにも対応しています。
 
 ## Tutorial
 
@@ -20,7 +21,7 @@ This tutorial demonstrates how to use OpenCV with GStreamer to capture video fro
   ```
 
 ### Configuration
-Please adjust the camera_name, pixelformat, width, height, framerate based on your requirements
+Please adjust the camera_name, pixelformat, width, height, framerate based on your requirements.  You can obtain these values by [arv-tool-0.8](../external/aravis/arv-tools) in Sensing-Dev software package
 ```python
   camera_name = 'replace-by-your-camera-name'
   pixelformat = 'Mono8'

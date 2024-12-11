@@ -4,7 +4,9 @@ sidebar_position: 4
 
 # OpenCV-PythonでGStreamerパイプラインを構築する方法
 
-このチュートリアルでは、OpenCVとGStreamerを使用してカメラからの映像を取得する方法を説明します。さまざまなカメラ設定、ピクセルフォーマット、フレームサイズに対応しています。
+このチュートリアルでは、OpenCVとGStreamerを使用する方法を紹介します。特に、`appsink`エレメントを活用してビデオストリームをキャプチャおよび処理する手法に焦点を当てています。
+GStreamer APIを使用すると、ビデオキャプチャおよび処理用のパイプラインを構築して実行できますが、`appsink`エレメントをOpenCVと組み合わせることで、GStreamerパイプラインの出力を直接OpenCVに取り込んでさらに操作を行うことが可能になります。
+この方法は、さまざまなカメラ構成、ピクセルフォーマット、フレームサイズにも対応しています。
 
 ## チュートリアル
 
@@ -13,13 +15,13 @@ sidebar_position: 4
 2. **windows**:  
    sensing-devのC++版を`-InstallGstPlugins`オプション付きでインストールしてください。GST_PLUGIN_PATHが設定されていることを確認してください。
 3. **linux**:  
-   sensing-devのC++版を--install-gst-toolsオプション付きでインストールしてください。GST_PLUGIN_PATH環境変数とsensing-devのライブラリパスを設定してください：
+   sensing-devのC++版を`--install-gst-tools`オプション付きでインストールしてください。GST_PLUGIN_PATH環境変数とsensing-devのライブラリパスを設定してください：
 ```bash
 export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
 export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ```
 ### 設定
-カメラ名、ピクセルフォーマット、幅、高さ、フレームレートを要件に応じて調整してください。
+カメラ名（camera_name）、ピクセル形式（pixelformat）、幅（width）、高さ（height）、フレームレート（framerate）を、必要に応じて調整してください。これらの値は、Sensing-Devソフトウェアパッケージ内の[arv-tool-0.8](../external/aravis/arv-tools)を使用して取得できます。
    ```python
   camera_name = 'replace-by-your-camera-name'
   pixelformat = 'Mono8'
