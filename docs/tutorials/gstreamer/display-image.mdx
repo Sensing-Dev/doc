@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Build GStreamer pipeline with opencv-python 
+# Display Image with Gstreamer
 
 This tutorial demonstrates how to use OpenCV with GStreamer, specifically leveraging the `appsink` element to capture and process video streams. 
 While the GStreamer API allows you to build and run pipelines for video capture and processing, combining the `appsink` element with OpenCV enables you to retrieve the output of a GStreamer pipeline directly into OpenCV for further manipulation. 
@@ -105,4 +105,4 @@ cap.release()
 import {tutorial_version} from "@site/static/version_const/latest.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
-<GenerateTutorialLink language="python" tag={tutorial_version} tutorialfile="gstreamer/tutorial1_display" />
+<GenerateTutorialLink language="gstreamer" tag={tutorial_version} tutorialfile="tutorial1_display" />
