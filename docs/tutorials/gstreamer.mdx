@@ -13,9 +13,9 @@ This approach also supports various camera configurations, pixel formats, and fr
 ### Prerequisites
 1. opencv-python with gstreamer backend
 2. **windows**:  
-  Install the C++ version of sensing-dev with `-InstallGstPlugins`. Make sure GST_PLUGIN_PATH is set.
+  Install the C++ version of sensing-dev with `-InstallGstPlugins`. Make sure `GST_PLUGIN_PATH` is set.
 3. **linux**:  
-  Install the C++ version of sensing-dev with `--install-gst-tools`. Set the GST_PLUGIN_PATH environment variable and sensing-dev library_path:
+  Install the C++ version of sensing-dev with `--install-gst-tools`. Set the `GST_PLUGIN_PATH` environment variable and sensing-dev library_path:
   ```bash
   export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
   export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
@@ -23,6 +23,7 @@ This approach also supports various camera configurations, pixel formats, and fr
 
 ### Configuration
 Please adjust the camera_name, pixelformat, width, height, framerate based on your requirements.  You can obtain these values by [arv-tool-0.8](../external/aravis/arv-tools) in Sensing-Dev software package
+
 ```python
   camera_name = 'replace-by-your-camera-name'
   pixelformat = 'Mono8'
@@ -34,8 +35,10 @@ Please adjust the camera_name, pixelformat, width, height, framerate based on yo
 
 ### Build a pipeline
 
-The pipeline starts with aravissrc, which connects to the camera.
+The pipeline starts with `aravissrc`, which connects to the camera.
+
 The camera-name parameter specifies which camera to use.
+
 #### Frame Processing:
 
 ##### For color images in Bayer format:
@@ -48,7 +51,7 @@ The camera-name parameter specifies which camera to use.
 
 #### Output to OpenCV:
 
-The final stage is appsink, which allows OpenCV to access the processed video frames.
+The final stage is `appsink`, which allows OpenCV to access the processed video frames.
 
 ##### Example Pipelines:
 1. Color (Bayer)(8-bit):
@@ -72,12 +75,15 @@ aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,for
 The line `cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)` connects OpenCV to the GStreamer Pipeline and tells OpenCV to use the pipeline to capture video frames.
 
 :::note
-currently this tutorial does not support BayerBG10 and BayerBG12, since for gstreamer 1.20.3, bayer2rgb only support 8 bits.
+Currently this tutorial does not support BayerBG10 and BayerBG12, since for gstreamer 1.20.3, bayer2rgb only support 8 bits.
 :::
 
 ### Display with OpenCV
 
-`outputs` is the `List` having 2 buffers. Each buffer is stored into numpy array, and we can access it by index (`output_datas[i]`).
+The output of `cap.read()` are `ret` and `frame` which are the result of reading the capture data and its data itself respectively.
+
+By displaying `frame` per pipeline execution with `for` loop, it looks like the sequential images.
+
 ```python
 while (user_input == -1):
     ret, frame = cap.read()
