@@ -1,0 +1,106 @@
+---
+sidebar_position: 4
+---
+
+# 画像の表示
+
+このチュートリアルでは、OpenCVと`appsink`エレメントを使ってGStreamerのパイプラインを構築・実行する方法を紹介します。
+
+GStreamer APIを使用すると、ビデオキャプチャおよび処理用のパイプラインを構築して実行できますが、`appsink`エレメントをOpenCVと組み合わせることで、GStreamerパイプラインの出力を直接OpenCVに取り込むことが可能になります。
+この方法は、さまざまなカメラ構成、ピクセルフォーマット、フレームサイズにも対応しています。
+
+## チュートリアル
+
+### 前提条件
+1. GStreamerバックエンドを使用したopencv-python
+2. **windows**:  
+   sensing-devのC++版を`-InstallGstPlugins`オプション付きでインストールしてください。`GST_PLUGIN_PATH`環境変数が設定されていることを確認してください。
+3. **linux**:  
+   sensing-devのC++版を`--install-gst-tools`オプション付きでインストールしてください。`GST_PLUGIN_PATH`環境変数とsensing-devのライブラリパスを設定してください。
+```bash
+export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
+export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+```
+### 設定
+カメラ名（camera_name）、ピクセル形式（pixelformat）、幅（width）、高さ（height）、フレームレート（framerate）を、必要に応じて調整してください。これらの値は、Sensing-Devソフトウェアパッケージ内の[arv-tool-0.8](../../external/aravis/arv-tools.md)を使用して取得できます。
+
+```python
+camera_name = 'replace-by-your-camera-name'
+pixelformat = 'Mono8'
+   # pixelformat = 'BayerBG8'
+width = 1920
+height = 1080
+framerate = 60
+```
+
+### パイプラインの構築
+パイプラインは`aravissrc`エレメントを最初に組み込むことでカメラに接続可能になります。camera-nameパラメータで使用するカメラを指定します。そこから`!`で後続のエレメントを繋ぎ、処理を進めていきます。
+
+#### フレーム処理:
+
+##### Bayerフォーマットのカラー画像:
+1. Bayerフォーマットを`bayer2rgb`でRGBに変換します。
+2. 互換性を確保するために`videoconvert`で画像フォーマットを調整します。
+
+##### グレースケール画像:
+1. `GRAY8`（8ビット）や`GRAY16_LE`（16ビット）などの生フォーマットをサポートします。
+2. 画像フォーマットを`videoconvert`で調整します。
+
+#### OpenCVへの出力:
+
+最後に、`appsink`を使用してOpenCVが処理済みのビデオフレームにアクセスできるようにします。
+
+##### パイプライン例:
+1. カラー（Bayer）(8ビット):
+
+```
+aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! appsink
+```
+
+2. グレースケール(8ビット):
+
+```
+aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
+```
+
+3. グレースケール(16ビット):
+
+```
+aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY16_LE,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
+```
+
+ソースコードの`cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)`という部分で、OpenCVをGStreamerパイプラインに接続し、OpenCVがビデオフレームをキャプチャ可能になりました。
+
+:::note
+現在、このチュートリアル（GStreamer 1.20.3）はBayerBG10およびBayerBG12をサポートしていません。bayer2rgbは8ビットのみに対応しています。
+:::
+
+### OpenCVでの画像表示
+
+`cap.read()`の出力は読み込みの結果を示す`ret`と実際のキャプチャデータを含む`frame`です。
+
+この`frame`を`for`ループを用いてパイプライン実行ごとに表示することで、連続した画像となります。
+
+```python
+while (user_input == -1):
+    ret, frame = cap.read()
+    if not ret:
+        print("Can't receive frame")
+        break
+    cv2.imshow('opencv with gstreamer test', frame)
+    user_input = cv2.waitKeyEx(1)
+
+```
+`for`ループ後にウィンドウを破棄し、カメラを解放することを忘れないでください。
+
+```python
+cv2.destroyAllWindows()
+cap.release()
+```
+
+## 完全なコード
+
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="gstreamer" tag={tutorial_version} tutorialfile="tutorial1_display" />

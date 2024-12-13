@@ -71,7 +71,7 @@ Element Properties:
 
 ## Run a pipeline (gst-launch-1.0)
 
-In most cases, we use the GStreamer API to build and run a pipeline, but `gst-launch-1.0` allows us to run a pipeline as a string, where each element is concatenated with `!`. See the detail in [gstreamer tutorial](../../tutorials/gstreamer.mdx).
+In most cases, we use the GStreamer API to build and run a pipeline, but `gst-launch-1.0` allows us to run a pipeline as a string, where each element is concatenated with `!`. See the detail in [gstreamer tutorial](../../tutorials/gstreamer/display-image.mdx).
 
 
 The following example obtains sensor data from `aravissrc` (the source element of the Aravis GStreamer plugin) and saves the data into `output%d.bin` using `multifilesink` (the sink element of the multifile plugin).

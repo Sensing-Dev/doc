@@ -73,7 +73,7 @@ Element Properties:
 
 ## パイプラインを実行する (gst-launch-1.0)
 
-通常、GStreamer API を使用してパイプラインを構築・実行しますが、`gst-launch-1.0` を使うと、各要素を `!` で連結した文字列形式でパイプラインを簡易的にビルドし、実行できます。詳細は [GStreamer チュートリアル](../../tutorials/gstreamer.mdx) を参照してください。
+通常、GStreamer API を使用してパイプラインを構築・実行しますが、`gst-launch-1.0` を使うと、各要素を `!` で連結した文字列形式でパイプラインを簡易的にビルドし、実行できます。詳細は [GStreamer チュートリアル](../../tutorials/gstreamer/display-image.mdx) を参照してください。
 
 以下の例では、`aravissrc`（Aravis GStreamer プラグインのソース要素）からセンサーデータを取得し、そのデータを `multifilesink`（multifile プラグインのシンク要素）を使って `output%d.bin` に保存します。
 
