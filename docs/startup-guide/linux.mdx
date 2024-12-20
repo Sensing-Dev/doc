@@ -38,12 +38,16 @@ wget -O setup.sh {this_version.latest_setup_URL}
 
 ### Install and setup SDK
 
-Note that `--install-opencv` is optional.
+Note that `--install-opencv`, `--install-gst-tools`, and `--install-gst-plugin` are optional.
 
-The following command install SDK and its dependencies
+The following command install SDK and its dependencies with optional contents.
 
-<pre><code class="language-bash">sudo bash setup.sh --install-opencv {this_version.linux_version}
+<pre><code class="language-bash">sudo bash setup.sh --install-opencv --install-gst-tools --install-gst-plugin {this_version.linux_version}
 </code></pre>
+
+* `--install-opencv`: Add this option to install OpenCV with Sensing-Dev SDK.
+* `--install-gst-tools`: Add this option to install Gstreamer tools with Sensing-Dev SDK.
+* `--install-gst-plugin`: Add this option to install Gstreamer plugins with Sensing-Dev SDK.
 
 ### Set Environment Variables
 
@@ -74,7 +78,7 @@ sudo rm -r /opt/sensing-dev
     * USB3.0 compatible USB port x2
 
 :::info For users of previous versions
-Sensing-Dev v24.09 uses ion-contrib-python instead of ion-python. Therefore, please uninstall ion-python with the following command.
+Sensing-Dev v24.09 or later uses ion-contrib-python instead of ion-python. Therefore, please uninstall ion-python with the following command.
 
 <pre>
 <code class="language-powershell">

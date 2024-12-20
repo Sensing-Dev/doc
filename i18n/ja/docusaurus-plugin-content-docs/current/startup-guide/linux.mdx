@@ -44,13 +44,19 @@ wget -O setup.sh {this_version.latest_setup_URL}
 
 OpenCVをお持ちでなく、チュートリアルなどでご利用になりたい方はオプションに`--install-opencv`とつけてください。
 
-以下のコマンドは、SDKとその依存ライブラリをインストールします。
+同様に、Gstreamerのチュートリアルをご利用になりたい方は`--install-gst-tools`と`--install-gst-plugin`をつけてインストールを行ってください。
+
+以下のコマンドは、SDKとその依存ライブラリをすべてインストールします。
 
 <pre>
 <code class="language-bash">
-sudo bash setup.sh --install-opencv {this_version.linux_version}
+sudo bash setup.sh --install-opencv --install-gst-tools --install-gst-plugin {this_version.linux_version}
 </code>
 </pre>
+
+* `--install-opencv`: OpenCV をインストールするためのオプションです。
+* `--install-gst-tools`: Gstreamer のツールをインストールするためのオプションです。
+* `--install-gst-plugin`:  Gstreamer のプラグインをインストールするためのオプションです。
 
 ### 環境変数の設定
 

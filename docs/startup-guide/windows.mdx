@@ -48,13 +48,30 @@ Please DL the installer script above or <a href={this_version.latest_installer_U
 
 Open the powershell terminal and move to the directory where you have the installer script downloaded in the previous step.
 
-Then type the following command. If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+Then type the following command.
 
 <pre>
 <code class="language-powershell">
 .\installer.ps1 {this_version.windows_version_option}
 </code>
 </pre>
+
+If you do not have and need OpenCV, you can add `-InstallOpenCV` option.
+
+If you also need Gstreamer tools and plugins, add `-InstallGstTools` and `-InstallGstPlugins` respectively
+
+The following example allows you to install all optional components with Sensing-Dev SDK.
+
+<pre>
+<code class="language-powershell">
+.\installer.ps1 -InstallOpenCV -InstallGstTools -InstallGstPlugins {this_version.windows_version_option}
+</code>
+</pre>
+
+* `-InstallOpenCV`: Add this option to install OpenCV with Sensing-Dev SDK.
+* `-InstallGstTools`: Add this option to install Gstreamer tools with Sensing-Dev SDK.
+* `-InstallGstPlugins`: Add this option to install Gstreamer plugins with Sensing-Dev SDK.
+
 
 The default installation path would be `"C:\Users\<username>\AppData\Local\sensing-dev"`.
 
@@ -114,7 +131,7 @@ Invoke-WebRequest -Uri {this_version.windows_uninstaller_url}  -OutFile uninstal
 </code>
 </pre>
 
-Also, v24.09 uses ion-contrib-python instead of ion-python. Therefore, please uninstall ion-python with the following command.
+Also, v24.09 or later uses ion-contrib-python instead of ion-python. Therefore, please uninstall ion-python with the following command.
 
 <pre>
 <code class="language-powershell">
