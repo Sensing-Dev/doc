@@ -48,13 +48,29 @@ DLLライブラリがあるディレクトリを`PATH`環境変数に追加す�
 
 上記の**Windows C++版パッケージスクリプト**をダウンロードするか、<a href={this_version.latest_installer_URL}>こちら</a>からダウンロードしてください。
 
-PowerShellターミナルを開いてスクリプトのあるディレクトリに移動し、以下のコマンドを実行してください。OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
+PowerShellターミナルを開いてスクリプトのあるディレクトリに移動し、以下のコマンドを実行してください。
 
 <pre>
 <code class="language-powershell">
 .\installer.ps1 {this_version.windows_version_option}
 </code>
 </pre>
+
+OpenCVをまだインストールしておらず、チュートリアルなどでご利用になりたい方はオプションに`-InstallOpenCV`とつけてください。
+
+同様に、Gstreamerのツールとプラグインが必要な場合はそれぞれ`-InstallGstTools`と`-InstallGstPlugins`のオプションをご利用ください。
+
+以下のコマンドはすべてのコンポーネントをインストールするための例です。
+
+<pre>
+<code class="language-powershell">
+.\installer.ps1 -InstallOpenCV -InstallGstTools -InstallGstPlugins {this_version.windows_version_option}
+</code>
+</pre>
+
+* `-InstallOpenCV`: OpenCV をインストールするためのオプションです。
+* `-InstallGstTools`: Gstreamer のツールをインストールするためのオプションです。
+* `-InstallGstPlugins`: Gstreamer のプラグインをインストールするためのオプションです。
 
 デフォルトのインストールパスは`"C:\Users\<ユーザー名>\AppData\Local\sensing-dev"`です。
 
