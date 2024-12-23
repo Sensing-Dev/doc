@@ -20,6 +20,7 @@ const {
 
 const windows_uninstaller_url = "https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/" + latest_version + "/uninstaller.ps1";
 const windows_pygobject_url = "https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/" + latest_version + "/pygobject_installer.ps1"
+const windows_opencvpython_url = "https://github.com/Sensing-Dev/sensing-dev-installer/releases/download/" + latest_version + "/opencv_python_installer.ps1"
 
 module.exports = {
     is_latest, 
@@ -35,5 +36,6 @@ module.exports = {
     windows_version_option,
     linux_version,
     windows_uninstaller_url,
-    windows_pygobject_url
+    windows_pygobject_url,
+    windows_opencvpython_url
 };
