@@ -30,4 +30,4 @@ jobs:
         with:
           path: 'build'
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4
