@@ -1,0 +1,220 @@
+---
+sidebar_position: 1
+---
+
+# Using CUDA
+
+This tutorial demonstarates how to **target GPU** for image processing using the Sensing-Dev SDK.
+
+While ion-kit already optimizes image processing on the CPU, running complex processes and adding multiple building blocks may take longer on a CPU.
+
+In this tutorial, we perform a simple image processing task—normalizing a raw image and demosaicing it—to learn how to use a CUDA GPU with our pipeline.
+
+## Prerequisites
+
+* Ubuntu 22.04 or later
+* GPU and CUDA toolkit
+* Sensing-Dev SDK
+* ion-kit cuda version
+
+The installation procedure for the Sensing-Dev SDK is introduced [here](./../../startup-guide/linux.mdx).
+
+**After** installing Sensing-Dev SDK, download `cuda-ion-setup.sh` and run it with the following command.
+
+```bash
+sudo bash cuda-ion-setup.sh --version v1.8.10
+```
+
+This enables ion-kit v1.8.10 to use CUDA.
+
+:::info
+
+If you are using Sensing-Dev v25.01 or later, you don't need to set the version.
+
+:::
+
+## Tutorial
+
+### Get Image Binary Files
+
+With [tutorial4](./../cpp/save-image-bin.md): Save Sensor Data (non-GenDC), please save image data into binary files.
+
+### Target CUDA
+
+While the basic procedure of creating a pipeline is the same as the other tutorials, we need to target CUDA instead of host device to use CUDA.
+
+```cpp
+Builder b;
+b.set_target(get_host_target().with_feature(Target::CUDA).with_feature(Target::Profile));
+```
+
+Also, ading the feature of `Target::Profile` allows us to see the performance of each BB.
+
+The code that we provide at the end of this tutorial, you can switch from host to CUDA by adding the option of `--target-cuda`.
+
+### Build a pipeline
+
+The pipeline of this tutorial has the following Building Blocks (BBs). Out of the following BBs, CUDA will be applied to `image_processing_normalize_raw_image` and `image_processing_bayer_demosaic_linear`.
+
+|             | Name of BB                               | Input         | Params                       | Output           | Remarks                                                 |
+|-------------|------------------------------------------|---------------|------------------------------|------------------|---------------------------------------------------------|
+| 1           | `image_io_binaryloader_u<bit-depth>x2`   | width, height | output_directory, prefix     | output, finished | Check bit-depth of the image to complete the name of BB |
+| 2           | `base_cast_2d_uint8_to_uint16`           | (prev) output |                              | output           | Optional (only if bit-depth is 8)                       |
+| 3           | `image_processing_normalize_raw_image`   | (prev) output | bit_width, bit-shift         | output           |                                                         |
+| 4           | `image_processing_bayer_demosaic_linear` | (prev) output | bayer_pattern, width, height | output           |                                                         |
+| 5           | `base_denormalize_3d_uint8`              | (prev) output |                              | output           |                                                         |
+| 6           | `base_reorder_buffer_3d_uint8`           | (prev) output | dim0, dim1, dim2             | output           |                                                         |
+
+
+#### 1. Binary image loader
+
+`image_io_binaryloader_u<bit-depth>x2` load the multiple images from binary files which start with particular `prefix` and under the `output_directory`.
+
+When you save images with [tutorial4](./../cpp/save-image-bin.md), you may see the output where the images are saved, and this is the value of Param `output_directory`.
+
+Example:
+```bash
+$ ./tutorial4_save_image_bin_data
+Hit SPACE KEY to stop saving
+293 frames are saved under tutorial_save_image_bin_20250312125605
+```
+
+`prefix` is `image0-` or `image1-` since all bin files are saved into imageX-Y.bin where X and Y are integer.
+
+We also need to know the `width`, `height`, and Pixelformat for this BB to know the size of a single image in the binary file.
+
+Therefore, please update the following part of the tutorial code.
+
+```cpp
+    // if prefix is imageX if the name of the config is imageX-config.json
+    std::string prefix = "image0-";
+    // check imageX-config.json
+    const int32_t width = 1920;
+    const int32_t height = 1080;
+    std::string pixelformat = "BayerBG8";
+```
+
+Also, this BB has output called `finished`, which return integer 1 when finishing to load all images in the sereis of binary files.
+
+In the tutorial code, `while` loop of pipeline run stops when this `finished` returns 1, or the number of loop reaches to the value a user set with `--num-frames`.
+
+```cpp
+Node n = b.add(bb_name[pixelformat])(&width, &height)
+      .set_param(
+              Param("output_directory", output_directory),
+              Param("prefix", prefix)
+      );
+n["finished"].bind(finished);
+...
+ while (true) {
+      b.run();
+      bool is_finished = finished(0);
+      ...
+      if (count_run == num_frames || is_finished) {
+        break;
+      }
+ }
+```
+
+#### 2. Cast uint8 to uint16
+
+Only if the image's bit-depth is 8 (e.g. `BayerBG8` or `Mono8`), we need to cast it to 16 bit-depth for calculation.
+
+#### 3. Normalize
+
+For the pre-processing of the image, normalize the input image (the output of the previous BB) to float32 between 0.0 to 1.0.
+
+#### 4. Demosaic
+
+This BB porforms demosaicing of a Bayer image to RGB8 image.
+
+#### 5. Denormalize
+
+For the post-processing of the image, denormalize the input image (the output of the previous BB) to integer between 0 to 256.
+
+#### 6. Reorder buffer
+
+Since Halide treats and process image data in the order of (x, y, c), which indicates of with, height, and color channel, we need to reorder this into (c, x, y) to treat in OpenCV Mat.
+
+### Options in tutorial code
+
+To run this tutorial code comfortably, we set some options.
+
+* `-c`, `--target-cuda` ... Enable the use of CUDA (GPU acceleration).
+* `-d`, `--display` ... Display the resulting image.
+* `-i`, `--input` ... Specify the image directory (output of tutorial4).
+* `-p`, `--prefix` ... Set a prefix of the image binary file (default is `image0-`).
+* `-n`, `--num-frames` ... Set the number of frames to process. Default is None (stops at the end of binary file).
+
+:::tip
+When running a pipeline for the first time, execution may take longer due to the effects of JIT (Just-In-Time) compilation. 
+
+To obtain a pure performance comparison, set `-n` to 2 or larget and analyze the records from the second or later execution onward.
+:::
+
+### Execute the pipeline
+
+The pipeline is ready to run. Each time you call `run()`, the buffer in the vector or `output` receive output images.
+
+```c++
+b.run();
+```
+
+### How to see the output
+
+The following 2 profiles are the output of this tutorial with and without `--target-cuda`.
+
+`output$6` represents the output from the `image_processing_normalize_raw_image` building block, and `output$7`: represents the output from the `image_processing_bayer_demosaic_linear` building block.
+
+You may see that `output$7` (`image_processing_bayer_demosaic_linear`) takes shorter with GPU.
+
+Also, memory usage is 24883200 Byte in `--target-cuda`, which is smaller than CPU version 33177600 Byte.
+
+Since CUDA mode requires memory copy between host and device, if the size of image gets larger, the actual run-time may takes longer.
+
+:::tip
+When running a pipeline for the first time, execution may take longer due to the effects of JIT (Just-In-Time) compilation. 
+
+To obtain a pure performance comparison, set `-n` to 2 or larget and analyze the records from the second or later execution onward.
+:::
+#### Output of GPU
+
+```bash
+$ ./load_and_process -i BayerBG12 --target-cuda
+...
+ total time: 17.207344 ms  samples: 15  runs: 1  time/run: 17.207344 ms
+ heap allocations: 5  peak heap usage: 24883200 bytes
+  halide_malloc:         0.000ms   (0%)    
+  halide_free:           0.000ms   (0%)    
+  f4:                    2.320ms   (13%)    peak: 4147200  num: 1         avg: 4147200
+  f5:                    0.000ms   (0%)     peak: 9        num: 3         avg: 3
+  finished$1:            0.000ms   (0%)    
+  output$6:              0.000ms   (0%)    
+  output$7:              0.000ms   (0%)     peak: 24883200 num: 1         avg: 24883200
+  output$9:              14.887ms  (86%)   
+```
+
+#### Output of CPU (CPU optimized)
+```bash
+$ ./load_and_process -i BayerBG12
+...
+ total time: 23.680784 ms  samples: 22  runs: 1  time/run: 23.680784 ms
+ average threads used: 4.500000
+ heap allocations: 6  peak heap usage: 33177600 bytes
+  halide_malloc:         0.000ms   (0%)    threads: 0.000 
+  halide_free:           0.000ms   (0%)    threads: 0.000 
+  f4:                    3.224ms   (13%)   threads: 1.000  peak: 4147200  num: 1         avg: 4147200
+  f5:                    0.000ms   (0%)    threads: 0.000  peak: 9        num: 3         avg: 3
+  finished$1:            0.000ms   (0%)    threads: 0.000 
+  output$6:              0.000ms   (0%)    threads: 0.000  peak: 8294400  num: 1         avg: 8294400
+  output$7:              5.372ms   (22%)   threads: 7.400  peak: 24883200 num: 1         avg: 24883200
+  sum$2:                 3.198ms   (13%)   threads: 16.000 stack: 192
+  output$9:              11.884ms  (50%)   threads: 1.000 
+```
+
+## Complete code
+
+import {tutorial_version} from "@site/static/version_const/v2405.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cuda" tag={tutorial_version} tutorialfile="load_and_process" />
