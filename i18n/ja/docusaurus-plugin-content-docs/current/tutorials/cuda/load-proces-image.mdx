@@ -1,0 +1,231 @@
+---
+sidebar_position: 1
+---
+
+# CUDAの使用
+
+このチュートリアルでは、GPUをターゲットにしてSensing-Dev SDKを使用した画像処理を行う方法を説明します。
+
+ion-kitはすでにCPU上での画像処理を最適化していますが、複雑な処理を実行したり、複数のビルディングブロックを追加したりすると、CPUでは処理時間が長くなる場合があります。
+
+このチュートリアルでは、CUDA GPUを使用する方法を学ぶために、Bayerの生の画像の正規化とデモザイク処理というシンプルな画像処理タスクを実行します。
+
+## 前準備
+
+* Ubuntu 22.04 or later
+* GPU と CUDA ツールキット
+* Sensing-Dev SDK
+* ion-kit cuda version
+
+Sensing-Dev SDKのインストール手順は[こちら](./../../startup-guide/linux.mdx)に紹介されています。
+
+Sensing-Dev SDKのインストール後、`cuda-ion-setup.sh`を[ここ](https://github.com/Sensing-Dev/tutorials/blob/main/cuda/cuda-ion-setup.sh)からダウンロードし、次のコマンドで実行してください。
+
+```bash
+sudo bash cuda-ion-setup.sh
+```
+
+これでion-kitでCUDAを使う準備が整いました。
+
+## チュートリアル
+
+### 画像のバイナリファイルの生成
+
+[チュートリアル4](./../cpp/save-image-bin.md): センサーデータを保存する（非GenDC）の手順通りに、お手持ちのU3Vカメラで画像を保存してください。
+
+このとき、センサのPixelFormatはBayerのいずれかに設定してください。
+
+### Target CUDA
+
+パイプラインの作成手順は他のチュートリアルと基本的に同じですが、CUDAを使用するためには、ホストデバイスではなくCUDAをターゲットにする必要があります。
+
+```cpp
+Builder b;
+b.set_target(get_host_target().with_feature(Target::CUDA).with_feature(Target::Profile));
+```
+
+`Target::Profile` を使うことで、パイプラインの処理速度を確認することができます。
+
+このチュートリアルの最後で提供するコードでは、`--target-cuda`オプションを追加することで、ホストからCUDAに切り替えることができます。
+
+### パイプラインの構築
+
+このチュートリアルのパイプラインには、次のビルディングブロック（BB）が含まれています。
+
+以下のBBのうち、CUDAは`image_processing_normalize_raw_image`と`image_processing_bayer_demosaic_linear`に適用されます。
+
+|             | Name of BB                               | Input         | Params                       | Output           | Remarks                                                 |
+|-------------|------------------------------------------|---------------|------------------------------|------------------|---------------------------------------------------------|
+| 1           | `image_io_binaryloader_u<bit-depth>x2`   | width, height | output_directory, prefix     | output, finished | Check bit-depth of the image to complete the name of BB |
+| 2           | `base_cast_2d_uint8_to_uint16`           | (prev) output |                              | output           | Optional (only if bit-depth is 8)                       |
+| 3           | `image_processing_normalize_raw_image`   | (prev) output | bit_width, bit-shift         | output           |                                                         |
+| 4           | `image_processing_bayer_demosaic_linear` | (prev) output | bayer_pattern, width, height | output           |                                                         |
+| 5           | `base_denormalize_3d_uint8`              | (prev) output |                              | output           |                                                         |
+| 6           | `base_reorder_buffer_3d_uint8`           | (prev) output | dim0, dim1, dim2             | output           |                                                         |
+
+
+#### 1. バイナリ画像の読み込み
+
+`image_io_binaryloader_u<bit-depth>x2` は、特定の`prefix`で始まり、`output_directory`の下にあるバイナリファイルから複数の画像を読み込みます。
+
+[チュートリアル4](./../cpp/save-image-bin.md)で画像を保存すると、画像が保存される出力先が表示されます。これがパラメータ`output_directory`の値です。
+
+例
+```bash
+$ ./tutorial4_save_image_bin_data
+Hit SPACE KEY to stop saving
+293 frames are saved under tutorial_save_image_bin_20250312125605
+```
+
+`prefix`は`image0-`または`image1-`です。すべてのbinファイルは`imageX-Y.bin`という形式で保存されます（XとYは整数）。
+
+バイナリファイル内の画像のサイズを知るために、`width`、`height`、および`Pixelformat`も必要です。
+
+上記を確認して、チュートリアルコードの以下の部分を更新してください。
+
+```cpp
+    // if prefix is imageX if the name of the config is imageX-config.json
+    std::string prefix = "image0-";
+    // check imageX-config.json
+    const int32_t width = 1920;
+    const int32_t height = 1080;
+    std::string pixelformat = "BayerBG8";
+```
+
+また、このBBには`finished`という出力があり、バイナリファイルの一連の画像をすべて読み込んだ際に整数1を返します。
+
+チュートリアルコード内でパイプラインを実行している`while`ループは、この`finishe`dが`1`を返すか、ユーザーが`--num-frames`で設定したループ回数に達したときに停止します。
+
+
+```cpp
+Node n = b.add(bb_name[pixelformat])(&width, &height)
+      .set_params(
+              Param("output_directory", output_directory),
+              Param("prefix", prefix)
+      );
+n["finished"].bind(finished);
+...
+ while (true) {
+      b.run();
+      bool is_finished = finished(0);
+      ...
+      if (count_run == num_frames || is_finished) {
+        break;
+      }
+ }
+```
+
+#### 2. uint8 から uint16 へのキャスト
+
+画像のビット深度が8（例：`BayerBG8`）の場合にのみ、計算のために16ビット深度にキャストする必要があります。
+
+#### 3. 正規化
+
+画像の前処理として、入力画像（前のBBの出力）を0.0から1.0の間のfloat32に正規化します。
+
+#### 4. デモザイク
+
+このBBは、Bayer画像をRGB8画像にデモザイキングします。
+
+#### 5. 非正規化
+
+画像の後処理として、入力画像（前のBBの出力）を0から256の間の整数にデノーマライズします。
+
+#### 6. バッファの入れ替え
+
+Halideは画像データを(x, y, c)の順序で処理しますが、これは幅、高さ、カラー チャネルを示します。
+
+OpenCVのMatで処理するためには、これを(c, x, y)の順序に並べ替える必要があるため、このBBを使用します。
+
+### チュートリアルコードのコマンドラインオプション
+
+このチュートリアルコードを快適に実行するために、いくつかのオプションを実行時に設定可能です。
+
+* `-c`, `--target-cuda` ... CUDA（GPUアクセラレーション）の使用を有効にします。
+* `-d`, `--display` ... 結果の画像を表示します。
+* `-i`, `--input` ... 画像ディレクトリを指定します（チュートリアル4の出力）。
+* `-p`, `--prefix` ... 画像バイナリファイルのプレフィックスを設定します（デフォルトは`image0-`）。
+* `-n`, `--num-frames` ... 処理するフレーム数を設定します。デフォルトはNone（バイナリファイルの終わりで停止）。
+
+:::tip
+パイプラインを初めて実行する際、JIT（Just-In-Time）コンパイルの影響で実行に時間がかかる場合があります。
+
+純粋なパフォーマンス比較を行うためには、`-n`を2以上に設定し、2回目以降の実行から記録を分析してください。
+:::
+
+### パイプラインの実行
+
+パイプラインの実行準備が整いました。run()を呼び出すたびに、ベクター内のバッファまたはoutputに出力画像が格納されます。
+
+```c++
+b.run();
+```
+
+### How to see the output
+
+以下の2つのプロファイルは、`--target-cuda`を使用した場合と使用しない場合のこのチュートリアルの出力です。
+
+`output$6`は`image_processing_normalize_raw_image`BBからの出力を示し、`output$7`は`image_processing_bayer_demosaic_linear`BBからの出力を示します。
+
+`output$7`（`image_processing_bayer_demosaic_linear`）がGPUを使用することで短時間で処理されていることがわかります。
+
+また、メモリ使用量は`--target-cuda`で24883200バイトとなり、CPUバージョンの33177600バイトよりも少なくなっています。
+
+CUDAモードではホストとデバイス間でメモリコピーが必要なため、画像のサイズが大きくなると、処理時間が長くなる可能性があります。
+
+:::tip
+パイプラインを初めて実行する際、JIT（Just-In-Time）コンパイルの影響で実行に時間がかかる場合があります。
+
+純粋なパフォーマンス比較を行うためには、`-n`を2以上に設定し、2回目以降の実行から記録を分析してください。
+:::
+
+#### Output of GPU
+
+```bash
+$ ./load_and_process -i BayerBG12 --target-cuda
+...
+ total time: 14.011730 ms  samples: 13  runs: 1  time/run: 14.011730 ms
+ heap allocations: 5  peak heap usage: 24883200 bytes
+  [funcs :::::::::::::::::::::::    8.629ms (61.5%) ::::]
+    halide_malloc:                  0.000ms ( 0.0%)   
+    halide_free:                    0.000ms ( 0.0%)   
+    f4:                             1.078ms ( 7.6%)    peak: 4147200  num: 1         avg: 4147200
+    f5:                             0.000ms ( 0.0%)    peak: 9        num: 3         avg: 3
+    finished$1:                     0.000ms ( 0.0%)   
+    output$6:                       0.000ms ( 0.0%)   
+    output$7:                       0.000ms ( 0.0%)    peak: 24883200 num: 1         avg: 24883200
+    output$9:                       7.551ms (53.8%)   
+  [buffer copies to device :::::    1.075ms ( 7.6%) ::::]
+    f4:                             1.075ms ( 7.6%)   
+    b16:                            0.000ms ( 0.0%)   
+    b17:                            0.000ms ( 0.0%)   
+  [buffer copies to host :::::::    4.306ms (30.7%) ::::]
+    finished$1:                     0.000ms ( 0.0%)   
+    output$7:                       4.306ms (30.7%)   
+    output$9:                       0.000ms ( 0.0%)
+```
+
+#### Output of CPU (CPU optimized)
+```bash
+$ ./load_and_process -i BayerBG12
+...
+ total time: 16.988224 ms  samples: 16  runs: 1  time/run: 16.988224 ms
+ average threads used: 6.625000
+ heap allocations: 6  peak heap usage: 33177600 bytes
+    halide_malloc:                0.000ms ( 0.0%)   threads: 0.000 
+    halide_free:                  0.000ms ( 0.0%)   threads: 0.000 
+    f4:                           2.137ms (12.5%)   threads: 1.000  peak: 4147200  num: 1         avg: 4147200
+    f5:                           0.000ms ( 0.0%)   threads: 0.000  peak: 9        num: 3         avg: 3
+    finished$1:                   0.000ms ( 0.0%)   threads: 0.000 
+    output$6:                     0.000ms ( 0.0%)   threads: 0.000  peak: 8294400  num: 1         avg: 8294400
+    output$7:                     1.064ms ( 6.2%)   threads: 3.000  peak: 24883200 num: 1         avg: 24883200
+    sum$2:                        6.369ms (37.4%)   threads: 15.666 stack: 192
+    output$9:                     7.417ms (43.6%)   threads: 1.000 
+```
+
+## Complete code
+
+import {tutorial_version} from "@site/static/version_const/latest.js"
+import GenerateTutorialLink from '@site/static/tutorial_link.js';
+
+<GenerateTutorialLink language="cuda" tag={tutorial_version} tutorialfile="load_and_process" />

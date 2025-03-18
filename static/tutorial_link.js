@@ -6,7 +6,7 @@ const prefix = "https://github.com/Sensing-Dev/tutorials/blob";
 const python = "python";
 const cpp = "cpp/src";
 const gstreamer = "gstreamer";
-const cuda = "cuda";
+const cuda = "cuda/src";
 
 const shorter_install_default = "installer.ps1 -user <username>";
 
