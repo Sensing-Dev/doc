@@ -6,6 +6,7 @@ const prefix = "https://github.com/Sensing-Dev/tutorials/blob";
 const python = "python";
 const cpp = "cpp/src";
 const gstreamer = "gstreamer";
+const cuda = "cuda/src";
 
 const shorter_install_default = "installer.ps1 -user <username>";
 
@@ -19,6 +20,8 @@ const GenerateTutorialLink = ({language, tag, tutorialfile}) => {
     url = prefix + "/" + tag + "/" + cpp + "/" + tutorialfile + '.cpp';
   }else if (language == 'gstreamer'){
     url = prefix + "/" + tag + "/" + gstreamer + "/" + tutorialfile + '.py';
+  }else if (language == 'cuda'){
+    url = prefix + "/" + tag + "/" + cuda + "/" + tutorialfile + '.cpp';
   }else {
     throw new Error("language " + language + " is not supported.");
   }
