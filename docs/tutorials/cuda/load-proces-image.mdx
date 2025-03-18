@@ -19,7 +19,7 @@ In this tutorial, we perform a simple image processing task—normalizing a raw 
 
 The installation procedure for the Sensing-Dev SDK is introduced [here](./../../startup-guide/linux.mdx).
 
-**After** installing Sensing-Dev SDK, download `cuda-ion-setup.sh` and run it with the following command.
+**After** installing Sensing-Dev SDK, download `cuda-ion-setup.sh` from [here](https://github.com/Sensing-Dev/tutorials/blob/main/cuda/cuda-ion-setup.sh) and run it with the following command.
 
 ```bash
 sudo bash cuda-ion-setup.sh
@@ -32,6 +32,8 @@ This enables ion-kit to use CUDA.
 ### Get Image Binary Files
 
 With [tutorial4](./../cpp/save-image-bin.md): Save Sensor Data (non-GenDC), please save image data into binary files.
+
+Make sure to set PixelFormat of the U3V camera into any of Bayer.
 
 ### Target CUDA
 
@@ -112,7 +114,7 @@ n["finished"].bind(finished);
 
 #### 2. Cast uint8 to uint16
 
-Only if the image's bit-depth is 8 (e.g. `BayerBG8` or `Mono8`), we need to cast it to 16 bit-depth for calculation.
+Only if the image's bit-depth is 8 (e.g. `BayerBG8`), we need to cast it to 16 bit-depth for calculation.
 
 #### 3. Normalize
 
