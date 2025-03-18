@@ -4,78 +4,121 @@ sidebar_position: 4
 
 # 画像の表示
 
-このチュートリアルでは、OpenCVと`appsink`エレメントを使ってGStreamerのパイプラインを構築・実行する方法を紹介します。
+このチュートリアルでは、カメラから画像を取得して表示するためのシンプルなGStreamerのパイプラインを構築・実行する方法を紹介します。
 
-GStreamer APIを使用すると、ビデオキャプチャおよび処理用のパイプラインを構築して実行できますが、`appsink`エレメントをOpenCVと組み合わせることで、GStreamerパイプラインの出力を直接OpenCVに取り込むことが可能になります。
-この方法は、さまざまなカメラ構成、ピクセルフォーマット、フレームサイズにも対応しています。
+GStreamer APIを使用すると、任意のアプリケーション内でビデオキャプチャおよび処理用のパイプラインを構築して実行できますが、今回はgst-launchというコンソールツール、またはOpenCVと組み合わせることで文字列として直感的にパイプラインの構築が可能になる例をご紹介します。
+
 
 ## チュートリアル
 
 ### 前提条件
-1. GStreamerバックエンドを使用したopencv-python ([セットアップ方法](../../external/OpenCV/how-to-build-opencv-with-gstreamer.md))
-2. **windows**:  
-   sensing-devのC++版を`-InstallGstPlugins`オプション付きでインストールしてください。`GST_PLUGIN_PATH`環境変数が設定されていることを確認してください。
-3. **linux**:  
-   sensing-devのC++版を`--install-gst-tools`オプション付きでインストールしてください。`GST_PLUGIN_PATH`環境変数とsensing-devのライブラリパスを設定してください。
+* Sensing-Dev SDK with gst-plugins and tools
+   * Windows: Sensing-DevのC++版を`-InstallGstTools -InstallGstPlugins`オプション付きでインストールしてください。`GST_PLUGIN_PATH`環境変数が設定されていることを確認してください。
+   * Linux: Sensing-DevのC++版を`--install-gst-tools --install-gst-plugin`オプション付きでインストールしてください。`GST_PLUGIN_PATH`環境変数とsensing-devのライブラリパスを設定してください。
+* （OpenCVを使う場合）GStreamerバックエンドを使用したopencv-python。セットアップ方法は[こちら](../../external/OpenCV/how-to-build-opencv-with-gstreamer.md)。
+
+:::note
+Windowsのインストーラスクリプトでは環境変数が自動で設定されますが、Linuxでは以下の環境変数を別途設定する必要があります。
 ```bash
 export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
 export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
 ```
+:::
+
 ### 設定
-カメラ名（camera_name）、ピクセル形式（pixelformat）、幅（width）、高さ（height）、フレームレート（framerate）を、必要に応じて調整してください。これらの値は、Sensing-Devソフトウェアパッケージ内の[arv-tool-0.8](../../external/aravis/arv-tools.md)を使用して取得できます。
+カメラ名（camera_name）、ピクセル形式（pixelformat）、幅（width）、高さ（height）、フレームレート（framerate）を、必要に応じて調整してください。
+これらの値は、Sensing-Devソフトウェアパッケージ内の[arv-tool-0.8](../../external/aravis/arv-tools.md)を使用して取得できます。
 
 ```python
 camera_name = 'replace-by-your-camera-name'
 pixelformat = 'Mono8'
-   # pixelformat = 'BayerBG8'
 width = 1920
 height = 1080
 framerate = 60
 ```
 
 ### パイプラインの構築
-パイプラインは`aravissrc`エレメントを最初に組み込むことでカメラに接続可能になります。camera-nameパラメータで使用するカメラを指定します。そこから`!`で後続のエレメントを繋ぎ、処理を進めていきます。
 
-#### フレーム処理:
+Gstreamerのパイプラインは`!`でエレメント同士を繋ぎ、処理を進めていきます。
 
-##### Bayerフォーマットのカラー画像:
-1. Bayerフォーマットを`bayer2rgb`でRGBに変換します。
-2. 互換性を確保するために`videoconvert`で画像フォーマットを調整します。
+| Element       | description               | parameters  |
+|---------------|---------------------------|-------------|
+| aravissrc     | camera data acquisition   | camera-name |
+| videoconvert  | convert from raw to image |             |
+| autovideosink | display                   |             |
 
-##### グレースケール画像:
-1. `GRAY8`（8ビット）や`GRAY16_LE`（16ビット）などの生フォーマットをサポートします。
+パイプラインは`aravissrc`エレメントを最初に組み込むことでカメラに接続可能になります。
+
+また、`video/x-raw`や`video/x-bayer`によってフォーマットの指定が可能になります。
+
+以下はいくつかの例です。
+
+##### Bayerフォーマットのカラー画像の例:
+1. Bayer指定をするために`video/x-bayer`でカメラの画像のフォーマットを指定します。
+2. Bayerフォーマットを`bayer2rgb`でRGBに変換します。
+3. 互換性を確保するために`videoconvert`で画像フォーマットを調整します。
+
+カラー（Bayer）(8ビット):
+```
+aravissrc camera-name="<camera-name>" ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! autovideosink
+```
+
+##### グレースケール画像の例:
+1. `GRAY8`（8ビット）や`GRAY16_LE`（16ビット）などの生フォーマットを`video/x-raw`でサポートします。
 2. 画像フォーマットを`videoconvert`で調整します。
 
-#### OpenCVへの出力:
-
-最後に、`appsink`を使用してOpenCVが処理済みのビデオフレームにアクセスできるようにします。
-
-##### パイプライン例:
-1. カラー（Bayer）(8ビット):
-
+グレースケール(8ビット):
 ```
-aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! appsink
+aravissrc camera-name="<camera-name>" ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! autovideosink
 ```
 
-2. グレースケール(8ビット):
-
+グレースケール(16ビット):
 ```
-aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
+aravissrc camera-name="<camera-name>" ! video/x-raw,format=GRAY16_LE,width=1920,height=1080,framerate=60/1 ! videoconvert ! autovideosink
 ```
-
-3. グレースケール(16ビット):
-
-```
-aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY16_LE,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
-```
-
-ソースコードの`cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)`という部分で、OpenCVをGStreamerパイプラインに接続し、OpenCVがビデオフレームをキャプチャ可能になりました。
 
 :::note
 現在、このチュートリアル（GStreamer 1.20.3）はBayerBG10およびBayerBG12をサポートしていません。bayer2rgbは8ビットのみに対応しています。
 :::
 
-### OpenCVでの画像表示
+### パイプラインの実行
+
+上記で構築したパイプラインはgst-launchというコンソールツールを使うことでコンソール上で実行可能です。また、`autovideosink`の代わりに`appsink`というエレメントに置き換えることで、PythonのOpenCV APIが使用可能になり、キャプチャした画像をOpenCVで表示することが可能になります。
+
+#### Option 1. gst-launchの使用
+
+Sensing-Devをgst-pluginsとtoolsオプションを有効にしたうえでインストールを行うと、`gst-launch-1.0`というコンソールツールが使用可能になります。
+
+コマンドライン上で`gst-launch-1.0`と入力し、上記で構築したパイプラインを続けて入力すると、ctrl-Cを押すまでの間、カメラから取得した画像が表示され続けます。
+
+例：
+```
+gst-launch-1.0 camera-name="<camera-name>" ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! autovideosink
+```
+
+#### Option 2. OpenCVへの出力:
+
+`autovideosink`の代わりに`appsink`を使用してOpenCVのAPIが処理済みのビデオフレームにアクセスできるようにします。
+
+GStreamerバックエンドを使用したopencv-python をimportする必要があります。セットアップ方法は[こちら](../../external/OpenCV/how-to-build-opencv-with-gstreamer.md)。
+
+また、Windowsをお使いの場合はopencv-pythonがgstreamerを見つけるために、以下のようにSensing-Devのbinをdllディレクトリに追加してください。_
+
+```python
+import os
+if os.name == 'nt':  # windows
+    os.add_dll_directory(os.path.join(os.environ["SENSING_DEV_ROOT"], "bin"))
+import cv2
+```
+
+下記のように文字列としてパイプラインを構築してください。また、一番最後が`appsink`になっていることを確かめてください。
+
+```python
+pipeline = 'aravissrc camera-name="<camera-name>" ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! appsink'
+```
+
+ソースコードの`cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)`という部分で、OpenCVをGStreamerパイプラインに接続し、OpenCVがビデオフレームをキャプチャ可能になりました。
+
 
 `cap.read()`の出力は読み込みの結果を示す`ret`と実際のキャプチャデータを含む`frame`です。
 

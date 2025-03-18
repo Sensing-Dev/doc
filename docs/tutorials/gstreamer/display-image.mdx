@@ -4,22 +4,26 @@ sidebar_position: 4
 
 # Display Image with Gstreamer
 
-This tutorial demonstrates how to use OpenCV with GStreamer, specifically leveraging the `appsink` element to capture and process video streams. 
-While the GStreamer API allows you to build and run pipelines for video capture and processing, combining the `appsink` element with OpenCV enables you to retrieve the output of a GStreamer pipeline directly into OpenCV for further manipulation. 
-This approach also supports various camera configurations, pixel formats, and frame sizes.
+This tutorial introduces how to build and run a simple GStreamer pipeline to capture and display images from a camera.
+
+While you can construct and execute pipelines for video capture and processing within any application with the GStreamer API, in this tutorial, we will demonstrate examples using the `gst-launch` console tool or integrating GStreamer with OpenCV, allowing for intuitive pipeline construction as a string.
+
 
 ## Tutorial
 
 ### Prerequisites
-1. opencv-python with gstreamer backend ([Check this page to setup](../../external/OpenCV/how-to-build-opencv-with-gstreamer.md))
-2. **windows**:  
-  Install the C++ version of sensing-dev with `-InstallGstPlugins`. Make sure `GST_PLUGIN_PATH` is set.
-3. **linux**:  
-  Install the C++ version of sensing-dev with `--install-gst-tools`. Set the `GST_PLUGIN_PATH` environment variable and sensing-dev library_path:
-  ```bash
-  export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
-  export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
-  ```
+* Sensing-Dev SDK with GStreamer plugins and tools
+  * Windows: Install the C++ version of sensing-dev with `-InstallGstTools -InstallGstPlugins`. Make sure `GST_PLUGIN_PATH` is set.
+  * Linux: Install the C++ version of sensing-dev with `--install-gst-tools --install-gst-plugin`. Set the `GST_PLUGIN_PATH`.
+* (When using OpenCV) OpenCV-Python with the GStreamer backend. Setup instructions can be found [here](../../external/OpenCV/how-to-build-opencv-with-gstreamer.md).
+:::note
+On Windows, the installation script automatically sets the environment variables. 
+On Linux, you need to manually configure the following environment variables:
+```bash
+export GST_PLUGIN_PATH=/opt/sensing-dev/lib/x86_64-linux-gnu/gstreamer-1.0
+export LD_LIBRARY_PATH=/opt/sensing-dev/lib:/opt/sensing-dev/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+```
+:::
 
 ### Configuration
 Please adjust the camera_name, pixelformat, width, height, framerate based on your requirements.  You can obtain these values by [arv-tool-0.8](../../external/aravis/arv-tools.md) in Sensing-Dev software package
@@ -27,7 +31,6 @@ Please adjust the camera_name, pixelformat, width, height, framerate based on yo
 ```python
   camera_name = 'replace-by-your-camera-name'
   pixelformat = 'Mono8'
-    # pixelformat = 'BayerBG8'
   width = 1920
   height = 1080
   framerate = 60
@@ -35,54 +38,91 @@ Please adjust the camera_name, pixelformat, width, height, framerate based on yo
 
 ### Build a pipeline
 
-The pipeline starts with `aravissrc`, which connects to the camera.
+In a GStreamer pipeline, elements are connected using `!` to process and pass data through the pipeline.
 
-The camera-name parameter specifies which camera to use.
+| Element       | description               | parameters  |
+|---------------|---------------------------|-------------|
+| aravissrc     | camera data acquisition   | camera-name |
+| videoconvert  | convert from raw to image |             |
+| autovideosink | display                   |             |
 
-#### Frame Processing:
+The pipeline can be connected to the camera by setting the `aravissrc` element at the beginning.
 
-##### For color images in Bayer format:
-1. Convert the Bayer format to RGB using `bayer2rgb`.
-2. Adjust the image format using `videoconvert` to ensure compatibility with OpenCV.
+Additionally, formats can be specified using `video/x-raw` or `video/x-bayer`.
 
-##### For grayscale images:
-1. Support raw formats such as `GRAY8` (8-bit) or `GRAY16_LE` (16-bit).
-2. Adjust the image format using `videoconvert`.
+Here are a few examples:
 
-#### Output to OpenCV:
+##### Example for color images in Bayer format:
+1. The camera image format is specified using `video/x-bayer` to define the Bayer format.
+2. The Bayer format is converted to RGB using `bayer2rgb`.
+3. To ensure compatibility, the image format is adjusted using `videoconvert`.
 
-The final stage is `appsink`, which allows OpenCV to access the processed video frames.
-
-##### Example Pipelines:
-1. Color (Bayer)(8-bit):
-
-```
+Color (Bayer)(8-bit):
+```bash
 aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! appsink
 ```
 
-2. Grayscale (8-bit)
+##### Example for grayscale images:
+1. Raw formats such as `GRAY8` (8-bit) or `GRAY16_LE` (16-bit) are supported with `video/x-raw`.
+2. The image format is adjusted using `videoconvert`.
 
-```
+Grayscale (8-bit)
+```bash
 aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
 ```
 
-3. Grayscale (16-bit):
-
-```
+Grayscale (16-bit):
+```bash
 aravissrc camera-name="<camera-name>" ! gendcseparator ! queue ! video/x-raw,format=GRAY16_LE,width=1920,height=1080,framerate=60/1 ! videoconvert ! appsink
 ```
 
-The line `cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)` connects OpenCV to the GStreamer Pipeline and tells OpenCV to use the pipeline to capture video frames.
-
 :::note
-Currently this tutorial does not support BayerBG10 and BayerBG12, since for gstreamer 1.20.3, bayer2rgb only support 8 bits.
+Currently, this tutorial (GStreamer 1.20.3) does not support BayerBG10 and BayerBG12. The `bayer2rgb` element only supports 8-bit formats.
 :::
 
-### Display with OpenCV
+### Execute the pipeline
 
-The output of `cap.read()` are `ret` and `frame` which are the result of reading the capture data and its data itself respectively.
+The pipeline constructed above can be executed on the console using the `gst-launch` command-line tool.
 
-By displaying `frame` per pipeline execution with `for` loop, it looks like the sequential images.
+Additionally, by replacing autovideosink with the `appsink` element, the Python OpenCV API becomes available, allowing the captured images to be displayed using OpenCV.
+
+#### Option 1. Using gst-launch
+
+When you install Sensing-Dev with the gst-plugins and tools options enabled, the `gst-launch-1.0` console tool becomes available.
+
+By typing `gst-launch-1.0` on the command line and then entering the pipeline you constructed above, the images captured from the camera will continue to be displayed until you press `Ctrl-C`.
+
+e.g.
+```
+gst-launch-1.0 camera-name="<camera-name>" ! video/x-raw,format=GRAY8,width=1920,height=1080,framerate=60/1 ! videoconvert ! autovideosink
+```
+
+#### Option 2. Output to OpenCV:
+
+By using `appsink` instead of `autovideosink`, OpenCV API can access the processed video frames.
+
+You will need to import opencv-python with the GStreamer backend. The setup instructions can be found [here](../../external/OpenCV/how-to-build-opencv-with-gstreamer.md).
+
+Additionally, if you are using Windows, you need to add the Sensing-Dev bin directory to the DLL directory so that opencv-python can find GStreamer, as follows:
+
+```python
+import os
+if os.name == 'nt':  # windows
+    os.add_dll_directory(os.path.join(os.environ["SENSING_DEV_ROOT"], "bin"))
+import cv2
+```
+
+Please construct the pipeline as a string as shown below. Also, make sure that the last element is `appsink`.
+
+```python
+pipeline = 'aravissrc camera-name="<camera-name>" ! video/x-bayer,format=bggr,width=1920,height=1080,framerate=60/1 ! bayer2rgb ! videoconvert ! appsink'
+```
+
+In the source code, the line `cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)` connects OpenCV to the GStreamer pipeline, enabling OpenCV to capture video frames.
+
+The output of `cap.read()` consists of two parts: `ret`, which indicates whether the read operation was successful, and `frame`, which contains the actual captured data.
+
+By using a `for` loop to display the `frame` for each pipeline execution, you can continuously display the captured images.
 
 ```python
 while (user_input == -1):
