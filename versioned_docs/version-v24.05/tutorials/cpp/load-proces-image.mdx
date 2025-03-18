@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 11
 ---
 
 # Using CUDA
@@ -22,10 +22,16 @@ The installation procedure for the Sensing-Dev SDK is introduced [here](./../../
 **After** installing Sensing-Dev SDK, download `cuda-ion-setup.sh` from [here](https://github.com/Sensing-Dev/tutorials/blob/main/cuda/cuda-ion-setup.sh) and run it with the following command.
 
 ```bash
-sudo bash cuda-ion-setup.sh
+sudo bash cuda-ion-setup.sh --version v1.8.10
 ```
 
-This enables ion-kit to use CUDA.
+This enables ion-kit v1.8.10 to use CUDA.
+
+:::info
+
+If you are using Sensing-Dev v25.01 or later, you don't need to set the version.
+
+:::
 
 ## Tutorial
 
@@ -96,7 +102,7 @@ In the tutorial code, `while` loop of pipeline run stops when this `finished` re
 
 ```cpp
 Node n = b.add(bb_name[pixelformat])(&width, &height)
-      .set_params(
+      .set_param(
               Param("output_directory", output_directory),
               Param("prefix", prefix)
       );
@@ -166,61 +172,51 @@ You may see that `output$7` (`image_processing_bayer_demosaic_linear`) takes sho
 
 Also, memory usage is 24883200 Byte in `--target-cuda`, which is smaller than CPU version 33177600 Byte.
 
-Since CUDA mode requires memory copy between host and device, if the size of image gets larger, it may takes longer.
+Since CUDA mode requires memory copy between host and device, if the size of image gets larger, the actual run-time may takes longer.
 
 :::tip
 When running a pipeline for the first time, execution may take longer due to the effects of JIT (Just-In-Time) compilation. 
 
 To obtain a pure performance comparison, set `-n` to 2 or larget and analyze the records from the second or later execution onward.
 :::
-
 #### Output of GPU
 
 ```bash
 $ ./load_and_process -i BayerBG12 --target-cuda
 ...
- total time: 14.011730 ms  samples: 13  runs: 1  time/run: 14.011730 ms
+ total time: 17.207344 ms  samples: 15  runs: 1  time/run: 17.207344 ms
  heap allocations: 5  peak heap usage: 24883200 bytes
-  [funcs :::::::::::::::::::::::    8.629ms (61.5%) ::::]
-    halide_malloc:                  0.000ms ( 0.0%)   
-    halide_free:                    0.000ms ( 0.0%)   
-    f4:                             1.078ms ( 7.6%)    peak: 4147200  num: 1         avg: 4147200
-    f5:                             0.000ms ( 0.0%)    peak: 9        num: 3         avg: 3
-    finished$1:                     0.000ms ( 0.0%)   
-    output$6:                       0.000ms ( 0.0%)   
-    output$7:                       0.000ms ( 0.0%)    peak: 24883200 num: 1         avg: 24883200
-    output$9:                       7.551ms (53.8%)   
-  [buffer copies to device :::::    1.075ms ( 7.6%) ::::]
-    f4:                             1.075ms ( 7.6%)   
-    b16:                            0.000ms ( 0.0%)   
-    b17:                            0.000ms ( 0.0%)   
-  [buffer copies to host :::::::    4.306ms (30.7%) ::::]
-    finished$1:                     0.000ms ( 0.0%)   
-    output$7:                       4.306ms (30.7%)   
-    output$9:                       0.000ms ( 0.0%)
+  halide_malloc:         0.000ms   (0%)    
+  halide_free:           0.000ms   (0%)    
+  f4:                    2.320ms   (13%)    peak: 4147200  num: 1         avg: 4147200
+  f5:                    0.000ms   (0%)     peak: 9        num: 3         avg: 3
+  finished$1:            0.000ms   (0%)    
+  output$6:              0.000ms   (0%)    
+  output$7:              0.000ms   (0%)     peak: 24883200 num: 1         avg: 24883200
+  output$9:              14.887ms  (86%)   
 ```
 
 #### Output of CPU (CPU optimized)
 ```bash
 $ ./load_and_process -i BayerBG12
 ...
- total time: 16.988224 ms  samples: 16  runs: 1  time/run: 16.988224 ms
- average threads used: 6.625000
+ total time: 23.680784 ms  samples: 22  runs: 1  time/run: 23.680784 ms
+ average threads used: 4.500000
  heap allocations: 6  peak heap usage: 33177600 bytes
-    halide_malloc:                0.000ms ( 0.0%)   threads: 0.000 
-    halide_free:                  0.000ms ( 0.0%)   threads: 0.000 
-    f4:                           2.137ms (12.5%)   threads: 1.000  peak: 4147200  num: 1         avg: 4147200
-    f5:                           0.000ms ( 0.0%)   threads: 0.000  peak: 9        num: 3         avg: 3
-    finished$1:                   0.000ms ( 0.0%)   threads: 0.000 
-    output$6:                     0.000ms ( 0.0%)   threads: 0.000  peak: 8294400  num: 1         avg: 8294400
-    output$7:                     1.064ms ( 6.2%)   threads: 3.000  peak: 24883200 num: 1         avg: 24883200
-    sum$2:                        6.369ms (37.4%)   threads: 15.666 stack: 192
-    output$9:                     7.417ms (43.6%)   threads: 1.000 
+  halide_malloc:         0.000ms   (0%)    threads: 0.000 
+  halide_free:           0.000ms   (0%)    threads: 0.000 
+  f4:                    3.224ms   (13%)   threads: 1.000  peak: 4147200  num: 1         avg: 4147200
+  f5:                    0.000ms   (0%)    threads: 0.000  peak: 9        num: 3         avg: 3
+  finished$1:            0.000ms   (0%)    threads: 0.000 
+  output$6:              0.000ms   (0%)    threads: 0.000  peak: 8294400  num: 1         avg: 8294400
+  output$7:              5.372ms   (22%)   threads: 7.400  peak: 24883200 num: 1         avg: 24883200
+  sum$2:                 3.198ms   (13%)   threads: 16.000 stack: 192
+  output$9:              11.884ms  (50%)   threads: 1.000 
 ```
 
 ## Complete code
 
-import {tutorial_version} from "@site/static/version_const/latest.js"
+import {tutorial_version} from "@site/static/version_const/v2405.js"
 import GenerateTutorialLink from '@site/static/tutorial_link.js';
 
 <GenerateTutorialLink language="cuda" tag={tutorial_version} tutorialfile="load_and_process" />
