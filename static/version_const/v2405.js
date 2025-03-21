@@ -1,8 +1,8 @@
 //THIS IS WHERE YOU UPDATE
 const is_latest = false;
-const latest_version = 'v24.05.11';
+const latest_version = 'v24.05.12';
 const latest_winUSB_URL = "v24.02.02"
-const ion_python_version = '1.8.9'
+const ion_python_version = '1.8.10'
 const gendc_python_version = '0.2.8'
 
 const GenerateVersionInfo = require('./generate_version_info.js');
