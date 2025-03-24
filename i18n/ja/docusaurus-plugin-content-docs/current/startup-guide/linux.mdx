@@ -104,15 +104,6 @@ pip uninstall ion-python -y
 :::
 
 ### 依存ライブラリのインストール
-<pre>
-<code class="language-bash">
-sudo apt install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0<br />
-pip3 install -U pip<br />
-pip3 install pycairo<br />
-</code>
-</pre>
-
-### Pythonモジュールのインストール
 
 #### Ubuntu 22.04
 <pre>
@@ -135,7 +126,18 @@ pip3 install 'PyGObject&gt;3.50'<br />
 </code>
 </pre>
 
+### Pythonモジュールのインストール
 
+本ウェブサイトで紹介するチュートリアルやソフトウェアはaravis-python、 gendc-python、そして ion-contrib-pythonをインストールすることで実行可能です。opencv-pythonのインストールは任意ですが、一部のチュートリアルで必要になります。
+
+<pre>
+<code class="language-bash">
+pip3 install aravis-python=={this_version.aravis_python_version}<br />
+pip3 install ion-contrib-python=={this_version.ion_python_version}<br />
+pip3 install gendc-python=={this_version.gendc_python_version}<br />
+pip3 install opencv-python<br />
+</code>
+</pre>
 
 
 ### Pythonモジュールのアンインストール
